@@ -5,6 +5,8 @@ import threading
 import time
 from typing import TYPE_CHECKING, List, Optional, Tuple, Union
 
+import torch
+
 from sglang.srt.disaggregation.utils import DisaggregationMode
 from sglang.srt.layers.logits_processor import LogitsProcessorOutput
 from sglang.srt.managers.io_struct import BatchEmbeddingOut, BatchTokenIDOut
@@ -58,11 +60,17 @@ class SchedulerOutputProcessorMixin:
                 # Move next_token_ids and logprobs to cpu
                 next_token_ids = next_token_ids.tolist()
                 if batch.return_logprob:
-                    if logits_output.next_token_logprobs is not None:
+                    if (
+                        logits_output.next_token_logprobs is not None
+                        and torch.is_tensor(logits_output.next_token_logprobs)
+                    ):
                         logits_output.next_token_logprobs = (
                             logits_output.next_token_logprobs.tolist()
                         )
-                    if logits_output.input_token_logprobs is not None:
+                    if (
+                        logits_output.input_token_logprobs is not None
+                        and torch.is_tensor(logits_output.input_token_logprobs)
+                    ):
                         logits_output.input_token_logprobs = tuple(
                             logits_output.input_token_logprobs.tolist()
                         )

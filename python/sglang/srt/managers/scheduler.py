@@ -732,11 +732,23 @@ class Scheduler(
                             result.next_token_ids,
                             result.bid,
                         )
-                        pp_outputs = PPProxyTensors(
-                            {
-                                "next_token_ids": next_token_ids,
-                            }
-                        )
+
+                        pp_tensor_kwargs = {
+                            "next_token_ids": next_token_ids,
+                        }
+                        if self.cur_batch.return_logprob:
+                            pp_tensor_kwargs["logits_output"] = result.logits_output
+                            assert torch.is_tensor(
+                                result.logits_output.next_token_logprobs
+                            )
+                            pp_tensor_kwargs["extend_input_len_per_req"] = (
+                                result.extend_input_len_per_req
+                            )
+                            pp_tensor_kwargs["extend_logprob_start_len_per_req"] = (
+                                result.extend_logprob_start_len_per_req
+                            )
+                        pp_outputs = PPProxyTensors(pp_tensor_kwargs)
+
                         # send the output from the last round to let the next stage worker run post processing
                         self.pp_group.send_tensor_dict(
                             pp_outputs.tensors,
@@ -752,13 +764,20 @@ class Scheduler(
                             all_gather_group=self.attn_tp_group
                         )
                     )
+
                     mbs[next_mb_id].output_ids = next_pp_outputs["next_token_ids"]
                     output_result = GenerationBatchResult(
-                        logits_output=None,
+                        logits_output=next_pp_outputs.tensors.get(
+                            "logits_output", None
+                        ),
                         pp_hidden_states_proxy_tensors=None,
                         next_token_ids=next_pp_outputs["next_token_ids"],
-                        extend_input_len_per_req=None,
-                        extend_logprob_start_len_per_req=None,
+                        extend_input_len_per_req=next_pp_outputs.tensors.get(
+                            "extend_input_len_per_req", None
+                        ),
+                        extend_logprob_start_len_per_req=next_pp_outputs.tensors.get(
+                            "extend_logprob_start_len_per_req", None
+                        ),
                         bid=bids[next_mb_id],
                         can_run_cuda_graph=result.can_run_cuda_graph,
                     )
