@@ -60,11 +60,13 @@ class SchedulerOutputProcessorMixin:
                 if batch.return_logprob:
                     if logits_output.next_token_logprobs is not None:
                         logits_output.next_token_logprobs = (
-                            logits_output.next_token_logprobs.tolist()
+                            # logits_output.next_token_logprobs.tolist()
+                            logits_output.next_token_logprobs
                         )
                     if logits_output.input_token_logprobs is not None:
                         logits_output.input_token_logprobs = tuple(
-                            logits_output.input_token_logprobs.tolist()
+                            # logits_output.input_token_logprobs.tolist()
+                            logits_output.input_token_logprobs
                         )
 
             hidden_state_offset = 0
