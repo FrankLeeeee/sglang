@@ -354,10 +354,13 @@ class Qwen3ForCausalLM(nn.Module):
                 if self.pp_group.world_size > 1 and self.pp_group.is_last_rank:
                     # Handle pp weight tying here
                     # find the embed_tokens.weight in the weights
-                    embed_token_weights = next(
+                    filtered_weights = list(
                         filter(lambda x: x[0] == "model.embed_tokens.weight", weights)
-                    )[1]
-                    loaded_weight = embed_token_weights
+                    )
+
+                    if len(filtered_weights) == 1:
+                        embed_token_weights = filtered_weights[0][1]
+                        loaded_weight = embed_token_weights
                 else:
                     continue
             if name.startswith("model.vision_tower") and name not in params_dict:
