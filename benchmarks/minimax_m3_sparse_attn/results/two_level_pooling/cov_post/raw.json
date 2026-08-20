@@ -1,0 +1,86 @@
+[
+  {
+    "impl": "block",
+    "phase": "decode",
+    "metric": "coverage",
+    "context_len": 131072,
+    "batch_size": 4,
+    "budget_tokens": 2048,
+    "attended_tokens": 2048.0,
+    "recall_of_exact": 0.67792,
+    "recall_of_top256": 0.99854,
+    "keys": "clustered"
+  },
+  {
+    "impl": "flat",
+    "phase": "decode",
+    "metric": "coverage",
+    "context_len": 131072,
+    "batch_size": 4,
+    "budget_tokens": 2048,
+    "attended_tokens": 2048.0,
+    "recall_of_exact": 1.0,
+    "recall_of_top256": 1.0,
+    "keys": "clustered"
+  },
+  {
+    "impl": "two_level_M16",
+    "phase": "decode",
+    "metric": "coverage",
+    "context_len": 131072,
+    "batch_size": 4,
+    "budget_tokens": 2048,
+    "attended_tokens": 2048.0,
+    "recall_of_exact": 0.67792,
+    "recall_of_top256": 0.99854,
+    "keys": "clustered"
+  },
+  {
+    "impl": "two_level_M32",
+    "phase": "decode",
+    "metric": "coverage",
+    "context_len": 131072,
+    "batch_size": 4,
+    "budget_tokens": 2048,
+    "attended_tokens": 2048.0,
+    "recall_of_exact": 0.87903,
+    "recall_of_top256": 1.0,
+    "keys": "clustered"
+  },
+  {
+    "impl": "two_level_M64",
+    "phase": "decode",
+    "metric": "coverage",
+    "context_len": 131072,
+    "batch_size": 4,
+    "budget_tokens": 2048,
+    "attended_tokens": 2048.0,
+    "recall_of_exact": 0.98474,
+    "recall_of_top256": 1.0,
+    "keys": "clustered"
+  },
+  {
+    "impl": "two_level_M128",
+    "phase": "decode",
+    "metric": "coverage",
+    "context_len": 131072,
+    "batch_size": 4,
+    "budget_tokens": 2048,
+    "attended_tokens": 2048.0,
+    "recall_of_exact": 1.0,
+    "recall_of_top256": 1.0,
+    "keys": "clustered"
+  },
+  {
+    "impl": "two_level_M256",
+    "phase": "decode",
+    "metric": "coverage",
+    "context_len": 131072,
+    "batch_size": 4,
+    "budget_tokens": 2048,
+    "attended_tokens": 2048.0,
+    "recall_of_exact": 1.0,
+    "recall_of_top256": 1.0,
+    "keys": "clustered"
+  }
+]

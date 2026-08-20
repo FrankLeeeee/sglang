@@ -1,0 +1,12 @@
+{
+  "plain": {
+    "orig_ms": 3.10592,
+    "paged_ms": 2.17053,
+    "speedup": 1.431
+  },
+  "instrumented": {
+    "orig_ms": 4.39421,
+    "paged_ms": 2.21485,
+    "speedup": 1.984
+  }
+}

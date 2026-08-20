@@ -1,0 +1,75 @@
+{
+  "started_at": "2026-08-04T07:56:49+00:00",
+  "pytest_args": "",
+  "status": "passed",
+  "failed_suites": [],
+  "totals": {
+    "tests": 281,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 281
+  },
+  "suites": [
+    {
+      "suite": "harness_units",
+      "name": "CPU harness units (stage attribution, memory accounting, budget cap)",
+      "status": "passed",
+      "exit_code": 0,
+      "log": "/data/projects/msa/sglang/benchmarks/minimax_m3_sparse_attn/results/bench_accuracy/results/harness_units.log",
+      "junit_xml": "/data/projects/msa/sglang/benchmarks/minimax_m3_sparse_attn/results/bench_accuracy/results/harness_units.junit.xml",
+      "tests": 31,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 31,
+      "duration_s": 8.071,
+      "failing_tests": []
+    },
+    {
+      "suite": "block_kernels",
+      "name": "block-granularity kernels (sparse GQA + indexer vs reference)",
+      "status": "passed",
+      "exit_code": 0,
+      "log": "/data/projects/msa/sglang/benchmarks/minimax_m3_sparse_attn/results/bench_accuracy/results/block_kernels.log",
+      "junit_xml": "/data/projects/msa/sglang/benchmarks/minimax_m3_sparse_attn/results/bench_accuracy/results/block_kernels.junit.xml",
+      "tests": 74,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 74,
+      "duration_s": 802.034,
+      "failing_tests": []
+    },
+    {
+      "suite": "block_topk",
+      "name": "block-level top-k selectors (decode radix + prefill radix path)",
+      "status": "passed",
+      "exit_code": 0,
+      "log": "/data/projects/msa/sglang/benchmarks/minimax_m3_sparse_attn/results/bench_accuracy/results/block_topk.log",
+      "junit_xml": "/data/projects/msa/sglang/benchmarks/minimax_m3_sparse_attn/results/bench_accuracy/results/block_topk.junit.xml",
+      "tests": 120,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 120,
+      "duration_s": 18.116,
+      "failing_tests": []
+    },
+    {
+      "suite": "token_dense",
+      "name": "token-granularity + dense kernels",
+      "status": "passed",
+      "exit_code": 0,
+      "log": "/data/projects/msa/sglang/benchmarks/minimax_m3_sparse_attn/results/bench_accuracy/results/token_dense.log",
+      "junit_xml": "/data/projects/msa/sglang/benchmarks/minimax_m3_sparse_attn/results/bench_accuracy/results/token_dense.junit.xml",
+      "tests": 56,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 56,
+      "duration_s": 228.193,
+      "failing_tests": []
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+
+[
+    {
+        "children": [
+            {
+                "children": [
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "k_load",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 1079932771,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 65913.86541748047
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "mask_bias",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 24313689,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 1483.9898071289063
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "page_table",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 327636602,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 19997.351196289063
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "pool",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 104194599,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 6359.533630371094
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "q_load",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 26551617,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 1620.5820922851563
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "qk_dot",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 190879377,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 11650.352600097656
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "score_store",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 22623327,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 1380.8182983398438
+                        }
+                    }
+                ],
+                "frame": {
+                    "name": "_instr_block_score_decode_kernel",
+                    "type": "function"
+                },
+                "metrics": {}
+            }
+        ],
+        "frame": {
+            "name": "ROOT",
+            "type": "function"
+        },
+        "metrics": {}
+    },
+    {
+        "CUDA": {
+            "0": {
+                "arch": "90",
+                "bus_width": 6016,
+                "clock_rate": 1980000,
+                "memory_clock_rate": 3201000,
+                "num_sms": 132
+            }
+        }
+    }
+]

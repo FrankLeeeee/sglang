@@ -1098,6 +1098,37 @@ class Envs:
     # set_*_buffer copies; falls back when main/index dtypes differ or non-CUDA.
     SGLANG_OPT_USE_MINIMAX_FUSED_KV_INDEX_STORE = EnvBool(True)
 
+    # MiniMax-M3 block-sparse attention (step 3): resolve a selected block's slots
+    # with one req_to_token lookup per page-aligned run instead of a per-token
+    # gather. The kernel self-guards and falls back to the gather when page and
+    # block sizes do not divide one another, so it is safe at any page size. Same
+    # math either way -- bit-identical when both kernels tune to the same config,
+    # within bf16 rounding when the autotuner splits them.
+    #
+    # Split by phase because the two measure opposite ways on H200 at page_size
+    # 128 (see benchmarks/minimax_m3_sparse_attn/bench_block_sparse_paged.py):
+    #   prefill  1.43x @ 32k, 1.16x @ 256k -- enough work per block that dropping
+    #            the 128-entry gather shows up
+    #   decode   0.93-0.97x -- latency-bound, so the scalar lookup just lengthens
+    #            the dependency chain ahead of the K/V loads. Still a regression
+    #            with both kernels pinned to one config, so it is not autotune.
+    SGLANG_OPT_USE_MINIMAX_SPARSE_PAGED_PREFILL = EnvBool(True)
+    SGLANG_OPT_USE_MINIMAX_SPARSE_PAGED_DECODE = EnvBool(False)
+
+    # MiniMax sparse attention selection granularity. Off = the released
+    # block-level selection (top-k blocks of sparse_block_size tokens). On =
+    # DeepSeek-style token-level selection: the indexer scores every key with no
+    # block pooling and the top-k picks individual token positions. Research
+    # toggle — the released M3 weights were trained against block selection.
+    SGLANG_USE_MINIMAX_TOKEN_SPARSE = EnvBool(False)
+    # Token budget for the token-level path. Unset derives the equal-budget
+    # default from the block config (sparse_topk_blocks * sparse_block_size).
+    SGLANG_MINIMAX_TOKEN_SPARSE_TOPK = EnvInt(None)
+    # Cap on the chunked prefill indexer logits buffer, in MiB. Token-level
+    # selection cannot pool, so its prefill logits are O(L^2); the query axis is
+    # chunked to keep the live buffer under this bound.
+    SGLANG_MINIMAX_TOKEN_SPARSE_SCORE_BUDGET_MB = EnvInt(512)
+
     # MiniMax-M3 MXFP8 MoE experimental fusion toggles (default off; A/B only).
     SGLANG_MINIMAX_M3_FUSED_SWIGLU_MXFP8 = EnvBool(False)
     SGLANG_MINIMAX_M3_FUSED_MOE_COMBINE = EnvBool(False)

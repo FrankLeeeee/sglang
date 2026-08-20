@@ -13,15 +13,43 @@ from sglang.kernels.ops.attention.minimax_sparse.decode.flash_with_topk_idx impo
 from sglang.kernels.ops.attention.minimax_sparse.decode.topk_sparse import (
     flash_decode_with_gqa_share_sparse,
 )
+from sglang.kernels.ops.attention.minimax_sparse.decode.topk_sparse_paged import (
+    flash_decode_with_gqa_share_sparse_paged,
+)
 from sglang.kernels.ops.attention.minimax_sparse.prefill.flash_with_topk_idx import (
     flash_prefill_with_topk_index,
 )
 from sglang.kernels.ops.attention.minimax_sparse.prefill.topk_sparse import (
     flash_prefill_with_gqa_share_sparse,
 )
+from sglang.kernels.ops.attention.minimax_sparse.prefill.topk_sparse_paged import (
+    flash_prefill_with_gqa_share_sparse_paged,
+)
 
 logger = logging.getLogger(__name__)
 _msa_fallback_warned = False
+
+
+def _sparse_prefill_main(*, use_paged: bool, page_size: int, **kwargs) -> torch.Tensor:
+    """Step 3 for prefill: main GQA attention over the selected blocks.
+
+    The paged kernel is a superset of the original — same math, same autotune
+    space, plus a compile-time branch that resolves a selected block's slots with
+    one ``req_to_token`` lookup per page-aligned run instead of a
+    ``block_size_k``-entry gather. It self-guards, so it is safe to call at any
+    page size: when page and block sizes do not divide one another the branch is
+    constexpr-dead and the emitted code is the original per-token gather.
+    """
+    if use_paged:
+        return flash_prefill_with_gqa_share_sparse_paged(page_size=page_size, **kwargs)
+    return flash_prefill_with_gqa_share_sparse(**kwargs)
+
+
+def _sparse_decode_main(*, use_paged: bool, page_size: int, **kwargs) -> torch.Tensor:
+    """Step 3 for decode. Same contract as :func:`_sparse_prefill_main`."""
+    if use_paged:
+        return flash_decode_with_gqa_share_sparse_paged(page_size=page_size, **kwargs)
+    return flash_decode_with_gqa_share_sparse(**kwargs)
 
 
 def _warn_msa_fallback(err: Exception) -> None:
@@ -67,6 +95,8 @@ def minimax_sparse_prefill(
     max_seqblock_q: Optional[int] = None,
     all_seqblock_q: Optional[int] = None,
     seqlens_cpu: Optional[List[int]] = None,
+    page_size: int = 1,
+    use_paged: bool = True,
 ):
     """Run MiniMax-M3 sparse prefill.
 
@@ -75,6 +105,12 @@ def minimax_sparse_prefill(
     kernels. Supplying them avoids recomputing the same block layout twice.
     ``seqlens_cpu`` (host copy of ``torch.diff(cu_seqlens)``) is forwarded to
     ``get_cu_seqblocks`` to avoid a per-layer device sync when it recomputes.
+
+    ``page_size`` is the KV-cache page size the step-3 kernel resolves slots
+    against; the default of 1 keeps the per-token gather for callers that do not
+    know their layout. ``use_paged`` is the kill-switch for that fast path
+    (``SGLANG_OPT_USE_MINIMAX_SPARSE_PAGED_{PREFILL,DECODE}`` at the backend;
+    prefill defaults on, decode off -- decode measures slower with it).
     """
     if cu_seqblocks_q is None or max_seqblock_q is None or all_seqblock_q is None:
         cu_seqblocks_q, max_seqblock_q, all_seqblock_q, _, _, _ = get_cu_seqblocks(
@@ -137,7 +173,9 @@ def minimax_sparse_prefill(
             )
         except MSAUnavailableError as err:
             _warn_msa_fallback(err)
-            o = flash_prefill_with_gqa_share_sparse(
+            o = _sparse_prefill_main(
+                use_paged=use_paged,
+                page_size=page_size,
                 q=q,
                 k_cache=k_cache,
                 v_cache=v_cache,
@@ -156,7 +194,9 @@ def minimax_sparse_prefill(
                 max_seqblock_q=max_seqblock_q,
             )
     else:
-        o = flash_prefill_with_gqa_share_sparse(
+        o = _sparse_prefill_main(
+            use_paged=use_paged,
+            page_size=page_size,
             q=q,
             k_cache=k_cache,
             v_cache=v_cache,
@@ -203,6 +243,7 @@ def minimax_sparse_decode(
     disable_index_value: bool = False,
     dense_main_attn_fn: Optional[Callable] = None,
     page_size: int = 1,
+    use_paged: bool = True,
     use_msa: bool = False,
     msa_kv_indices: Optional[
         torch.Tensor
@@ -265,7 +306,9 @@ def minimax_sparse_decode(
                 )
             except MSAUnavailableError as err:
                 _warn_msa_fallback(err)
-                o = flash_decode_with_gqa_share_sparse(
+                o = _sparse_decode_main(
+                    use_paged=use_paged,
+                    page_size=page_size,
                     q=q,
                     sink=sink,
                     k_cache=k_cache,
@@ -278,7 +321,9 @@ def minimax_sparse_decode(
                     sm_scale=sm_scale,
                 )
         else:
-            o = flash_decode_with_gqa_share_sparse(
+            o = _sparse_decode_main(
+                use_paged=use_paged,
+                page_size=page_size,
                 q=q,
                 sink=sink,
                 k_cache=k_cache,

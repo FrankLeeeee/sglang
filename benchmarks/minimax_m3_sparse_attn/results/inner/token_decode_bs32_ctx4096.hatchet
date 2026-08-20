@@ -1,0 +1,110 @@
+
+[
+    {
+        "children": [
+            {
+                "children": [
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "k_load",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 70749102,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 4318.1824951171875
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "mask_bias",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 7714596,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 470.861572265625
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "page_table",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 4413848,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 269.39990234375
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "q_load",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 31024248,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 1893.56982421875
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "qk_dot",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 48173703,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 2940.2894897460938
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "score_store",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 24741493,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 1510.1008911132813
+                        }
+                    }
+                ],
+                "frame": {
+                    "name": "_instr_token_score_decode_kernel",
+                    "type": "function"
+                },
+                "metrics": {}
+            }
+        ],
+        "frame": {
+            "name": "ROOT",
+            "type": "function"
+        },
+        "metrics": {}
+    },
+    {
+        "CUDA": {
+            "0": {
+                "arch": "90",
+                "bus_width": 6016,
+                "clock_rate": 1980000,
+                "memory_clock_rate": 3201000,
+                "num_sms": 132
+            }
+        }
+    }
+]

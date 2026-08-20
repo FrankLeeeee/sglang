@@ -32,6 +32,7 @@ def _jit_module(seq_dtype: torch.dtype) -> Module:
         cuda_files=["minimax/minimax_decode_topk.cuh"],
         cuda_wrappers=[
             ("minimax_decode_topk", f"minimax_decode_topk<{args}>"),
+            ("minimax_prefill_topk", "minimax_prefill_topk"),
             (
                 "minimax_decode_topk_page_table",
                 f"minimax_decode_topk_page_table<{args}>",
@@ -69,6 +70,51 @@ def minimax_decode_topk(
 
     module = _jit_module(seq_lens.dtype)
     module.minimax_decode_topk(score, seq_lens, out, int(block_size), int(topk))
+    return out
+
+
+def minimax_prefill_topk(
+    score: torch.Tensor,
+    cu_seqlens: torch.Tensor,
+    cu_seqblocks_q: torch.Tensor,
+    prefix_lens: torch.Tensor,
+    max_seqblock_q: int,
+    all_seqblocks_q: int,
+    sample_interval: int,
+    block_size: int,
+    topk: int,
+    init_blocks: int,
+    local_blocks: int,
+) -> torch.Tensor:
+    """Select block ids for block-prefill's sampled ragged query rows."""
+    assert score.is_cuda and score.dtype == torch.float32 and score.dim() == 3
+    assert cu_seqlens.dtype == torch.int32 and cu_seqlens.is_contiguous()
+    assert cu_seqblocks_q.dtype == torch.int32 and cu_seqblocks_q.is_contiguous()
+    assert prefix_lens.dtype == torch.int32 and prefix_lens.is_contiguous()
+    assert score.is_contiguous() and 0 < topk <= 32
+    assert score.shape[-1] <= 4096
+
+    out = torch.full(
+        (score.shape[0], all_seqblocks_q, topk),
+        -1,
+        dtype=torch.int32,
+        device=score.device,
+    )
+    if all_seqblocks_q == 0:
+        return out
+    _jit_module(cu_seqlens.dtype).minimax_prefill_topk(
+        score,
+        cu_seqlens,
+        cu_seqblocks_q,
+        prefix_lens,
+        out,
+        int(max_seqblock_q),
+        int(sample_interval),
+        int(block_size),
+        int(topk),
+        int(init_blocks),
+        int(local_blocks),
+    )
     return out
 
 

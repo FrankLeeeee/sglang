@@ -29,9 +29,10 @@ namespace {
 //                          in-loop scatter -- nothing is cached in shared memory.
 // The trivial case num_blocks <= topk (every block selected) is handled by the
 // kernels below, outside the Trait.
-struct TopKTrait {
+template <uint32_t kCTASizeV>
+struct TopKTraitT {
   static constexpr uint32_t kMaxTopK = 32;
-  static constexpr uint32_t kCTASize = 512;
+  static constexpr uint32_t kCTASize = kCTASizeV;
   static constexpr uint32_t kNumWarps = kCTASize / device::kWarpThreads;
   static constexpr uint32_t kMaxNumBlocks = 4096;  // block topk
   static constexpr uint32_t kSmallThreshold = 8 * kNumWarps;
@@ -55,7 +56,9 @@ struct TopKTrait {
       const uint32_t num_blocks,
       int32_t* __restrict__ topk_out,
       const uint32_t topk,
-      Smem* smem) {
+      Smem* smem,
+      const uint32_t init_blocks = 0,
+      const uint32_t local_blocks = 0) {
     using namespace device;
     const auto tx = threadIdx.x;
     __builtin_assume(tx < kCTASize);
@@ -74,6 +77,15 @@ struct TopKTrait {
       return val;
     };
     constexpr auto clip_nan = [](float x) { return x != x ? kNegInf : x; };
+    const auto load_score = [&](uint32_t idx) {
+      float x = clip_nan(scores[idx]);
+      if (local_blocks != 0 && idx >= num_blocks - min(num_blocks, local_blocks)) {
+        x = 1e29f;
+      } else if (idx < init_blocks) {
+        x = 1e30f;
+      }
+      return x;
+    };
     constexpr auto score_to_key = [](float x) {
       uint32_t b = __float_as_uint(x);
       return (b & 0x80000000u) ? ~b : (b | 0x80000000u);
@@ -108,7 +120,7 @@ struct TopKTrait {
       // O(n^2) compare: each block's rank = #blocks that outrank it; the ones
       // with rank < topk are selected (rank is its position in topk_out).
       static_assert(kSmallThreshold <= kCTASize);
-      if (tx < num_blocks) smem->small_scores[tx] = clip_nan(scores[tx]);
+      if (tx < num_blocks) smem->small_scores[tx] = load_score(tx);
       __syncthreads();
       constexpr uint32_t kNumCandidates = kSmallThreshold / kNumWarps;
       constexpr uint32_t kNumTargets = kSmallThreshold / kWarpThreads;
@@ -143,12 +155,12 @@ struct TopKTrait {
     } else if (num_blocks <= kCTASize) {
       // 4-pass 8-bit radix select, one element per thread held in a register.
       bool active = tx < num_blocks;
-      const auto value = active ? clip_nan(scores[tx]) : kNegInf;
+      const auto value = active ? load_score(tx) : kNegInf;
       const auto key = score_to_key(value);
       uint32_t topk_remain = topk;
       uint32_t write_pos = topk;  // sentinel: not selected
       if (tx < kRadixSize) smem->histogram[0][tx] = 0;
-      if (tx == kRadixSize) smem->counter = smem->counter_final = 0;
+      if (tx == 0) smem->counter = smem->counter_final = 0;
       __syncthreads();
       uint32_t total_active = num_blocks;
 
@@ -205,12 +217,12 @@ struct TopKTrait {
       for (uint32_t i = 0; i < kIters; ++i) {
         const uint32_t idx = i * kCTASize + tx;
         if (idx < num_blocks) {
-          key[i] = score_to_key(clip_nan(scores[idx]));
+          key[i] = score_to_key(load_score(idx));
           active |= 1u << i;
         }
       }
       if (tx < kRadixSize) smem->histogram[0][tx] = 0;
-      if (tx == kRadixSize) smem->counter = smem->counter_final = 0;
+      if (tx == 0) smem->counter = smem->counter_final = 0;
       __syncthreads();
 
       uint32_t topk_remain = topk;
@@ -258,6 +270,9 @@ struct TopKTrait {
   }
 };
 
+using TopKTrait = TopKTraitT<512>;
+using PrefillTopKTrait = TopKTraitT<256>;
+
 // -------------------------------------------------------------------------
 // Kernels: one CTA (kCTASize threads) per (head, batch) row. The trivial case
 // num_blocks <= topk (every block selected) is special-judged here, outside the
@@ -298,6 +313,53 @@ __global__ void minimax_decode_topk_block_kernel(
   const float* __restrict__ row = score + (static_cast<int64_t>(h) * batch + b) * max_seqblock;
   __shared__ TopKTrait::Smem smem;
   TopKTrait::forward(row, static_cast<uint32_t>(num_blocks), out, static_cast<uint32_t>(topk), &smem);
+}
+
+template <bool kUsePDL>
+__global__ void minimax_prefill_topk_block_kernel(
+    const float* __restrict__ score,
+    const int32_t* __restrict__ cu_seqlens,
+    const int32_t* __restrict__ cu_seqblocks_q,
+    const int32_t* __restrict__ prefix_lens,
+    int32_t* __restrict__ topk_idx,
+    int total_q,
+    int max_seqblock,
+    int all_seqblocks_q,
+    int sample_interval,
+    int block_size,
+    int topk,
+    int init_blocks,
+    int local_blocks) {
+  const int qb = blockIdx.x;
+  const int b = blockIdx.y;
+  const int h = blockIdx.z;
+  const int tx = threadIdx.x;
+  const int block_start = cu_seqblocks_q[b];
+  const int query_blocks = cu_seqblocks_q[b + 1] - block_start;
+  if (qb >= query_blocks) return;
+
+  const int score_row = cu_seqlens[b] + qb * sample_interval;
+  const int valid_blocks_raw = (prefix_lens[b] + qb * sample_interval + block_size) / block_size;
+  const int valid_blocks = valid_blocks_raw < max_seqblock ? valid_blocks_raw : max_seqblock;
+  int32_t* __restrict__ out = topk_idx + (static_cast<int64_t>(h) * all_seqblocks_q + block_start + qb) * topk;
+  device::PDLWaitPrimary<kUsePDL>();
+
+  if (valid_blocks <= topk) {
+    for (int i = tx; i < topk; i += PrefillTopKTrait::kCTASize)
+      out[i] = (i < valid_blocks) ? i : -1;
+    return;
+  }
+
+  const float* __restrict__ row = score + (static_cast<int64_t>(h) * total_q + score_row) * max_seqblock;
+  __shared__ PrefillTopKTrait::Smem smem;
+  PrefillTopKTrait::forward(
+      row,
+      static_cast<uint32_t>(valid_blocks),
+      out,
+      static_cast<uint32_t>(topk),
+      &smem,
+      static_cast<uint32_t>(init_blocks),
+      static_cast<uint32_t>(local_blocks));
 }
 
 // Page-table output: for each (batch b, kv-head h) pseudo-request emit the
@@ -450,6 +512,62 @@ void minimax_decode_topk(
           max_seqblock,
           static_cast<int>(block_size),
           topk_i);
+}
+
+void minimax_prefill_topk(
+    tvm::ffi::TensorView score,
+    tvm::ffi::TensorView cu_seqlens,
+    tvm::ffi::TensorView cu_seqblocks_q,
+    tvm::ffi::TensorView prefix_lens,
+    tvm::ffi::TensorView topk_idx,
+    int64_t max_seqblock_q,
+    int64_t sample_interval,
+    int64_t block_size,
+    int64_t topk,
+    int64_t init_blocks,
+    int64_t local_blocks) {
+  using namespace host;
+  SymbolicSize H = {"num_heads"};
+  SymbolicSize N = {"total_q"};
+  SymbolicSize S = {"max_seqblock"};
+  SymbolicSize BP1 = {"batch_plus_one"};
+  SymbolicSize B = {"batch"};
+  SymbolicSize QB = {"all_seqblocks_q"};
+  SymbolicSize T = {"topk"};
+  SymbolicDevice device_;
+  device_.set_options<kDLCUDA>();
+
+  TensorMatcher({H, N, S}).with_dtype<fp32_t>().with_device(device_).verify(score);
+  TensorMatcher({BP1}).with_dtype<int32_t>().with_device(device_).verify(cu_seqlens);
+  TensorMatcher({BP1}).with_dtype<int32_t>().with_device(device_).verify(cu_seqblocks_q);
+  TensorMatcher({B}).with_dtype<int32_t>().with_device(device_).verify(prefix_lens);
+  TensorMatcher({H, QB, T}).with_dtype<int32_t>().with_device(device_).verify(topk_idx);
+
+  RuntimeCheck(BP1.unwrap() == B.unwrap() + 1, "cumulative lengths must have batch + 1 entries");
+  RuntimeCheck(T.unwrap() == topk, "topk arg must match topk_idx last dim");
+  RuntimeCheck(topk > 0 && topk <= PrefillTopKTrait::kMaxTopK, "topk must be in [1, 32]");
+  RuntimeCheck(S.unwrap() <= PrefillTopKTrait::kMaxNumBlocks, "max_seqblock exceeds radix kernel capacity");
+  if (B.unwrap() == 0 || H.unwrap() == 0 || QB.unwrap() == 0) return;
+
+  const DLDevice device = device_.unwrap();
+  const dim3 grid(
+      static_cast<unsigned>(max_seqblock_q), static_cast<unsigned>(B.unwrap()), static_cast<unsigned>(H.unwrap()));
+  LaunchKernel(grid, PrefillTopKTrait::kCTASize, device, 0)
+      .enable_pdl(true)(
+          minimax_prefill_topk_block_kernel<true>,
+          static_cast<const float*>(score.data_ptr()),
+          static_cast<const int32_t*>(cu_seqlens.data_ptr()),
+          static_cast<const int32_t*>(cu_seqblocks_q.data_ptr()),
+          static_cast<const int32_t*>(prefix_lens.data_ptr()),
+          static_cast<int32_t*>(topk_idx.data_ptr()),
+          static_cast<int>(N.unwrap()),
+          static_cast<int>(S.unwrap()),
+          static_cast<int>(QB.unwrap()),
+          static_cast<int>(sample_interval),
+          static_cast<int>(block_size),
+          static_cast<int>(topk),
+          static_cast<int>(init_blocks),
+          static_cast<int>(local_blocks));
 }
 
 // Page-table variant: emit the per-(batch, kv-head) paged page table consumed by

@@ -531,33 +531,53 @@ def flash_prefill_with_topk_index(
         DISABLE_INDEX_VALUE=disable_index_value,
     )
 
-    # topk extraction kernel
-    topk_idx = torch.full(
-        (num_heads, all_seqblock_q, topk),
-        fill_value=-1,
-        device=score.device,
-        dtype=torch.int32,
-    )
-    # launch kernel
-    grid = (max_seqblock_q, batch_size, num_heads)
-    _topk_index_kernel[grid](
-        score,
-        topk_idx,
-        block_size_q,
-        block_size_k,
-        cu_seqlens,
-        cu_seqblocks_q,
-        prefix_lens,
-        topk,
-        init_blocks,
-        local_blocks,
-        score.stride(0),
-        score.stride(1),
-        score.stride(2),
-        topk_idx.stride(0),
-        topk_idx.stride(1),
-        topk_idx.stride(2),
-        MASK_INIT=False,
-        MASK_LOCAL=False,
-    )
+    # Reuse the single-stage block radix selector with a prefill-specific CTA
+    # width. It scans each sampled query row once and avoids the streaming
+    # bitonic merge used by the fallback below.
+    if topk <= 32 and max_seqblock_k <= 4096:
+        from sglang.kernels.ops.attention.minimax_decode_topk import (
+            minimax_prefill_topk,
+        )
+
+        topk_idx = minimax_prefill_topk(
+            score,
+            cu_seqlens,
+            cu_seqblocks_q,
+            prefix_lens,
+            max_seqblock_q,
+            all_seqblock_q,
+            block_size_q,
+            block_size_k,
+            topk,
+            init_blocks,
+            local_blocks,
+        )
+    else:
+        topk_idx = torch.full(
+            (num_heads, all_seqblock_q, topk),
+            fill_value=-1,
+            device=score.device,
+            dtype=torch.int32,
+        )
+        grid = (max_seqblock_q, batch_size, num_heads)
+        _topk_index_kernel[grid](
+            score,
+            topk_idx,
+            block_size_q,
+            block_size_k,
+            cu_seqlens,
+            cu_seqblocks_q,
+            prefix_lens,
+            topk,
+            init_blocks,
+            local_blocks,
+            score.stride(0),
+            score.stride(1),
+            score.stride(2),
+            topk_idx.stride(0),
+            topk_idx.stride(1),
+            topk_idx.stride(2),
+            MASK_INIT=False,
+            MASK_LOCAL=False,
+        )
     return o, topk_idx

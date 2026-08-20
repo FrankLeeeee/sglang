@@ -1,15 +1,17 @@
-"""Correctness tests for the MiniMax-M3 single-stage radix-select decode topk.
+"""Correctness tests for the MiniMax-M3 block-level top-k selectors.
 
-The kernel selects, per (head, batch) row, the indices of the ``topk`` largest
-block scores among the row's first ``num_blocks = ceil(seq_len / block_size)``
-entries, front-packing valid block ids and ``-1``-padding the tail. This mirrors
-the consumer ``_gqa_share_sparse_decode_kernel`` contract.
+The decode and prefill radix paths select the largest block scores, front-pack
+valid block ids, and ``-1``-pad the tail. This mirrors the consumer
+``_gqa_share_sparse_decode_kernel`` contract.
 """
 
 import pytest
 import torch
 
-from sglang.kernels.ops.attention.minimax_decode_topk import minimax_decode_topk
+from sglang.kernels.ops.attention.minimax_decode_topk import (
+    minimax_decode_topk,
+    minimax_prefill_topk,
+)
 from sglang.test.ci.ci_register import register_amd_ci, register_cuda_ci
 
 register_cuda_ci(est_time=40, stage="base-b-kernel-unit", runner_config="1-gpu-large")
@@ -137,6 +139,72 @@ def test_decode_topk_out_param():
     out = torch.empty((H, B, topk), dtype=torch.int32, device="cuda")
     res = minimax_decode_topk(score, seq_lens, block_size, topk, out=out)
     assert res is out
+
+
+@pytest.mark.parametrize(
+    "sample_interval,q_lens",
+    [
+        (1, [64, 40]),  # production: every query token selects blocks
+        (128, [1024, 640]),  # generic sampled-query path
+    ],
+)
+def test_prefill_topk_ragged_rows_and_forced_blocks(sample_interval, q_lens):
+    """Prefill maps sampled ragged rows and applies init/local priorities."""
+    torch.manual_seed(19)
+    block_size = 128
+    prefix_lens_cpu = [0, 65536]
+    num_heads, width, topk = 2, 1024, 16
+    init_blocks, local_blocks = 1, 2
+
+    cu_seqlens = torch.tensor(
+        [0, q_lens[0], sum(q_lens)], dtype=torch.int32, device="cuda"
+    )
+    q_blocks = [(n + sample_interval - 1) // sample_interval for n in q_lens]
+    cu_seqblocks_q = torch.tensor(
+        [0, q_blocks[0], sum(q_blocks)], dtype=torch.int32, device="cuda"
+    )
+    prefix_lens = torch.tensor(
+        prefix_lens_cpu, dtype=torch.int32, device="cuda"
+    )
+    score = torch.randn(
+        num_heads, sum(q_lens), width, dtype=torch.float32, device="cuda"
+    )
+
+    out = minimax_prefill_topk(
+        score,
+        cu_seqlens,
+        cu_seqblocks_q,
+        prefix_lens,
+        max(q_blocks),
+        sum(q_blocks),
+        sample_interval,
+        block_size,
+        topk,
+        init_blocks,
+        local_blocks,
+    )
+
+    out_row = 0
+    for h in range(num_heads):
+        for b, (q_len, prefix) in enumerate(zip(q_lens, prefix_lens_cpu)):
+            seq_start = sum(q_lens[:b])
+            for qb in range(q_blocks[b]):
+                valid = min(
+                    width,
+                    (prefix + qb * sample_interval + block_size) // block_size,
+                )
+                got = out[h, out_row]
+                got_set = set(got[got >= 0].tolist())
+                if valid <= topk:
+                    expected = set(range(valid))
+                else:
+                    biased = score[h, seq_start + qb * sample_interval, :valid].clone()
+                    biased[:init_blocks] = 1e30
+                    biased[max(0, valid - local_blocks) :] = 1e29
+                    expected = set(torch.topk(biased, topk).indices.tolist())
+                assert got_set == expected
+                out_row += 1
+        out_row = 0
 
 
 if __name__ == "__main__":

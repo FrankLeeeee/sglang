@@ -16,6 +16,10 @@ from sglang.srt.layers.attention.minimax_sparse_ops.minimax_sparse import (
     minimax_sparse_decode,
     minimax_sparse_prefill,
 )
+from sglang.srt.layers.attention.minimax_sparse_ops.minimax_token_sparse import (
+    minimax_token_sparse_decode,
+    minimax_token_sparse_prefill,
+)
 from sglang.srt.mem_cache.memory_pool import MiniMaxSparseKVPool
 from sglang.srt.model_executor.forward_batch_info import ForwardBatch
 
@@ -23,6 +27,32 @@ if TYPE_CHECKING:
     from sglang.srt.model_executor.model_runner import ModelRunner
 
 logger = logging.getLogger(__name__)
+
+
+def _resolve_sparse_window_counts(
+    sparse_cfg: dict, block_size: int
+) -> tuple[int, int, int, int]:
+    """Return ``(init_blocks, local_blocks, init_tokens, local_tokens)``.
+
+    Block attention needs a covering block count (including the extra boundary
+    block used by its local window), while token attention should retain exact
+    token counts whenever the model config provides them.
+    """
+    if "sparse_init_block" in sparse_cfg:
+        init_blocks = sparse_cfg["sparse_init_block"]
+    else:
+        init_tokens = sparse_cfg["sparse_init_tokens"]
+        init_blocks = (init_tokens + block_size - 1) // block_size
+    init_tokens = sparse_cfg.get("sparse_init_tokens", init_blocks * block_size)
+
+    if "sparse_local_block" in sparse_cfg:
+        local_blocks = sparse_cfg["sparse_local_block"]
+    else:
+        local_tokens = sparse_cfg["sparse_local_tokens"]
+        local_blocks = (local_tokens + block_size - 1) // block_size + 1
+    local_tokens = sparse_cfg.get("sparse_local_tokens", local_blocks * block_size)
+
+    return init_blocks, local_blocks, init_tokens, local_tokens
 
 
 class MiniMaxSparseAttnBackend(AttentionBackend):
@@ -49,25 +79,46 @@ class MiniMaxSparseAttnBackend(AttentionBackend):
 
         self.block_size_q = 1
         self.block_size_k = sparse_cfg["sparse_block_size"]
-        if "sparse_init_block" in sparse_cfg:
-            self.init_blocks = sparse_cfg["sparse_init_block"]
-        else:
-            init_tokens = sparse_cfg["sparse_init_tokens"]
-            self.init_blocks = (
-                init_tokens + self.block_size_k - 1
-            ) // self.block_size_k
-        if "sparse_local_block" in sparse_cfg:
-            self.local_blocks = sparse_cfg["sparse_local_block"]
-        else:
-            local_tokens = sparse_cfg["sparse_local_tokens"]
-            self.local_blocks = (
-                local_tokens + self.block_size_k - 1
-            ) // self.block_size_k + 1
+        (
+            self.init_blocks,
+            self.local_blocks,
+            self.init_tokens,
+            self.local_tokens,
+        ) = _resolve_sparse_window_counts(
+            sparse_cfg,
+            self.block_size_k,
+        )
         self.topk_blocks = sparse_cfg["sparse_topk_blocks"]
 
         # MSA (fmha_sm100) is SM100-only; fall back to the Triton sparse path when
         # the kernel is unavailable or its constraints don't hold.
         from sglang.srt.environ import envs
+
+        # Token-granularity selection (DeepSeek-style): the indexer scores every
+        # key with no block pooling and the top-k picks individual tokens. The
+        # token budget defaults to the block path's, so the two are directly
+        # comparable: topk_blocks blocks of block_size tokens == that many tokens.
+        self.use_token_sparse = envs.SGLANG_USE_MINIMAX_TOKEN_SPARSE.get()
+        _topk_tokens = envs.SGLANG_MINIMAX_TOKEN_SPARSE_TOPK.get()
+        self.topk_tokens = (
+            self.topk_blocks * self.block_size_k
+            if _topk_tokens is None
+            else _topk_tokens
+        )
+        self.token_score_budget_bytes = (
+            envs.SGLANG_MINIMAX_TOKEN_SPARSE_SCORE_BUDGET_MB.get() * 1024 * 1024
+        )
+        if self.use_token_sparse:
+            value_layers = sorted(
+                set(self.sparse_layer_ids) - self.disable_value_layer_ids
+            )
+            if value_layers:
+                raise NotImplementedError(
+                    "Token-granularity MiniMax sparse attention requires the K-only "
+                    "indexer (sparse_disable_index_value=1 on every sparse layer), "
+                    "which is how MiniMax-M3 ships. Layers with an index-value "
+                    f"output: {value_layers}"
+                )
         from sglang.srt.layers.attention.minimax_sparse_ops.msa import (
             msa_available,
         )
@@ -79,7 +130,10 @@ class MiniMaxSparseAttnBackend(AttentionBackend):
             torch.float8_e5m2,
         )
         self.use_msa = (
-            not envs.SGLANG_DISABLE_MSA.get()
+            # MSA's sparse unit is a 128-token block; token-granularity
+            # selection has no blocks for it to consume.
+            not self.use_token_sparse
+            and not envs.SGLANG_DISABLE_MSA.get()
             and msa_available()
             and self.block_size_k == 128
             and self.kv_pool.page_size == self.block_size_k
@@ -115,6 +169,18 @@ class MiniMaxSparseAttnBackend(AttentionBackend):
             self._msa_cg: dict[int, tuple] = {}
 
         self.page_size = self.kv_pool.page_size
+        # Step-3 slot resolution: one req_to_token lookup per page-aligned run
+        # instead of a per-token gather. Same math either way, and the kernel
+        # falls back to the gather on its own when page and block sizes do not
+        # divide one another, so this needs no page_size condition here. Prefill
+        # gains from it and decode measures slightly slower, hence the split
+        # defaults -- see the env definitions for the numbers.
+        self.use_paged_sparse_prefill = (
+            envs.SGLANG_OPT_USE_MINIMAX_SPARSE_PAGED_PREFILL.get()
+        )
+        self.use_paged_sparse_decode = (
+            envs.SGLANG_OPT_USE_MINIMAX_SPARSE_PAGED_DECODE.get()
+        )
         self.use_dense_sparse_decode = (
             envs.SGLANG_OPT_USE_MINIMAX_DENSE_SPARSE_DECODE.get()
             and self.block_size_k % self.page_size == 0
@@ -154,12 +220,20 @@ class MiniMaxSparseAttnBackend(AttentionBackend):
         )
         self.dense_backend: Optional[AttentionBackend] = None
 
-        logger.info(
-            f"[MiniMaxSparse] Backend initialized "
-            f"(score_type={self.score_type!r}, "
-            f"main_attn={'MSA' if self.use_msa else 'triton'}, "
-            f"disable_value_layers={sorted(self.disable_value_layer_ids)})"
-        )
+        if self.use_token_sparse:
+            logger.info(
+                f"[MiniMaxSparse] Backend initialized "
+                f"(granularity=token, topk_tokens={self.topk_tokens}, "
+                f"init_tokens={self.init_tokens}, local_tokens={self.local_tokens}, "
+                f"score_budget={self.token_score_budget_bytes >> 20}MiB)"
+            )
+        else:
+            logger.info(
+                f"[MiniMaxSparse] Backend initialized "
+                f"(granularity=block, score_type={self.score_type!r}, "
+                f"main_attn={'MSA' if self.use_msa else 'triton'}, "
+                f"disable_value_layers={sorted(self.disable_value_layer_ids)})"
+            )
 
     def init_forward_metadata_out_graph(
         self, forward_batch: ForwardBatch, in_capture: bool = False
@@ -321,32 +395,71 @@ class MiniMaxSparseAttnBackend(AttentionBackend):
             q = q[:actual_num_tokens]
             idx_q = idx_q[:actual_num_tokens]
 
-        idx_o, o = minimax_sparse_prefill(
-            q,
-            k_cache,
-            v_cache,
-            None,
-            idx_q,
-            idx_k_cache,
-            idx_v_cache,
-            None,
-            self.req_to_token,
-            forward_batch.req_pool_indices,
-            cu_seqlens,
-            seq_lens,
-            prefix_lens,
-            self._max_seqlen_q,
-            self._max_seqlen_k,
-            self.block_size_q,
-            self.block_size_k,
-            self.topk_blocks,
-            self.init_blocks,
-            self.local_blocks,
-            score_type=self.score_type,
-            disable_index_value=disable_value,
-            use_msa=self.use_msa,
-            seqlens_cpu=forward_batch.extend_seq_lens_cpu,
-        )
+        if self.use_token_sparse:
+            idx_o, o = minimax_token_sparse_prefill(
+                q,
+                k_cache,
+                v_cache,
+                None,
+                idx_q,
+                idx_k_cache,
+                idx_v_cache,
+                None,
+                self.req_to_token,
+                forward_batch.req_pool_indices,
+                cu_seqlens,
+                seq_lens,
+                prefix_lens,
+                self._max_seqlen_q,
+                self._max_seqlen_k,
+                self.topk_tokens,
+                self.init_tokens,
+                self.local_tokens,
+                disable_index_value=disable_value,
+                seqlens_cpu=forward_batch.extend_seq_lens_cpu,
+                # Host-side prefix lengths keep the chunk planner sync-free.
+                prefix_lens_cpu=(
+                    None
+                    if forward_batch.extend_seq_lens_cpu is None
+                    else [
+                        int(s) - int(e)
+                        for s, e in zip(
+                            forward_batch.seq_lens_cpu.tolist(),
+                            forward_batch.extend_seq_lens_cpu,
+                        )
+                    ]
+                ),
+                score_budget_bytes=self.token_score_budget_bytes,
+            )
+        else:
+            idx_o, o = minimax_sparse_prefill(
+                q,
+                k_cache,
+                v_cache,
+                None,
+                idx_q,
+                idx_k_cache,
+                idx_v_cache,
+                None,
+                self.req_to_token,
+                forward_batch.req_pool_indices,
+                cu_seqlens,
+                seq_lens,
+                prefix_lens,
+                self._max_seqlen_q,
+                self._max_seqlen_k,
+                self.block_size_q,
+                self.block_size_k,
+                self.topk_blocks,
+                self.init_blocks,
+                self.local_blocks,
+                score_type=self.score_type,
+                disable_index_value=disable_value,
+                use_msa=self.use_msa,
+                seqlens_cpu=forward_batch.extend_seq_lens_cpu,
+                page_size=self.page_size,
+                use_paged=self.use_paged_sparse_prefill,
+            )
 
         if actual_num_tokens < original_num_tokens:
             pad_len = original_num_tokens - actual_num_tokens
@@ -432,6 +545,30 @@ class MiniMaxSparseAttnBackend(AttentionBackend):
         else:
             idx_k_cache, idx_v_cache = self.kv_pool.get_index_kv_buffer(layer.layer_id)
 
+        if self.use_token_sparse:
+            idx_o, o = minimax_token_sparse_decode(
+                q,
+                None,
+                k_cache,
+                v_cache,
+                idx_q,
+                None,
+                idx_k_cache,
+                idx_v_cache,
+                self.req_to_token,
+                forward_batch.req_pool_indices,
+                forward_batch.seq_lens,
+                self._max_seqlen_k,
+                self.topk_tokens,
+                self.init_tokens,
+                self.local_tokens,
+                disable_index_value=disable_value,
+            )
+            return (
+                None if idx_o is None else idx_o.reshape(q.shape[0], -1).contiguous(),
+                o.reshape(q.shape[0], -1).contiguous(),
+            )
+
         attn_fn = None
         if self.use_dense_sparse_decode and k_cache.shape[1] == 1:
 
@@ -480,6 +617,7 @@ class MiniMaxSparseAttnBackend(AttentionBackend):
             disable_index_value=disable_value,
             dense_main_attn_fn=attn_fn,
             page_size=self.page_size,
+            use_paged=self.use_paged_sparse_decode,
             use_msa=self._use_msa_decode,
             msa_kv_indices=msa_kv_indices,
             msa_plan=msa_plan,

@@ -1,0 +1,193 @@
+
+[
+    {
+        "children": [
+            {
+                "children": [
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "k_load",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 100637324181,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 385518.64329980046
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "mask_bias",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 4592220223,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 17591.86070433166
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "page_table",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 178688893653,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 684516.0238966906
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "q_load",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 51495996754,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 197268.8191697581
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "qk_dot",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 105883563026,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 405615.810122628
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "score_store",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 69972594361,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 268049.5943576138
+                        }
+                    }
+                ],
+                "frame": {
+                    "name": "_instr_token_score_prefill_kernel",
+                    "type": "function"
+                },
+                "metrics": {}
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "k_load",
+                    "type": "function"
+                },
+                "metrics": {
+                    "cycles": 435329416,
+                    "device_id": "0",
+                    "device_type": "1",
+                    "normalized_cycles": 1673.5200209127943
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "mask_bias",
+                    "type": "function"
+                },
+                "metrics": {
+                    "cycles": 20011215,
+                    "device_id": "0",
+                    "device_type": "1",
+                    "normalized_cycles": 76.92833912535541
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "page_table",
+                    "type": "function"
+                },
+                "metrics": {
+                    "cycles": 774093018,
+                    "device_id": "0",
+                    "device_type": "1",
+                    "normalized_cycles": 2975.815821441784
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "q_load",
+                    "type": "function"
+                },
+                "metrics": {
+                    "cycles": 219036703,
+                    "device_id": "0",
+                    "device_type": "1",
+                    "normalized_cycles": 842.03431772056
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "qk_dot",
+                    "type": "function"
+                },
+                "metrics": {
+                    "cycles": 453891432,
+                    "device_id": "0",
+                    "device_type": "1",
+                    "normalized_cycles": 1744.8772604256621
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "score_store",
+                    "type": "function"
+                },
+                "metrics": {
+                    "cycles": 302631483,
+                    "device_id": "0",
+                    "device_type": "1",
+                    "normalized_cycles": 1163.394494248985
+                }
+            }
+        ],
+        "frame": {
+            "name": "ROOT",
+            "type": "function"
+        },
+        "metrics": {
+            "cycles": 1202,
+            "device_id": "0",
+            "device_type": "1",
+            "normalized_cycles": 0.004620802066674868
+        }
+    },
+    {
+        "CUDA": {
+            "0": {
+                "arch": "90",
+                "bus_width": 6016,
+                "clock_rate": 1980000,
+                "memory_clock_rate": 3201000,
+                "num_sms": 132
+            }
+        }
+    }
+]
