@@ -1,0 +1,9 @@
+............                                                             [100%]
+=============================== warnings summary ===============================
+benchmarks/dsa_m3_attention/test_implementations.py: 14 warnings
+  /data/frankleeeee/home/sglang/.venv/lib/python3.12/site-packages/torch/jit/_script.py:365: DeprecationWarning: `torch.jit.script_method` is deprecated. Please switch to `torch.compile` or `torch.export`.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+12 passed, 14 warnings in 50.76s
+Warning: please use at least NVCC 12.9 for the best DeepGEMM performance

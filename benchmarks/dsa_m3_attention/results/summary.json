@@ -1,0 +1,339 @@
+{
+  "phases": [
+    {
+      "architecture": "dsa",
+      "config": 1,
+      "phase": "prefill",
+      "wins": 24,
+      "separated_wins": 24,
+      "points": 24,
+      "min_speedup": 2.444205553957846,
+      "max_speedup": 7.307587242809263
+    },
+    {
+      "architecture": "dsa",
+      "config": 1,
+      "phase": "decode",
+      "wins": 10,
+      "separated_wins": 10,
+      "points": 24,
+      "min_speedup": 0.5955464224390958,
+      "max_speedup": 4.094072273485294
+    },
+    {
+      "architecture": "dsa",
+      "config": 2,
+      "phase": "prefill",
+      "wins": 24,
+      "separated_wins": 24,
+      "points": 24,
+      "min_speedup": 3.5131049041975095,
+      "max_speedup": 9.868347300468175
+    },
+    {
+      "architecture": "dsa",
+      "config": 2,
+      "phase": "decode",
+      "wins": 10,
+      "separated_wins": 10,
+      "points": 24,
+      "min_speedup": 0.6121442850852756,
+      "max_speedup": 4.175569298802093
+    },
+    {
+      "architecture": "m3",
+      "config": 1,
+      "phase": "prefill",
+      "wins": 19,
+      "separated_wins": 19,
+      "points": 24,
+      "min_speedup": 0.8960780886912506,
+      "max_speedup": 4.170229674735779
+    },
+    {
+      "architecture": "m3",
+      "config": 1,
+      "phase": "decode",
+      "wins": 20,
+      "separated_wins": 18,
+      "points": 24,
+      "min_speedup": 0.8918654176518486,
+      "max_speedup": 5.0756523450053255
+    },
+    {
+      "architecture": "m3",
+      "config": 2,
+      "phase": "prefill",
+      "wins": 19,
+      "separated_wins": 19,
+      "points": 24,
+      "min_speedup": 0.7158497125303692,
+      "max_speedup": 3.80869900757464
+    },
+    {
+      "architecture": "m3",
+      "config": 2,
+      "phase": "decode",
+      "wins": 22,
+      "separated_wins": 21,
+      "points": 24,
+      "min_speedup": 0.9619518336073022,
+      "max_speedup": 9.14295390364626
+    }
+  ],
+  "both_phases": [
+    {
+      "architecture": "dsa",
+      "config": 1,
+      "context": 16384,
+      "both_faster_batches": [
+        32
+      ],
+      "both_10pct_faster_batches": [
+        32
+      ]
+    },
+    {
+      "architecture": "dsa",
+      "config": 1,
+      "context": 32768,
+      "both_faster_batches": [
+        16,
+        32
+      ],
+      "both_10pct_faster_batches": [
+        16,
+        32
+      ]
+    },
+    {
+      "architecture": "dsa",
+      "config": 1,
+      "context": 65536,
+      "both_faster_batches": [
+        8,
+        16,
+        32
+      ],
+      "both_10pct_faster_batches": [
+        8,
+        16,
+        32
+      ]
+    },
+    {
+      "architecture": "dsa",
+      "config": 1,
+      "context": 131072,
+      "both_faster_batches": [
+        4,
+        8,
+        16,
+        32
+      ],
+      "both_10pct_faster_batches": [
+        4,
+        8,
+        16,
+        32
+      ]
+    },
+    {
+      "architecture": "dsa",
+      "config": 2,
+      "context": 16384,
+      "both_faster_batches": [
+        32
+      ],
+      "both_10pct_faster_batches": [
+        32
+      ]
+    },
+    {
+      "architecture": "dsa",
+      "config": 2,
+      "context": 32768,
+      "both_faster_batches": [
+        16,
+        32
+      ],
+      "both_10pct_faster_batches": [
+        16,
+        32
+      ]
+    },
+    {
+      "architecture": "dsa",
+      "config": 2,
+      "context": 65536,
+      "both_faster_batches": [
+        8,
+        16,
+        32
+      ],
+      "both_10pct_faster_batches": [
+        8,
+        16,
+        32
+      ]
+    },
+    {
+      "architecture": "dsa",
+      "config": 2,
+      "context": 131072,
+      "both_faster_batches": [
+        4,
+        8,
+        16,
+        32
+      ],
+      "both_10pct_faster_batches": [
+        4,
+        8,
+        16,
+        32
+      ]
+    },
+    {
+      "architecture": "m3",
+      "config": 1,
+      "context": 16384,
+      "both_faster_batches": [
+        32
+      ],
+      "both_10pct_faster_batches": [
+        32
+      ]
+    },
+    {
+      "architecture": "m3",
+      "config": 1,
+      "context": 32768,
+      "both_faster_batches": [
+        2,
+        4,
+        8,
+        16,
+        32
+      ],
+      "both_10pct_faster_batches": [
+        4,
+        8,
+        16,
+        32
+      ]
+    },
+    {
+      "architecture": "m3",
+      "config": 1,
+      "context": 65536,
+      "both_faster_batches": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32
+      ],
+      "both_10pct_faster_batches": [
+        2,
+        4,
+        8,
+        16,
+        32
+      ]
+    },
+    {
+      "architecture": "m3",
+      "config": 1,
+      "context": 131072,
+      "both_faster_batches": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32
+      ],
+      "both_10pct_faster_batches": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32
+      ]
+    },
+    {
+      "architecture": "m3",
+      "config": 2,
+      "context": 16384,
+      "both_faster_batches": [
+        32
+      ],
+      "both_10pct_faster_batches": []
+    },
+    {
+      "architecture": "m3",
+      "config": 2,
+      "context": 32768,
+      "both_faster_batches": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32
+      ],
+      "both_10pct_faster_batches": [
+        2,
+        4,
+        8,
+        16,
+        32
+      ]
+    },
+    {
+      "architecture": "m3",
+      "config": 2,
+      "context": 65536,
+      "both_faster_batches": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32
+      ],
+      "both_10pct_faster_batches": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32
+      ]
+    },
+    {
+      "architecture": "m3",
+      "config": 2,
+      "context": 131072,
+      "both_faster_batches": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32
+      ],
+      "both_10pct_faster_batches": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32
+      ]
+    }
+  ]
+}

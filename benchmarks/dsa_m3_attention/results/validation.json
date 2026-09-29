@@ -1,0 +1,15 @@
+{
+  "measurements": 576,
+  "samples": 8640,
+  "comparisons": 192,
+  "charts": 32,
+  "bar_labels": 384,
+  "source_sha256": {
+    "profile_stages.py": "06ab642dfe2974cc599493fa9bd7aa1b67632f10e62cb5dfa78523c6e022e500",
+    "test_implementations.py": "3dbec88aabf53cd91af935a0ce34ec299dbdba95f98263b3a46363915ae82aa0",
+    "publish_report.py": "e227231c68ef83b36e267813542e534381dacf36ce5c24e6316688beb097aae4",
+    "implementations.py": "13701b16279001778c36cec183587e51b3515d5f94bd1d6a32bf59973208897d",
+    "benchmark.py": "97ff6b4339bcb92a204cba40b4a5c3939139b3da222334a7a30f77c863df115a",
+    "report.py": "d1b5a710ed53578f3bf1e1e3ba9ad65f2677f22781fe044d8837c61014169312"
+  }
+}

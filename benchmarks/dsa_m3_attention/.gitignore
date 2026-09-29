@@ -1,0 +1,5 @@
+!results/*.csv
+!results/**/*.csv
+results/document/
+results/**/*.zip
+!results/correctness.txt

@@ -1,0 +1,546 @@
+[
+  {
+    "architecture": "m3",
+    "config": 1,
+    "phase": "prefill",
+    "context": 16384,
+    "batch": 1,
+    "scope_ms": {
+      "main_projection_cache": 0.4133763333333331,
+      "m3_index_projection_cache": 0.08430900000000034,
+      "m3_native_sparse_pipeline": 1.5030099999999995
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.4487899999999993,
+      "index_scoring": 0.3144006666666669,
+      "selection": 0.034004999999999654,
+      "sparse_attention": 1.105804
+    },
+    "kernels_ms": {
+      "Memset (Device)": 0.0007999999999998787,
+      "nvjet_sm90_tst_256x128_64x4_1x2_h_bz_coopA_TNT": 0.25851833333333335,
+      "_norm": 0.08158866666666668,
+      "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_TNT": 0.08085366666666641,
+      "_cache_write": 0.009674666666666932,
+      "nvjet_sm90_tst_64x64_64x13_2x1_v_bz_splitK_TNT": 0.01174399999999999,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.00246399999999979,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>)": 0.0017919999999996131,
+      "_flash_attn_fwd_with_block_score_kernel": 0.3144006666666669,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul> >(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)": 0.001354666666666617,
+      "void (anonymous namespace)::minimax_prefill_topk_block_kernel<true>(float const*, int const*, int const*, int const*, int*, int, int, int, int, int, int, int, int)": 0.034004999999999654,
+      "_gqa_share_sparse_fwd_kernel": 1.105804
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  },
+  {
+    "architecture": "m3",
+    "config": 1,
+    "phase": "prefill",
+    "context": 16384,
+    "batch": 32,
+    "scope_ms": {
+      "main_projection_cache": 0.4088426666666669,
+      "m3_index_projection_cache": 0.08003233333333314,
+      "m3_native_sparse_pipeline": 1.580758
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.44383933333333364,
+      "index_scoring": 0.3273179999999999,
+      "selection": 0.035765666666666675,
+      "sparse_attention": 1.1687359999999998
+    },
+    "kernels_ms": {
+      "Memset (Device)": 0.0007893333333334263,
+      "nvjet_sm90_tst_256x128_64x4_1x2_h_bz_coopA_TNT": 0.25597899999999996,
+      "_norm": 0.08157766666666705,
+      "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_TNT": 0.07904066666666681,
+      "_cache_write": 0.009684999999999718,
+      "nvjet_sm90_tst_64x64_64x13_2x1_v_bz_splitK_TNT": 0.011370666666666694,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.0024640000000000933,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>)": 0.0018133333333334271,
+      "_flash_attn_fwd_with_block_score_kernel": 0.3273179999999999,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul> >(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)": 0.0011196666666664897,
+      "void (anonymous namespace)::minimax_prefill_topk_block_kernel<true>(float const*, int const*, int const*, int const*, int*, int, int, int, int, int, int, int, int)": 0.035765666666666675,
+      "_gqa_share_sparse_fwd_kernel": 1.1687359999999998
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  },
+  {
+    "architecture": "m3",
+    "config": 1,
+    "phase": "prefill",
+    "context": 131072,
+    "batch": 1,
+    "scope_ms": {
+      "main_projection_cache": 0.40974933333333335,
+      "m3_index_projection_cache": 0.07972233333333345,
+      "m3_native_sparse_pipeline": 3.905268
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.4505056666666664,
+      "index_scoring": 2.5363723333333335,
+      "selection": 0.10875766666666702,
+      "sparse_attention": 1.2080423333333332
+    },
+    "kernels_ms": {
+      "Memset (Device)": 0.0009813333333328273,
+      "nvjet_sm90_tst_256x128_64x4_1x2_h_bz_coopA_TNT": 0.25572233333333316,
+      "_norm": 0.08149366666666712,
+      "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_TNT": 0.07954033333333282,
+      "_cache_write": 0.00960000000000006,
+      "nvjet_sm90_tst_64x64_64x13_2x1_v_bz_splitK_TNT": 0.011477333333333187,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.002431999999999865,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>)": 0.008192000000000463,
+      "_flash_attn_fwd_with_block_score_kernel": 2.5363723333333335,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul> >(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)": 0.0010666666666669091,
+      "void (anonymous namespace)::minimax_prefill_topk_block_kernel<true>(float const*, int const*, int const*, int const*, int*, int, int, int, int, int, int, int, int)": 0.10875766666666702,
+      "_gqa_share_sparse_fwd_kernel": 1.2080423333333332
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  },
+  {
+    "architecture": "m3",
+    "config": 1,
+    "phase": "prefill",
+    "context": 131072,
+    "batch": 32,
+    "scope_ms": {
+      "main_projection_cache": 0.4092170000000007,
+      "m3_index_projection_cache": 0.07922133333333303,
+      "m3_native_sparse_pipeline": 4.315060333333333
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.4505713333333321,
+      "index_scoring": 2.5710346666666664,
+      "selection": 0.108619,
+      "sparse_attention": 1.5847076666666662
+    },
+    "kernels_ms": {
+      "Memset (Device)": 0.0008853333333335438,
+      "nvjet_sm90_tst_256x128_64x4_1x2_h_bz_coopA_TNT": 0.25641666666666635,
+      "_norm": 0.08149333333333264,
+      "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_TNT": 0.07913599999999965,
+      "_cache_write": 0.009589333333332662,
+      "nvjet_sm90_tst_64x64_64x13_2x1_v_bz_splitK_TNT": 0.01152000000000036,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.002464000000000624,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>)": 0.00805333333333321,
+      "_flash_attn_fwd_with_block_score_kernel": 2.5710346666666664,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul> >(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)": 0.001013333333333018,
+      "void (anonymous namespace)::minimax_prefill_topk_block_kernel<true>(float const*, int const*, int const*, int const*, int*, int, int, int, int, int, int, int, int)": 0.108619,
+      "_gqa_share_sparse_fwd_kernel": 1.5847076666666662
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  },
+  {
+    "architecture": "m3",
+    "config": 1,
+    "phase": "decode",
+    "context": 16384,
+    "batch": 1,
+    "scope_ms": {
+      "main_projection_cache": 0.2775360000000002,
+      "m3_index_projection_cache": 0.12714666666666682,
+      "m3_native_sparse_pipeline": 0.22490633333333335
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.0634023333333336,
+      "index_scoring": 0.004554999999999988,
+      "selection": 0.0020799999999999274,
+      "sparse_attention": 0.007637333333333269
+    },
+    "kernels_ms": {
+      "nvjet_sm90_tst_64x8_64x16_4x1_v_bz_TNT": 0.029567999999999907,
+      "_norm": 0.004885333333333012,
+      "nvjet_sm90_tst_64x8_64x16_4x1_v_bz_splitK_TNT": 0.015317000000000008,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.006687999999999949,
+      "_cache_write": 0.0025813333333336843,
+      "nvjet_sm90_tst_64x8_64x16_2x1_v_bz_splitK_TNT": 0.0043626666666670335,
+      "_decode_score_kernel": 0.004554999999999988,
+      "void (anonymous namespace)::minimax_decode_topk_block_kernel<int, true>(float const*, int const*, int*, int, int, int, int, int)": 0.0020799999999999274,
+      "_gqa_share_sparse_decode_kernel": 0.005727999999999914,
+      "_merge_topk_attn_out_kernel": 0.001909333333333355
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  },
+  {
+    "architecture": "m3",
+    "config": 1,
+    "phase": "decode",
+    "context": 16384,
+    "batch": 32,
+    "scope_ms": {
+      "main_projection_cache": 0.282838,
+      "m3_index_projection_cache": 0.1248106666666666,
+      "m3_native_sparse_pipeline": 0.22689133333333317
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.06615466666666613,
+      "index_scoring": 0.04011733333333329,
+      "selection": 0.002773666666666638,
+      "sparse_attention": 0.040693333333333616
+    },
+    "kernels_ms": {
+      "nvjet_sm90_tst_64x32_64x16_4x1_v_bz_TNT": 0.027850666666666635,
+      "_norm": 0.006751999999999801,
+      "nvjet_sm90_tst_64x32_64x16_4x1_v_bz_splitK_TNT": 0.01619200000000001,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.007754666666667012,
+      "_cache_write": 0.0030293333333326396,
+      "nvjet_sm90_tst_32x64_64x16_4x1_v_bz_splitK_TNN": 0.004576000000000022,
+      "_decode_score_kernel": 0.04011733333333329,
+      "void (anonymous namespace)::minimax_decode_topk_block_kernel<int, true>(float const*, int const*, int*, int, int, int, int, int)": 0.002773666666666638,
+      "_gqa_share_sparse_decode_kernel": 0.03824000000000024,
+      "_merge_topk_attn_out_kernel": 0.002453333333333376
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  },
+  {
+    "architecture": "m3",
+    "config": 1,
+    "phase": "decode",
+    "context": 131072,
+    "batch": 1,
+    "scope_ms": {
+      "main_projection_cache": 0.2521943333333334,
+      "m3_index_projection_cache": 0.12008633333333349,
+      "m3_native_sparse_pipeline": 0.20771333333333328
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.06243266666666712,
+      "index_scoring": 0.014175999999999855,
+      "selection": 0.00425600000000001,
+      "sparse_attention": 0.007786666666666709
+    },
+    "kernels_ms": {
+      "nvjet_sm90_tst_64x8_64x16_4x1_v_bz_TNT": 0.02901399999999997,
+      "_norm": 0.004863999999999957,
+      "nvjet_sm90_tst_64x8_64x16_4x1_v_bz_splitK_TNT": 0.015050666666666832,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.006805333333333238,
+      "_cache_write": 0.0023040000000003904,
+      "nvjet_sm90_tst_64x8_64x16_2x1_v_bz_splitK_TNT": 0.004394666666666732,
+      "_decode_score_kernel": 0.014175999999999855,
+      "void (anonymous namespace)::minimax_decode_topk_block_kernel<int, true>(float const*, int const*, int*, int, int, int, int, int)": 0.00425600000000001,
+      "_gqa_share_sparse_decode_kernel": 0.005813333333333427,
+      "_merge_topk_attn_out_kernel": 0.001973333333333282
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  },
+  {
+    "architecture": "m3",
+    "config": 1,
+    "phase": "decode",
+    "context": 131072,
+    "batch": 32,
+    "scope_ms": {
+      "main_projection_cache": 0.26297666666666664,
+      "m3_index_projection_cache": 0.12062933333333338,
+      "m3_native_sparse_pipeline": 0.30374399999999985
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.06746666666666754,
+      "index_scoring": 0.2553599999999999,
+      "selection": 0.005055999999999964,
+      "sparse_attention": 0.04091733333333317
+    },
+    "kernels_ms": {
+      "nvjet_sm90_tst_64x32_64x16_4x1_v_bz_TNT": 0.02955766666666667,
+      "_norm": 0.006794666666667051,
+      "nvjet_sm90_tst_64x32_64x16_4x1_v_bz_splitK_TNT": 0.015861333333333505,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.007733000000000023,
+      "_cache_write": 0.002954666666666829,
+      "nvjet_sm90_tst_32x64_64x16_4x1_v_bz_splitK_TNN": 0.004565333333333456,
+      "_decode_score_kernel": 0.2553599999999999,
+      "void (anonymous namespace)::minimax_decode_topk_block_kernel<int, true>(float const*, int const*, int*, int, int, int, int, int)": 0.005055999999999964,
+      "_gqa_share_sparse_decode_kernel": 0.0384853333333333,
+      "_merge_topk_attn_out_kernel": 0.002431999999999865
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  },
+  {
+    "architecture": "m3",
+    "config": 2,
+    "phase": "prefill",
+    "context": 16384,
+    "batch": 1,
+    "scope_ms": {
+      "main_projection_cache": 0.5682249999999999,
+      "m3_index_projection_cache": 0.08071466666666705,
+      "m3_native_sparse_pipeline": 2.6437190000000004
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.6279800000000029,
+      "index_scoring": 0.3626993333333338,
+      "selection": 0.06519466666666661,
+      "sparse_attention": 2.1687093333333336
+    },
+    "kernels_ms": {
+      "Memset (Device)": 0.0009920000000001135,
+      "nvjet_sm90_tst_256x128_64x4_1x2_h_bz_coopA_TNT": 0.3436170000000002,
+      "_norm": 0.11644766666666724,
+      "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT": 0.13272566666666732,
+      "_cache_write": 0.014624000000000251,
+      "nvjet_sm90_tst_64x64_64x13_2x1_v_bz_splitK_TNT": 0.012725333333333613,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.0026346666666665136,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>)": 0.0026990000000003725,
+      "_flash_attn_fwd_with_block_score_kernel": 0.3626993333333338,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul> >(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)": 0.0015146666666672292,
+      "void (anonymous namespace)::minimax_prefill_topk_block_kernel<true>(float const*, int const*, int const*, int const*, int*, int, int, int, int, int, int, int, int)": 0.06519466666666661,
+      "_gqa_share_sparse_fwd_kernel": 2.1687093333333336
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  },
+  {
+    "architecture": "m3",
+    "config": 2,
+    "phase": "prefill",
+    "context": 16384,
+    "batch": 32,
+    "scope_ms": {
+      "main_projection_cache": 0.5661776666666666,
+      "m3_index_projection_cache": 0.07974400000000006,
+      "m3_native_sparse_pipeline": 2.783036
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.6256763333333336,
+      "index_scoring": 0.3805556666666668,
+      "selection": 0.0681599999999997,
+      "sparse_attention": 2.2871629999999996
+    },
+    "kernels_ms": {
+      "Memset (Device)": 0.0007999999999998408,
+      "nvjet_sm90_tst_256x128_64x4_1x2_h_bz_coopA_TNT": 0.34223000000000003,
+      "_norm": 0.1162889999999998,
+      "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT": 0.13251199999999974,
+      "_cache_write": 0.014773333333334297,
+      "nvjet_sm90_tst_64x64_64x13_2x1_v_bz_splitK_TNT": 0.012437333333333602,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.0026239999999993413,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>)": 0.0027733333333336907,
+      "_flash_attn_fwd_with_block_score_kernel": 0.3805556666666668,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul> >(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)": 0.001237333333333178,
+      "void (anonymous namespace)::minimax_prefill_topk_block_kernel<true>(float const*, int const*, int const*, int const*, int*, int, int, int, int, int, int, int, int)": 0.0681599999999997,
+      "_gqa_share_sparse_fwd_kernel": 2.2871629999999996
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  },
+  {
+    "architecture": "m3",
+    "config": 2,
+    "phase": "prefill",
+    "context": 131072,
+    "batch": 1,
+    "scope_ms": {
+      "main_projection_cache": 0.5658773333333329,
+      "m3_index_projection_cache": 0.07979733333333328,
+      "m3_native_sparse_pipeline": 5.507897
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.6376529999999995,
+      "index_scoring": 2.8448553333333333,
+      "selection": 0.21337600000000018,
+      "sparse_attention": 2.393441666666668
+    },
+    "kernels_ms": {
+      "Memset (Device)": 0.001098666666666683,
+      "nvjet_sm90_tst_256x128_64x4_1x2_h_bz_coopA_TNT": 0.34185600000000016,
+      "_norm": 0.11622366666666623,
+      "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT": 0.1320213333333333,
+      "_cache_write": 0.014549333333333305,
+      "nvjet_sm90_tst_64x64_64x13_2x1_v_bz_splitK_TNT": 0.013077333333333552,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.0025706666666667384,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>)": 0.015061333333333095,
+      "_flash_attn_fwd_with_block_score_kernel": 2.8448553333333333,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul> >(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)": 0.0011946666666663077,
+      "void (anonymous namespace)::minimax_prefill_topk_block_kernel<true>(float const*, int const*, int const*, int const*, int*, int, int, int, int, int, int, int, int)": 0.21337600000000018,
+      "_gqa_share_sparse_fwd_kernel": 2.393441666666668
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  },
+  {
+    "architecture": "m3",
+    "config": 2,
+    "phase": "prefill",
+    "context": 131072,
+    "batch": 32,
+    "scope_ms": {
+      "main_projection_cache": 0.5659636666666666,
+      "m3_index_projection_cache": 0.07975466666666702,
+      "m3_native_sparse_pipeline": 6.395797666666667
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.637195333333334,
+      "index_scoring": 2.9925809999999995,
+      "selection": 0.21332333333333373,
+      "sparse_attention": 3.131493333333334
+    },
+    "kernels_ms": {
+      "Memset (Device)": 0.0010560000000001536,
+      "nvjet_sm90_tst_256x128_64x4_1x2_h_bz_coopA_TNT": 0.34176100000000004,
+      "_norm": 0.11642633333333334,
+      "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT": 0.13204266666666603,
+      "_cache_write": 0.014613333333333686,
+      "nvjet_sm90_tst_64x64_64x13_2x1_v_bz_splitK_TNT": 0.012479999999999943,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.0026240000000000993,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>)": 0.015029333333333623,
+      "_flash_attn_fwd_with_block_score_kernel": 2.9925809999999995,
+      "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul> >(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)": 0.0011626666666670644,
+      "void (anonymous namespace)::minimax_prefill_topk_block_kernel<true>(float const*, int const*, int const*, int const*, int*, int, int, int, int, int, int, int, int)": 0.21332333333333373,
+      "_gqa_share_sparse_fwd_kernel": 3.131493333333334
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  },
+  {
+    "architecture": "m3",
+    "config": 2,
+    "phase": "decode",
+    "context": 16384,
+    "batch": 1,
+    "scope_ms": {
+      "main_projection_cache": 0.27254466666666655,
+      "m3_index_projection_cache": 0.1210036666666668,
+      "m3_native_sparse_pipeline": 0.22457700000000008
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.07341799999999953,
+      "index_scoring": 0.0046189999999998385,
+      "selection": 0.0019626666666663368,
+      "sparse_attention": 0.008917333333333319
+    },
+    "kernels_ms": {
+      "nvjet_sm90_tst_64x8_64x16_2x1_v_bz_TNT": 0.03394099999999996,
+      "_norm": 0.005216000000000501,
+      "nvjet_sm90_tst_64x8_64x16_4x1_v_bz_splitK_TNT": 0.020362666666666734,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.007050333333333128,
+      "_cache_write": 0.0024746666666662044,
+      "nvjet_sm90_tst_64x8_64x16_2x1_v_bz_splitK_TNT": 0.004373333333332994,
+      "_decode_score_kernel": 0.0046189999999998385,
+      "void (anonymous namespace)::minimax_decode_topk_block_kernel<int, true>(float const*, int const*, int*, int, int, int, int, int)": 0.0019626666666663368,
+      "_gqa_share_sparse_decode_kernel": 0.00690099999999984,
+      "_merge_topk_attn_out_kernel": 0.0020163333333334775
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  },
+  {
+    "architecture": "m3",
+    "config": 2,
+    "phase": "decode",
+    "context": 16384,
+    "batch": 32,
+    "scope_ms": {
+      "main_projection_cache": 0.3728119999999999,
+      "m3_index_projection_cache": 0.12371199999999999,
+      "m3_native_sparse_pipeline": 0.26595266666666656
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.07889033333333359,
+      "index_scoring": 0.03974400000000029,
+      "selection": 0.0031146666666669867,
+      "sparse_attention": 0.07340799999999975
+    },
+    "kernels_ms": {
+      "nvjet_sm90_tst_64x32_64x16_2x1_v_bz_TNT": 0.034442666666666504,
+      "_norm": 0.007200000000000574,
+      "nvjet_sm90_tst_64x32_64x16_4x1_v_bz_splitK_TNT": 0.02179166666666712,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.007711999999999684,
+      "_cache_write": 0.003167999999999665,
+      "nvjet_sm90_tst_32x64_64x16_4x1_v_bz_splitK_TNN": 0.004576000000000022,
+      "_decode_score_kernel": 0.03974400000000029,
+      "void (anonymous namespace)::minimax_decode_topk_block_kernel<int, true>(float const*, int const*, int*, int, int, int, int, int)": 0.0031146666666669867,
+      "_gqa_share_sparse_decode_kernel": 0.07099733333333309,
+      "_merge_topk_attn_out_kernel": 0.002410666666666657
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  },
+  {
+    "architecture": "m3",
+    "config": 2,
+    "phase": "decode",
+    "context": 131072,
+    "batch": 1,
+    "scope_ms": {
+      "main_projection_cache": 0.26047033333333325,
+      "m3_index_projection_cache": 0.11885866666666682,
+      "m3_native_sparse_pipeline": 0.2159366666666665
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.07353600000000006,
+      "index_scoring": 0.015189666666666653,
+      "selection": 0.004170666666666799,
+      "sparse_attention": 0.009045333333333171
+    },
+    "kernels_ms": {
+      "nvjet_sm90_tst_64x8_64x16_2x1_v_bz_TNT": 0.03341866666666677,
+      "_norm": 0.005311999999999899,
+      "nvjet_sm90_tst_64x8_64x16_4x1_v_bz_splitK_TNT": 0.020885333333333395,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.006976000000000188,
+      "_cache_write": 0.0025386666666665104,
+      "nvjet_sm90_tst_64x8_64x16_2x1_v_bz_splitK_TNT": 0.0044053333333332985,
+      "_decode_score_kernel": 0.015189666666666653,
+      "void (anonymous namespace)::minimax_decode_topk_block_kernel<int, true>(float const*, int const*, int*, int, int, int, int, int)": 0.004170666666666799,
+      "_gqa_share_sparse_decode_kernel": 0.0070719999999999655,
+      "_merge_topk_attn_out_kernel": 0.001973333333333206
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  },
+  {
+    "architecture": "m3",
+    "config": 2,
+    "phase": "decode",
+    "context": 131072,
+    "batch": 32,
+    "scope_ms": {
+      "main_projection_cache": 0.238913,
+      "m3_index_projection_cache": 0.12164299999999988,
+      "m3_native_sparse_pipeline": 0.339212
+    },
+    "kernel_stage_ms": {
+      "projection_cache_other": 0.079979,
+      "index_scoring": 0.2568863333333334,
+      "selection": 0.005696000000000064,
+      "sparse_attention": 0.07417633333333355
+    },
+    "kernels_ms": {
+      "nvjet_sm90_tst_64x32_64x16_2x1_v_bz_TNT": 0.03491200000000003,
+      "_norm": 0.007157333333333668,
+      "nvjet_sm90_tst_64x32_64x16_4x1_v_bz_splitK_TNT": 0.022442666666666736,
+      "void cublasLt::splitKreduce_kernel<32, 16, int, float, __nv_bfloat16, float, __nv_bfloat16, false, float, __nv_bfloat16, __nv_bfloat16, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __nv_bfloat16 const*, float*, __nv_bfloat16*, float const*, float const*, __nv_bfloat16 const*, float const*, __nv_bfloat16*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)": 0.007690999999999805,
+      "_cache_write": 0.003210666666666308,
+      "nvjet_sm90_tst_32x64_64x16_4x1_v_bz_splitK_TNN": 0.004565333333333456,
+      "_decode_score_kernel": 0.2568863333333334,
+      "void (anonymous namespace)::minimax_decode_topk_block_kernel<int, true>(float const*, int const*, int*, int, int, int, int, int)": 0.005696000000000064,
+      "_gqa_share_sparse_decode_kernel": 0.07176566666666682,
+      "_merge_topk_attn_out_kernel": 0.0024106666666667328
+    },
+    "warmup": 3,
+    "profile_iterations": 3,
+    "timing_note": "Eager profiler CUDA kernel durations; excludes launch gaps; diagnostic only, not latency benchmark."
+  }
+]
