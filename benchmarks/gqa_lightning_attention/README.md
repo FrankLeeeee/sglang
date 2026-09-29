@@ -275,3 +275,50 @@ labeled bar charts covering the complete grid, and consolidated CSV/ZIP evidence
 bundle, and document verification receipts; these are excluded from Git. Original experiment 1 chart/file resources
 are retained; experiment 2 and 3 are separate sections. This document update
 uses the completed measured runs and does not rerun the GPU benchmark.
+
+## Two-stage block shortlist (2026-09-30)
+
+`benchmark_two_stage.py` reruns all three head presets against **both** paged
+FlashInfer FA2 and FA3. Reports choose the faster dense median at each point.
+This updates the older FA2-only comparisons above; they are historical results.
+
+- `Attention(cfg, sparse=True, two_stage=True)` enables the new selector;
+  create the matching `PagedState(..., sparse=True, two_stage=True)` once.
+- Stage 1 scores cached mean-pooled indexer keys for 128-token blocks and
+  selects 64 blocks. Stage 2 scores their 8192 tokens and selects 2048 tokens
+  per main KV group. Both stages use Triton scores and FlashInfer top-k.
+- Pooling is FP32 accumulation with BF16 stored means. Existing prefix block
+  summaries initialize outside timing; every forward recomputes the summaries
+  of blocks containing newly written indexer keys, **inside timing**.
+- The current block is forced into the shortlist. Its potentially future-bearing
+  mean never influences other selected blocks; fine scores mask future tokens.
+  All indices remain request-local and resolve through shuffled physical pages.
+- Mean pooling is an approximate coarse selector: it can omit global top-k
+  tokens. `recall_two_stage.py` reports sampled token-ID recall, separates zero
+  gates, and does not claim model-quality equivalence. This is not a trained
+  hierarchical indexer or a production SGLang backend registration.
+- All latency runs enforce at least three warmups, then take 15 CUDA-event
+  samples. Decode uses CUDA graphs; prefill is a final 2048-total-token chunk.
+  Every timing includes projections, normalization, cache append, both selection
+  stages, and final attention; allocation/planning/JIT/graph capture are excluded.
+- The correctness suites pass 108 tests, including independent fine-score and
+  top-k checks, pooled-cache checks, causal/request isolation, and graph replay.
+
+Run one experiment (1, 2, or 3) with:
+
+```bash
+CUDA_VISIBLE_DEVICES=0 .venv/bin/python benchmarks/gqa_lightning_attention/benchmark_two_stage.py \
+  --experiments 1 --configs 1,2 --contexts 16384,32768,65536,131072 \
+  --batches 1,2,4,8,16,32 --phases prefill,decode \
+  --variants dense_fa2,dense_fa3,sparse,two_stage --candidate-blocks 64 \
+  --prefill-budget 2048 --warmup 3 --iterations 15
+CUDA_VISIBLE_DEVICES=0 .venv/bin/python benchmarks/gqa_lightning_attention/recall_two_stage.py --experiments 1
+.venv/bin/python benchmarks/gqa_lightning_attention/report_two_stage.py --experiment 1
+```
+
+Each completed experiment has raw samples and metadata, paired CSV/JSON,
+Chinese report, copyable `reproduce.sh`, recall diagnostics and a 16-chart
+manifest under `results/two_stage/experimentN/`. Plot generation labels every
+bar. `publish_two_stage.py --experiment N --publish` appends the report, charts
+and evidence to Feishu and verifies that prior resources were preserved.
+DSA/MSA use [the native adapter benchmark](../dsa_m3_attention/README.md).

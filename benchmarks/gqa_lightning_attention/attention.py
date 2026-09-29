@@ -93,6 +93,7 @@ class PagedState:
         page_size=128,
         sparse=False,
         phase="prefill",
+        two_stage=False,
     ):
         assert length % page_size == 0
         assert q_per_request == 1 or q_per_request % 4 == 0
@@ -144,6 +145,12 @@ class PagedState:
             else None
         )
         self.wrapper = None
+        if two_stage:
+            if not sparse:
+                raise ValueError("Two-stage indexing requires sparse=True")
+            from two_stage import prepare_block_cache
+
+            prepare_block_cache(self)
         if not sparse:
             # FlashInfer tensor-core decode reserves larger split-K workspaces
             # at the 48:1 / 64:1 MQA ratios, even for a short context.
@@ -216,8 +223,19 @@ class Attention:
     No output projection, RoPE, residual, MLP, or learned norm gain was requested.
     """
 
-    def __init__(self, cfg, sparse=False, top_k=2048, score_budget_mib=256):
+    def __init__(
+        self,
+        cfg,
+        sparse=False,
+        top_k=2048,
+        score_budget_mib=256,
+        two_stage=False,
+        candidate_blocks=64,
+    ):
         self.cfg, self.sparse, self.top_k = cfg, sparse, top_k
+        self.two_stage = two_stage
+        if two_stage and not sparse:
+            raise ValueError("Two-stage indexing requires sparse=True")
         self.score_budget = score_budget_mib * 1024**2
 
         def weight(out):
@@ -229,7 +247,12 @@ class Attention:
         self.wq = weight(cfg.num_q_heads * cfg.head_dim)
         self.wk = weight(cfg.num_k_heads * cfg.head_dim)
         self.wv = weight(cfg.num_k_heads * cfg.head_dim)
-        self.indexer = LightningIndexer(cfg) if sparse else None
+        if two_stage:
+            from two_stage import TwoStageIndexer
+
+            self.indexer = TwoStageIndexer(cfg, candidate_blocks=candidate_blocks)
+        else:
+            self.indexer = LightningIndexer(cfg) if sparse else None
 
     @torch.no_grad()
     def forward(self, x, state, x_kv=None):
@@ -248,10 +271,15 @@ class Attention:
             return state.dense(q)
         qi, ki, w = self.indexer.project(x.detach(), x_kv.detach())
         cache_write(ki, state.ik, state.write_slots)
+        if self.two_stage:
+            self.indexer.update_cache(state)
         # Bound score memory independently of prompt and batch size.
         tile = state.score_query_tile
+        score_width = (
+            self.indexer.score_width(state) if self.two_stage else state.length
+        )
         chunk = max(
-            tile, self.score_budget // (c.num_k_heads * state.length * 4) // tile * tile
+            tile, self.score_budget // (c.num_k_heads * score_width * 4) // tile * tile
         )
         outputs = []
         for start in range(0, len(q), chunk):

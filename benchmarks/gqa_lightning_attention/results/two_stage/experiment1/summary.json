@@ -1,0 +1,38 @@
+[
+  {
+    "config": 1,
+    "phase": "prefill",
+    "sparse_wins": 0,
+    "two_stage_wins": 10,
+    "vs_original_wins": 18,
+    "min_speedup": 0.288592322676317,
+    "max_speedup": 2.858839128054417
+  },
+  {
+    "config": 1,
+    "phase": "decode",
+    "sparse_wins": 10,
+    "two_stage_wins": 11,
+    "vs_original_wins": 12,
+    "min_speedup": 0.41826422926766443,
+    "max_speedup": 6.263554601537366
+  },
+  {
+    "config": 2,
+    "phase": "prefill",
+    "sparse_wins": 0,
+    "two_stage_wins": 7,
+    "vs_original_wins": 18,
+    "min_speedup": 0.20461429904532463,
+    "max_speedup": 2.0071866204217566
+  },
+  {
+    "config": 2,
+    "phase": "decode",
+    "sparse_wins": 14,
+    "two_stage_wins": 14,
+    "vs_original_wins": 15,
+    "min_speedup": 0.4726407921958563,
+    "max_speedup": 9.315178705539521
+  }
+]
