@@ -322,3 +322,12 @@ manifest under `results/two_stage/experimentN/`. Plot generation labels every
 bar. `publish_two_stage.py --experiment N --publish` appends the report, charts
 and evidence to Feishu and verifies that prior resources were preserved.
 DSA/MSA use [the native adapter benchmark](../dsa_m3_attention/README.md).
+
+The completed [four-method overview](results/two_stage/four_methods_zh.md)
+compares DSA, MSA, and both of our selectors across all three head presets.
+The new scans contain 1,728 main measurements and 25,920 samples, with 80
+labeled charts. At 128k/batch 32, the two-stage selector in experiment 1 reaches
+2.86x/2.01x prefill and 6.26x/9.32x decode speedups for configurations 1/2.
+However, sampled global top-k recall at 128k is only about 9% for all three
+presets with random weights. These latency gains do **not** establish quality
+preservation. No method wins at every prefill and decode point in the full grid.

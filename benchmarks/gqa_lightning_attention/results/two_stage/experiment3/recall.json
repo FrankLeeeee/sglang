@@ -1,0 +1,685 @@
+{
+  "note": "Seed 42 weights / 43 history / 44 input; batch 1; final 16 prefill queries or one decode query. Active means sum of nonnegative gates > 0. Tied zero scores make ID recall ambiguous. Not a quality benchmark.",
+  "rows": [
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2032,
+      "group": 0,
+      "active": true,
+      "recall": 0.55517578125
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2033,
+      "group": 0,
+      "active": true,
+      "recall": 0.5439453125
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2034,
+      "group": 0,
+      "active": true,
+      "recall": 0.5517578125
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2035,
+      "group": 0,
+      "active": true,
+      "recall": 0.5576171875
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2036,
+      "group": 0,
+      "active": true,
+      "recall": 0.5517578125
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2037,
+      "group": 0,
+      "active": true,
+      "recall": 0.548828125
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2038,
+      "group": 0,
+      "active": false,
+      "recall": 1.0
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2039,
+      "group": 0,
+      "active": true,
+      "recall": 0.55712890625
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2040,
+      "group": 0,
+      "active": true,
+      "recall": 0.55712890625
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2041,
+      "group": 0,
+      "active": true,
+      "recall": 0.54833984375
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2042,
+      "group": 0,
+      "active": true,
+      "recall": 0.546875
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2043,
+      "group": 0,
+      "active": true,
+      "recall": 0.5712890625
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2044,
+      "group": 0,
+      "active": true,
+      "recall": 0.54248046875
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2045,
+      "group": 0,
+      "active": false,
+      "recall": 1.0
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2046,
+      "group": 0,
+      "active": true,
+      "recall": 0.57177734375
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2047,
+      "group": 0,
+      "active": true,
+      "recall": 0.5615234375
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 16384,
+      "phase": "decode",
+      "query": 0,
+      "group": 0,
+      "active": true,
+      "recall": 0.552734375
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2032,
+      "group": 0,
+      "active": true,
+      "recall": 0.1015625
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2033,
+      "group": 0,
+      "active": true,
+      "recall": 0.091796875
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2034,
+      "group": 0,
+      "active": true,
+      "recall": 0.091796875
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2035,
+      "group": 0,
+      "active": true,
+      "recall": 0.10546875
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2036,
+      "group": 0,
+      "active": true,
+      "recall": 0.08935546875
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2037,
+      "group": 0,
+      "active": true,
+      "recall": 0.091796875
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2038,
+      "group": 0,
+      "active": false,
+      "recall": 1.0
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2039,
+      "group": 0,
+      "active": true,
+      "recall": 0.08837890625
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2040,
+      "group": 0,
+      "active": true,
+      "recall": 0.0908203125
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2041,
+      "group": 0,
+      "active": true,
+      "recall": 0.0888671875
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2042,
+      "group": 0,
+      "active": true,
+      "recall": 0.0908203125
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2043,
+      "group": 0,
+      "active": true,
+      "recall": 0.0927734375
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2044,
+      "group": 0,
+      "active": true,
+      "recall": 0.08447265625
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2045,
+      "group": 0,
+      "active": false,
+      "recall": 1.0
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2046,
+      "group": 0,
+      "active": true,
+      "recall": 0.099609375
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2047,
+      "group": 0,
+      "active": true,
+      "recall": 0.08984375
+    },
+    {
+      "experiment": 3,
+      "config": 1,
+      "context": 131072,
+      "phase": "decode",
+      "query": 0,
+      "group": 0,
+      "active": true,
+      "recall": 0.09033203125
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2032,
+      "group": 0,
+      "active": true,
+      "recall": 0.55908203125
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2033,
+      "group": 0,
+      "active": true,
+      "recall": 0.53662109375
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2034,
+      "group": 0,
+      "active": true,
+      "recall": 0.54736328125
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2035,
+      "group": 0,
+      "active": true,
+      "recall": 0.5576171875
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2036,
+      "group": 0,
+      "active": true,
+      "recall": 0.53857421875
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2037,
+      "group": 0,
+      "active": true,
+      "recall": 0.55078125
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2038,
+      "group": 0,
+      "active": true,
+      "recall": 0.56689453125
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2039,
+      "group": 0,
+      "active": true,
+      "recall": 0.5478515625
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2040,
+      "group": 0,
+      "active": true,
+      "recall": 0.5546875
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2041,
+      "group": 0,
+      "active": true,
+      "recall": 0.556640625
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2042,
+      "group": 0,
+      "active": true,
+      "recall": 0.5419921875
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2043,
+      "group": 0,
+      "active": true,
+      "recall": 0.537109375
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2044,
+      "group": 0,
+      "active": true,
+      "recall": 0.546875
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2045,
+      "group": 0,
+      "active": true,
+      "recall": 0.55908203125
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2046,
+      "group": 0,
+      "active": true,
+      "recall": 0.5458984375
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "prefill",
+      "query": 2047,
+      "group": 0,
+      "active": true,
+      "recall": 0.5390625
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 16384,
+      "phase": "decode",
+      "query": 0,
+      "group": 0,
+      "active": true,
+      "recall": 0.5556640625
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2032,
+      "group": 0,
+      "active": true,
+      "recall": 0.08984375
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2033,
+      "group": 0,
+      "active": true,
+      "recall": 0.09716796875
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2034,
+      "group": 0,
+      "active": true,
+      "recall": 0.09619140625
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2035,
+      "group": 0,
+      "active": true,
+      "recall": 0.09716796875
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2036,
+      "group": 0,
+      "active": true,
+      "recall": 0.08349609375
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2037,
+      "group": 0,
+      "active": true,
+      "recall": 0.09814453125
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2038,
+      "group": 0,
+      "active": true,
+      "recall": 0.08544921875
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2039,
+      "group": 0,
+      "active": true,
+      "recall": 0.09765625
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2040,
+      "group": 0,
+      "active": true,
+      "recall": 0.087890625
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2041,
+      "group": 0,
+      "active": true,
+      "recall": 0.09814453125
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2042,
+      "group": 0,
+      "active": true,
+      "recall": 0.0908203125
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2043,
+      "group": 0,
+      "active": true,
+      "recall": 0.08154296875
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2044,
+      "group": 0,
+      "active": true,
+      "recall": 0.08154296875
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2045,
+      "group": 0,
+      "active": true,
+      "recall": 0.08740234375
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2046,
+      "group": 0,
+      "active": true,
+      "recall": 0.1044921875
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "prefill",
+      "query": 2047,
+      "group": 0,
+      "active": true,
+      "recall": 0.08935546875
+    },
+    {
+      "experiment": 3,
+      "config": 2,
+      "context": 131072,
+      "phase": "decode",
+      "query": 0,
+      "group": 0,
+      "active": true,
+      "recall": 0.091796875
+    }
+  ]
+}
