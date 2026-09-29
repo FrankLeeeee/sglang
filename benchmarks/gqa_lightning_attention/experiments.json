@@ -1,0 +1,26 @@
+{
+  "1": {
+    "name": "Grouped main attention and full grouped indexer",
+    "results": "results/lark_rerun_20260929",
+    "main_q_heads": [48, 64],
+    "main_kv_heads": [4, 8],
+    "indexer_q_heads": [48, 64],
+    "indexer_kv_heads": [4, 8]
+  },
+  "2": {
+    "name": "Grouped main attention and reduced-query shared-key indexer",
+    "results": "results/reduced_indexer",
+    "main_q_heads": [48, 64],
+    "main_kv_heads": [4, 8],
+    "indexer_q_heads": [4, 8],
+    "indexer_kv_heads": [1, 1]
+  },
+  "3": {
+    "name": "Main MQA with experiment 2 indexer head counts",
+    "results": "results/experiment3_mqa",
+    "main_q_heads": [48, 64],
+    "main_kv_heads": [1, 1],
+    "indexer_q_heads": [4, 8],
+    "indexer_kv_heads": [1, 1]
+  }
+}

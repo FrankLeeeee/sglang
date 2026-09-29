@@ -1,0 +1,13 @@
+{
+  "measurements": 192,
+  "comparisons": 96,
+  "samples": 2880,
+  "charts": 16,
+  "bar_labels": 192,
+  "label_overlap_check": "passed",
+  "xml_parse": "passed",
+  "source_sha256": {
+    "config1.json": "a78cb4954608795b0c9ba600e9f96fbe8d23ba1bd2e2edc6cdd48d9b67c3f6a0",
+    "config2.json": "708d9f7c50c4adbc66b66b8665a5a0aa683a8dfd29b1994460e5d807915ecc66"
+  }
+}

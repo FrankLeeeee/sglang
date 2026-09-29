@@ -1,0 +1,23 @@
+{
+  "measurements": 192,
+  "comparisons": 96,
+  "samples": 2880,
+  "charts": 16,
+  "bar_labels": 192,
+  "label_overlap_check": "passed",
+  "xml_parse": "passed",
+  "source_sha256": {
+    "config1.json": "77a4437b6df61349e57872f55933002b1df4a20bed33354c3eabd5164e0ef25d",
+    "config2.json": "c9773ca42d7419edc2ac9e410626319666358a94e1a4ec4a462bf993f720f4fb"
+  },
+  "gpu_correctness_tests": 94,
+  "experiment": 3,
+  "indexer_query_heads_preserved_from_experiment_2": [
+    4,
+    8
+  ],
+  "main_kv_heads": [
+    1,
+    1
+  ]
+}

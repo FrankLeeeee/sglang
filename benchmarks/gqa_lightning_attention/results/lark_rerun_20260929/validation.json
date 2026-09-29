@@ -1,0 +1,20 @@
+{
+  "measurements": 192,
+  "comparisons": 96,
+  "samples": 2880,
+  "charts": 16,
+  "bar_labels": 192,
+  "label_overlap_check": "passed",
+  "xml_parse": "passed",
+  "source_sha256": {
+    "config1.json": "cb6431f3e8babbbd43ef7dfc6776d7e70f5c31fb09050bcb355388492d56b21f",
+    "config2.json": "601712b40abb24a6af965a4ac574f4c1119f598470926923dbfb2d5aef45e03f"
+  },
+  "publication": {
+    "url": "https://my.feishu.cn/docx/UiWfdNSWvoFzCixy1wUc58kBnBb",
+    "revision": 20,
+    "verified_images": 16,
+    "verified_attachments": 2,
+    "verified_tables": 2
+  }
+}

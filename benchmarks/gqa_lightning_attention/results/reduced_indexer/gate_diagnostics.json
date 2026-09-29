@@ -1,0 +1,100 @@
+[
+  {
+    "config": 1,
+    "phase": "prefill",
+    "batch": null,
+    "zero_gate_fraction": 0.511474609375,
+    "group_rows": 8192
+  },
+  {
+    "config": 1,
+    "phase": "decode",
+    "batch": 1,
+    "zero_gate_fraction": 0.0,
+    "group_rows": 4
+  },
+  {
+    "config": 1,
+    "phase": "decode",
+    "batch": 2,
+    "zero_gate_fraction": 0.375,
+    "group_rows": 8
+  },
+  {
+    "config": 1,
+    "phase": "decode",
+    "batch": 4,
+    "zero_gate_fraction": 0.5,
+    "group_rows": 16
+  },
+  {
+    "config": 1,
+    "phase": "decode",
+    "batch": 8,
+    "zero_gate_fraction": 0.5625,
+    "group_rows": 32
+  },
+  {
+    "config": 1,
+    "phase": "decode",
+    "batch": 16,
+    "zero_gate_fraction": 0.53125,
+    "group_rows": 64
+  },
+  {
+    "config": 1,
+    "phase": "decode",
+    "batch": 32,
+    "zero_gate_fraction": 0.5078125,
+    "group_rows": 128
+  },
+  {
+    "config": 2,
+    "phase": "prefill",
+    "batch": null,
+    "zero_gate_fraction": 0.50543212890625,
+    "group_rows": 16384
+  },
+  {
+    "config": 2,
+    "phase": "decode",
+    "batch": 1,
+    "zero_gate_fraction": 0.25,
+    "group_rows": 8
+  },
+  {
+    "config": 2,
+    "phase": "decode",
+    "batch": 2,
+    "zero_gate_fraction": 0.4375,
+    "group_rows": 16
+  },
+  {
+    "config": 2,
+    "phase": "decode",
+    "batch": 4,
+    "zero_gate_fraction": 0.46875,
+    "group_rows": 32
+  },
+  {
+    "config": 2,
+    "phase": "decode",
+    "batch": 8,
+    "zero_gate_fraction": 0.515625,
+    "group_rows": 64
+  },
+  {
+    "config": 2,
+    "phase": "decode",
+    "batch": 16,
+    "zero_gate_fraction": 0.4765625,
+    "group_rows": 128
+  },
+  {
+    "config": 2,
+    "phase": "decode",
+    "batch": 32,
+    "zero_gate_fraction": 0.5234375,
+    "group_rows": 256
+  }
+]

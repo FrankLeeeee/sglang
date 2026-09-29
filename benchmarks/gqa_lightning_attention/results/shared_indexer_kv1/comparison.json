@@ -1,0 +1,968 @@
+{
+  "runs": [
+    {
+      "timestamp_utc": "2026-09-29T14:28:49.107921+00:00",
+      "gpu": "NVIDIA H200",
+      "gpu_uuid": "166288d3-a850-bcc1-8716-96c33d3a5679",
+      "torch": "2.11.0+cu130",
+      "cuda": "13.0",
+      "flashinfer": "0.6.15.post1",
+      "triton": "3.6.0",
+      "python": "3.12.3",
+      "git_commit": "a2c397e51b762d26ba55460f3ea4b0a3fc5102df",
+      "arguments": {
+        "configs": [
+          1
+        ],
+        "contexts": [
+          16384,
+          32768,
+          65536,
+          131072
+        ],
+        "batches": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32
+        ],
+        "phases": "prefill,decode",
+        "sparse": false,
+        "dense_only": false,
+        "indexer_kv_heads": "1",
+        "top_k": 2048,
+        "prefill_budget": 2048,
+        "full_prefill": false,
+        "prefill_graph": false,
+        "page_size": 128,
+        "score_budget_mib": 256,
+        "warmup": 3,
+        "iterations": 15,
+        "seed": 42,
+        "output": "benchmarks/gqa_lightning_attention/results/config1"
+      },
+      "scope": "One attention layer, BF16, TP=1; QKV projections, per-head RMSNorm, cache writes, attention; sparse includes indexer projection + score + exact top-k. Excludes scheduler, metadata planning, full model and output projection.",
+      "prefill": "Final chunk at target context length, fixed total query budget across batch; NOT full prompt latency",
+      "dense_kernel": "FlashInfer paged FA2 prefill / tensor-core paged decode",
+      "sparse_kernel": "SGLang autotuned Triton token-sparse GQA + fused grouped Lightning scores + FlashInfer exact top-k",
+      "cache": "BF16, shuffled physical pages, independent request caches, L2 flushed before each timed sample"
+    },
+    {
+      "timestamp_utc": "2026-09-29T14:32:16.841244+00:00",
+      "gpu": "NVIDIA H200",
+      "gpu_uuid": "70664ba4-0cb7-5441-493b-dd7b9ffc9ff5",
+      "torch": "2.11.0+cu130",
+      "cuda": "13.0",
+      "flashinfer": "0.6.15.post1",
+      "triton": "3.6.0",
+      "python": "3.12.3",
+      "git_commit": "a2c397e51b762d26ba55460f3ea4b0a3fc5102df",
+      "arguments": {
+        "configs": [
+          2
+        ],
+        "contexts": [
+          16384,
+          32768,
+          65536,
+          131072
+        ],
+        "batches": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32
+        ],
+        "phases": "prefill,decode",
+        "sparse": false,
+        "dense_only": false,
+        "indexer_kv_heads": "1",
+        "top_k": 2048,
+        "prefill_budget": 2048,
+        "full_prefill": false,
+        "prefill_graph": false,
+        "page_size": 128,
+        "score_budget_mib": 256,
+        "warmup": 3,
+        "iterations": 15,
+        "seed": 42,
+        "output": "benchmarks/gqa_lightning_attention/results/config2"
+      },
+      "scope": "One attention layer, BF16, TP=1; QKV projections, per-head RMSNorm, cache writes, attention; sparse includes indexer projection + score + exact top-k. Excludes scheduler, metadata planning, full model and output projection.",
+      "prefill": "Final chunk at target context length, fixed total query budget across batch; NOT full prompt latency",
+      "dense_kernel": "FlashInfer paged FA2 prefill / tensor-core paged decode",
+      "sparse_kernel": "SGLang autotuned Triton token-sparse GQA + fused grouped Lightning scores + FlashInfer exact top-k",
+      "cache": "BF16, shuffled physical pages, independent request caches, L2 flushed before each timed sample"
+    }
+  ],
+  "comparisons": [
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 16384,
+      "batch": 1,
+      "dense_ms": 0.07782399654388428,
+      "sparse_ms": 0.13523200154304504,
+      "speedup_dense_over_sparse": 0.5754850601624238
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 16384,
+      "batch": 2,
+      "dense_ms": 0.08406399935483932,
+      "sparse_ms": 0.15411199629306793,
+      "speedup_dense_over_sparse": 0.5454734308611418
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 16384,
+      "batch": 4,
+      "dense_ms": 0.1037760004401207,
+      "sparse_ms": 0.1674879938364029,
+      "speedup_dense_over_sparse": 0.6196026238244031
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 16384,
+      "batch": 8,
+      "dense_ms": 0.13446399569511414,
+      "sparse_ms": 0.19603200256824493,
+      "speedup_dense_over_sparse": 0.6859287969998825
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 16384,
+      "batch": 16,
+      "dense_ms": 0.19472000002861023,
+      "sparse_ms": 0.25094398856163025,
+      "speedup_dense_over_sparse": 0.7759500482347208
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 16384,
+      "batch": 32,
+      "dense_ms": 0.3158720135688782,
+      "sparse_ms": 0.2724800109863281,
+      "speedup_dense_over_sparse": 1.1592483882596705
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 32768,
+      "batch": 1,
+      "dense_ms": 0.08761599659919739,
+      "sparse_ms": 0.14531199634075165,
+      "speedup_dense_over_sparse": 0.6029508836540989
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 32768,
+      "batch": 2,
+      "dense_ms": 0.10534399747848511,
+      "sparse_ms": 0.16835199296474457,
+      "speedup_dense_over_sparse": 0.6257365631575608
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 32768,
+      "batch": 4,
+      "dense_ms": 0.13369600474834442,
+      "sparse_ms": 0.18396799266338348,
+      "speedup_dense_over_sparse": 0.7267351391552958
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 32768,
+      "batch": 8,
+      "dense_ms": 0.1939840018749237,
+      "sparse_ms": 0.21823999285697937,
+      "speedup_dense_over_sparse": 0.8888563426688183
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 32768,
+      "batch": 16,
+      "dense_ms": 0.3123199939727783,
+      "sparse_ms": 0.28806400299072266,
+      "speedup_dense_over_sparse": 1.0842034781514747
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 32768,
+      "batch": 32,
+      "dense_ms": 0.551967978477478,
+      "sparse_ms": 0.34751999378204346,
+      "speedup_dense_over_sparse": 1.5883056755107439
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 65536,
+      "batch": 1,
+      "dense_ms": 0.1053759977221489,
+      "sparse_ms": 0.1746560037136078,
+      "speedup_dense_over_sparse": 0.6033345289116955
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 65536,
+      "batch": 2,
+      "dense_ms": 0.13462400436401367,
+      "sparse_ms": 0.18678399920463562,
+      "speedup_dense_over_sparse": 0.7207469854873552
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 65536,
+      "batch": 4,
+      "dense_ms": 0.19487999379634857,
+      "sparse_ms": 0.21347199380397797,
+      "speedup_dense_over_sparse": 0.9129066081394189
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 65536,
+      "batch": 8,
+      "dense_ms": 0.31113600730895996,
+      "sparse_ms": 0.2614080011844635,
+      "speedup_dense_over_sparse": 1.1902313850347899
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 65536,
+      "batch": 16,
+      "dense_ms": 0.5500159859657288,
+      "sparse_ms": 0.35814398527145386,
+      "speedup_dense_over_sparse": 1.5357398381236147
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 65536,
+      "batch": 32,
+      "dense_ms": 1.0223679542541504,
+      "sparse_ms": 0.4691520035266876,
+      "speedup_dense_over_sparse": 2.1791827522185847
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 131072,
+      "batch": 1,
+      "dense_ms": 0.13529600203037262,
+      "sparse_ms": 0.19475199282169342,
+      "speedup_dense_over_sparse": 0.6947092046151427
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 131072,
+      "batch": 2,
+      "dense_ms": 0.19439999759197235,
+      "sparse_ms": 0.22115199267864227,
+      "speedup_dense_over_sparse": 0.8790334431869965
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 131072,
+      "batch": 4,
+      "dense_ms": 0.31068798899650574,
+      "sparse_ms": 0.25942400097846985,
+      "speedup_dense_over_sparse": 1.1976069593587464
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 131072,
+      "batch": 8,
+      "dense_ms": 0.546783983707428,
+      "sparse_ms": 0.3359360098838806,
+      "speedup_dense_over_sparse": 1.6276432642527037
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 131072,
+      "batch": 16,
+      "dense_ms": 1.0194560289382935,
+      "sparse_ms": 0.4865280091762543,
+      "speedup_dense_over_sparse": 2.0953696595276092
+    },
+    {
+      "config": 1,
+      "phase": "decode",
+      "context": 131072,
+      "batch": 32,
+      "dense_ms": 1.9648640155792236,
+      "sparse_ms": 0.7113280296325684,
+      "speedup_dense_over_sparse": 2.762247421339717
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 16384,
+      "batch": 1,
+      "dense_ms": 2.670624017715454,
+      "sparse_ms": 5.465663909912109,
+      "speedup_dense_over_sparse": 0.4886184115478112
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 16384,
+      "batch": 2,
+      "dense_ms": 2.693824052810669,
+      "sparse_ms": 5.506495952606201,
+      "speedup_dense_over_sparse": 0.48920839604643557
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 16384,
+      "batch": 4,
+      "dense_ms": 2.7188479900360107,
+      "sparse_ms": 5.531231880187988,
+      "speedup_dense_over_sparse": 0.49154474969210765
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 16384,
+      "batch": 8,
+      "dense_ms": 2.724287986755371,
+      "sparse_ms": 5.532032012939453,
+      "speedup_dense_over_sparse": 0.4924570176714897
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 16384,
+      "batch": 16,
+      "dense_ms": 2.738271951675415,
+      "sparse_ms": 5.530144214630127,
+      "speedup_dense_over_sparse": 0.4951538052897883
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 16384,
+      "batch": 32,
+      "dense_ms": 2.735935926437378,
+      "sparse_ms": 5.571872234344482,
+      "speedup_dense_over_sparse": 0.49102632138140806
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 32768,
+      "batch": 1,
+      "dense_ms": 4.935840129852295,
+      "sparse_ms": 7.751520156860352,
+      "speedup_dense_over_sparse": 0.6367576978412309
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 32768,
+      "batch": 2,
+      "dense_ms": 4.984960079193115,
+      "sparse_ms": 7.789279937744141,
+      "speedup_dense_over_sparse": 0.6399770093045101
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 32768,
+      "batch": 4,
+      "dense_ms": 5.019968032836914,
+      "sparse_ms": 7.75216007232666,
+      "speedup_dense_over_sparse": 0.6475573241523982
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 32768,
+      "batch": 8,
+      "dense_ms": 5.022208213806152,
+      "sparse_ms": 7.788383960723877,
+      "speedup_dense_over_sparse": 0.6448331565486112
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 32768,
+      "batch": 16,
+      "dense_ms": 5.033792018890381,
+      "sparse_ms": 7.82041597366333,
+      "speedup_dense_over_sparse": 0.6436731800255369
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 32768,
+      "batch": 32,
+      "dense_ms": 5.05782413482666,
+      "sparse_ms": 7.9154558181762695,
+      "speedup_dense_over_sparse": 0.6389807802618737
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 65536,
+      "batch": 1,
+      "dense_ms": 9.594783782958984,
+      "sparse_ms": 11.947199821472168,
+      "speedup_dense_over_sparse": 0.8030989626301143
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 65536,
+      "batch": 2,
+      "dense_ms": 9.683263778686523,
+      "sparse_ms": 11.95359992980957,
+      "speedup_dense_over_sparse": 0.8100709272140401
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 65536,
+      "batch": 4,
+      "dense_ms": 9.811871528625488,
+      "sparse_ms": 12.039263725280762,
+      "speedup_dense_over_sparse": 0.8149893342748142
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 65536,
+      "batch": 8,
+      "dense_ms": 9.809951782226562,
+      "sparse_ms": 11.956128120422363,
+      "speedup_dense_over_sparse": 0.8204957059192182
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 65536,
+      "batch": 16,
+      "dense_ms": 9.90441608428955,
+      "sparse_ms": 12.1046724319458,
+      "speedup_dense_over_sparse": 0.8182308228474248
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 65536,
+      "batch": 32,
+      "dense_ms": 10.043423652648926,
+      "sparse_ms": 12.12723159790039,
+      "speedup_dense_over_sparse": 0.8281711758838481
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 131072,
+      "batch": 1,
+      "dense_ms": 18.925024032592773,
+      "sparse_ms": 21.21776008605957,
+      "speedup_dense_over_sparse": 0.8919425969486212
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 131072,
+      "batch": 2,
+      "dense_ms": 18.889055252075195,
+      "sparse_ms": 21.11756706237793,
+      "speedup_dense_over_sparse": 0.8944711858274172
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 131072,
+      "batch": 4,
+      "dense_ms": 19.368959426879883,
+      "sparse_ms": 21.237567901611328,
+      "speedup_dense_over_sparse": 0.9120140082240928
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 131072,
+      "batch": 8,
+      "dense_ms": 19.388896942138672,
+      "sparse_ms": 21.107200622558594,
+      "speedup_dense_over_sparse": 0.9185915881908346
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 131072,
+      "batch": 16,
+      "dense_ms": 19.41551971435547,
+      "sparse_ms": 21.11187171936035,
+      "speedup_dense_over_sparse": 0.9196493789108586
+    },
+    {
+      "config": 1,
+      "phase": "prefill",
+      "context": 131072,
+      "batch": 32,
+      "dense_ms": 19.715808868408203,
+      "sparse_ms": 21.23472023010254,
+      "speedup_dense_over_sparse": 0.9284703850469801
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 16384,
+      "batch": 1,
+      "dense_ms": 0.09567999839782715,
+      "sparse_ms": 0.15404799580574036,
+      "speedup_dense_over_sparse": 0.6211051166058844
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 16384,
+      "batch": 2,
+      "dense_ms": 0.11088000237941742,
+      "sparse_ms": 0.1759359985589981,
+      "speedup_dense_over_sparse": 0.6302291929314005
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 16384,
+      "batch": 4,
+      "dense_ms": 0.14422400295734406,
+      "sparse_ms": 0.19760000705718994,
+      "speedup_dense_over_sparse": 0.7298785314091732
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 16384,
+      "batch": 8,
+      "dense_ms": 0.20492799580097198,
+      "sparse_ms": 0.23715199530124664,
+      "speedup_dense_over_sparse": 0.8641209007778259
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 16384,
+      "batch": 16,
+      "dense_ms": 0.3248960077762604,
+      "sparse_ms": 0.2882879972457886,
+      "speedup_dense_over_sparse": 1.1269841647249037
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 16384,
+      "batch": 32,
+      "dense_ms": 0.57123202085495,
+      "sparse_ms": 0.41203200817108154,
+      "speedup_dense_over_sparse": 1.3863777801887815
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 32768,
+      "batch": 1,
+      "dense_ms": 0.1143999993801117,
+      "sparse_ms": 0.1781120002269745,
+      "speedup_dense_over_sparse": 0.6422924858197521
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 32768,
+      "batch": 2,
+      "dense_ms": 0.14339199662208557,
+      "sparse_ms": 0.19200000166893005,
+      "speedup_dense_over_sparse": 0.7468333092482969
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 32768,
+      "batch": 4,
+      "dense_ms": 0.20291200280189514,
+      "sparse_ms": 0.2184000015258789,
+      "speedup_dense_over_sparse": 0.929084255422276
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 32768,
+      "batch": 8,
+      "dense_ms": 0.3234559893608093,
+      "sparse_ms": 0.27296000719070435,
+      "speedup_dense_over_sparse": 1.1849940681413662
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 32768,
+      "batch": 16,
+      "dense_ms": 0.5648959875106812,
+      "sparse_ms": 0.35094401240348816,
+      "speedup_dense_over_sparse": 1.6096470307098663
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 32768,
+      "batch": 32,
+      "dense_ms": 1.0526080131530762,
+      "sparse_ms": 0.5331839919090271,
+      "speedup_dense_over_sparse": 1.9741928286036656
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 65536,
+      "batch": 1,
+      "dense_ms": 0.14287999272346497,
+      "sparse_ms": 0.1950400024652481,
+      "speedup_dense_over_sparse": 0.7325676318575882
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 65536,
+      "batch": 2,
+      "dense_ms": 0.20323200523853302,
+      "sparse_ms": 0.21756799519062042,
+      "speedup_dense_over_sparse": 0.9341080017788138
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 65536,
+      "batch": 4,
+      "dense_ms": 0.3222079873085022,
+      "sparse_ms": 0.2576960027217865,
+      "speedup_dense_over_sparse": 1.2503414251883607
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 65536,
+      "batch": 8,
+      "dense_ms": 0.5615040063858032,
+      "sparse_ms": 0.33904001116752625,
+      "speedup_dense_over_sparse": 1.6561585296443173
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 65536,
+      "batch": 16,
+      "dense_ms": 1.0419199466705322,
+      "sparse_ms": 0.47328001260757446,
+      "speedup_dense_over_sparse": 2.2014873202229484
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 65536,
+      "batch": 32,
+      "dense_ms": 2.016416072845459,
+      "sparse_ms": 0.7683519721031189,
+      "speedup_dense_over_sparse": 2.624339034786573
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 131072,
+      "batch": 1,
+      "dense_ms": 0.20342400670051575,
+      "sparse_ms": 0.2226880043745041,
+      "speedup_dense_over_sparse": 0.9134933301499651
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 131072,
+      "batch": 2,
+      "dense_ms": 0.3226560056209564,
+      "sparse_ms": 0.26582399010658264,
+      "speedup_dense_over_sparse": 1.2137956603976445
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 131072,
+      "batch": 4,
+      "dense_ms": 0.560096025466919,
+      "sparse_ms": 0.33299198746681213,
+      "speedup_dense_over_sparse": 1.6820105184144747
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 131072,
+      "batch": 8,
+      "dense_ms": 1.040768027305603,
+      "sparse_ms": 0.4659839868545532,
+      "speedup_dense_over_sparse": 2.2334845330864472
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 131072,
+      "batch": 16,
+      "dense_ms": 1.994431972503662,
+      "sparse_ms": 0.70796799659729,
+      "speedup_dense_over_sparse": 2.8171216525175007
+    },
+    {
+      "config": 2,
+      "phase": "decode",
+      "context": 131072,
+      "batch": 32,
+      "dense_ms": 3.9626240730285645,
+      "sparse_ms": 1.2455999851226807,
+      "speedup_dense_over_sparse": 3.1812974633572115
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 16384,
+      "batch": 1,
+      "dense_ms": 3.5512640476226807,
+      "sparse_ms": 9.863615989685059,
+      "speedup_dense_over_sparse": 0.3600367300730724
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 16384,
+      "batch": 2,
+      "dense_ms": 3.6080000400543213,
+      "sparse_ms": 9.938591957092285,
+      "speedup_dense_over_sparse": 0.36302929586314425
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 16384,
+      "batch": 4,
+      "dense_ms": 3.641792058944702,
+      "sparse_ms": 9.937439918518066,
+      "speedup_dense_over_sparse": 0.36647185681679967
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 16384,
+      "batch": 8,
+      "dense_ms": 3.6576640605926514,
+      "sparse_ms": 9.959039688110352,
+      "speedup_dense_over_sparse": 0.367270758541044
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 16384,
+      "batch": 16,
+      "dense_ms": 3.657599925994873,
+      "sparse_ms": 10.026464462280273,
+      "speedup_dense_over_sparse": 0.3647945833503749
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 16384,
+      "batch": 32,
+      "dense_ms": 3.6384639739990234,
+      "sparse_ms": 10.09171199798584,
+      "speedup_dense_over_sparse": 0.3605398147237266
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 32768,
+      "batch": 1,
+      "dense_ms": 6.740767955780029,
+      "sparse_ms": 13.75011157989502,
+      "speedup_dense_over_sparse": 0.49023369131317945
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 32768,
+      "batch": 2,
+      "dense_ms": 6.631199836730957,
+      "sparse_ms": 13.855744361877441,
+      "speedup_dense_over_sparse": 0.47858849467344206
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 32768,
+      "batch": 4,
+      "dense_ms": 6.864192008972168,
+      "sparse_ms": 13.865471839904785,
+      "speedup_dense_over_sparse": 0.4950565035383105
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 32768,
+      "batch": 8,
+      "dense_ms": 6.8494720458984375,
+      "sparse_ms": 13.875167846679688,
+      "speedup_dense_over_sparse": 0.4936496712389327
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 32768,
+      "batch": 16,
+      "dense_ms": 6.968448162078857,
+      "sparse_ms": 13.91312026977539,
+      "speedup_dense_over_sparse": 0.5008544472383372
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 32768,
+      "batch": 32,
+      "dense_ms": 6.671264171600342,
+      "sparse_ms": 13.924223899841309,
+      "speedup_dense_over_sparse": 0.47911210129825427
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 65536,
+      "batch": 1,
+      "dense_ms": 13.097567558288574,
+      "sparse_ms": 21.052383422851562,
+      "speedup_dense_over_sparse": 0.6221417924619244
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 65536,
+      "batch": 2,
+      "dense_ms": 12.93785572052002,
+      "sparse_ms": 21.05580711364746,
+      "speedup_dense_over_sparse": 0.6144554635540075
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 65536,
+      "batch": 4,
+      "dense_ms": 13.229439735412598,
+      "sparse_ms": 21.12041664123535,
+      "speedup_dense_over_sparse": 0.6263815700294252
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 65536,
+      "batch": 8,
+      "dense_ms": 13.244928359985352,
+      "sparse_ms": 21.0710391998291,
+      "speedup_dense_over_sparse": 0.6285844867154333
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 65536,
+      "batch": 16,
+      "dense_ms": 13.4334716796875,
+      "sparse_ms": 21.03343963623047,
+      "speedup_dense_over_sparse": 0.6386721293339065
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 65536,
+      "batch": 32,
+      "dense_ms": 13.678976058959961,
+      "sparse_ms": 21.258560180664062,
+      "speedup_dense_over_sparse": 0.6434573152043388
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 131072,
+      "batch": 1,
+      "dense_ms": 25.562271118164062,
+      "sparse_ms": 38.37206268310547,
+      "speedup_dense_over_sparse": 0.6661688043530345
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 131072,
+      "batch": 2,
+      "dense_ms": 25.57734489440918,
+      "sparse_ms": 38.363712310791016,
+      "speedup_dense_over_sparse": 0.6667067224152533
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 131072,
+      "batch": 4,
+      "dense_ms": 25.786176681518555,
+      "sparse_ms": 38.345054626464844,
+      "speedup_dense_over_sparse": 0.6724772446593817
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 131072,
+      "batch": 8,
+      "dense_ms": 26.012832641601562,
+      "sparse_ms": 38.3256950378418,
+      "speedup_dense_over_sparse": 0.6787308779636525
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 131072,
+      "batch": 16,
+      "dense_ms": 26.28175926208496,
+      "sparse_ms": 38.316001892089844,
+      "speedup_dense_over_sparse": 0.6859212330165039
+    },
+    {
+      "config": 2,
+      "phase": "prefill",
+      "context": 131072,
+      "batch": 32,
+      "dense_ms": 26.732831954956055,
+      "sparse_ms": 38.35113525390625,
+      "speedup_dense_over_sparse": 0.6970545142397887
+    }
+  ]
+}

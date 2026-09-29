@@ -1,0 +1,12 @@
+# Keep the small benchmark result tables despite the root CSV ignore rule.
+!results/*.csv
+!results/**/*.csv
+
+# Local publication drafts, API receipts, and reproducible binary artifacts.
+results/all_experiments_doc/
+results/**/document/
+results/**/doc_*.json
+results/**/verify_*.json
+results/**/write_*.json
+results/**/*.zip
+results/**/*.jpg
