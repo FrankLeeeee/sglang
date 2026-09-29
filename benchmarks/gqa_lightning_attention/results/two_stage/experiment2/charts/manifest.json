@@ -1,0 +1,130 @@
+[
+  {
+    "path": "charts/config1_prefill_16k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 1,
+    "phase": "prefill",
+    "context": 16384
+  },
+  {
+    "path": "charts/config1_prefill_32k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 1,
+    "phase": "prefill",
+    "context": 32768
+  },
+  {
+    "path": "charts/config1_prefill_64k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 1,
+    "phase": "prefill",
+    "context": 65536
+  },
+  {
+    "path": "charts/config1_prefill_128k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 1,
+    "phase": "prefill",
+    "context": 131072
+  },
+  {
+    "path": "charts/config1_decode_16k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 1,
+    "phase": "decode",
+    "context": 16384
+  },
+  {
+    "path": "charts/config1_decode_32k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 1,
+    "phase": "decode",
+    "context": 32768
+  },
+  {
+    "path": "charts/config1_decode_64k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 1,
+    "phase": "decode",
+    "context": 65536
+  },
+  {
+    "path": "charts/config1_decode_128k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 1,
+    "phase": "decode",
+    "context": 131072
+  },
+  {
+    "path": "charts/config2_prefill_16k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 2,
+    "phase": "prefill",
+    "context": 16384
+  },
+  {
+    "path": "charts/config2_prefill_32k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 2,
+    "phase": "prefill",
+    "context": 32768
+  },
+  {
+    "path": "charts/config2_prefill_64k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 2,
+    "phase": "prefill",
+    "context": 65536
+  },
+  {
+    "path": "charts/config2_prefill_128k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 2,
+    "phase": "prefill",
+    "context": 131072
+  },
+  {
+    "path": "charts/config2_decode_16k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 2,
+    "phase": "decode",
+    "context": 16384
+  },
+  {
+    "path": "charts/config2_decode_32k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 2,
+    "phase": "decode",
+    "context": 32768
+  },
+  {
+    "path": "charts/config2_decode_64k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 2,
+    "phase": "decode",
+    "context": 65536
+  },
+  {
+    "path": "charts/config2_decode_128k.png",
+    "bars": 18,
+    "labels": 18,
+    "config": 2,
+    "phase": "decode",
+    "context": 131072
+  }
+]
