@@ -11,18 +11,27 @@ import triton
 import triton.language as tl
 from attention import LightningIndexer
 from kernels import lightning_scores
+from stages import stage
 
 
 @triton.jit
-def _pool(K, POOLED, IDS, IK: tl.constexpr, BS: tl.constexpr, ALL: tl.constexpr):
-    page, group = tl.program_id(0), tl.program_id(1)
+def _pool(
+    K,
+    POOLED,
+    IDS,
+    IK: tl.constexpr,
+    BS: tl.constexpr,
+    ALL: tl.constexpr,
+    D: tl.constexpr,
+):
+    page, group = tl.program_id(0).to(tl.int64), tl.program_id(1)
     if not ALL:
-        page = tl.load(IDS + page)
+        page = tl.load(IDS + page).to(tl.int64)
     n = tl.arange(0, BS)
-    d = tl.arange(0, 64)
-    k = tl.load(K + ((page * BS + n[:, None]) * IK + group) * 64 + d[None, :])
+    d = tl.arange(0, D)
+    k = tl.load(K + ((page * BS + n[:, None]) * IK + group) * D + d[None, :])
     mean = tl.sum(k.to(tl.float32), axis=0) / BS
-    tl.store(POOLED + (page * IK + group) * 64 + d, mean)
+    tl.store(POOLED + (page * IK + group) * D + d, mean)
 
 
 def prepare_block_cache(state, block_size=128):
@@ -32,7 +41,7 @@ def prepare_block_cache(state, block_size=128):
     state.block_ik = torch.empty(
         state.ik.shape[0] // block_size,
         state.ik.shape[1],
-        64,
+        state.ik.shape[2],
         device=state.ik.device,
         dtype=state.ik.dtype,
     )
@@ -46,6 +55,7 @@ def prepare_block_cache(state, block_size=128):
         state.ik.shape[1],
         block_size,
         True,
+        state.ik.shape[2],
     )
 
 
@@ -67,6 +77,7 @@ def _candidate_score(
     IK: tl.constexpr,
     H: tl.constexpr,
     BS: tl.constexpr,
+    D: tl.constexpr,
 ):
     row, group, candidate = tl.program_id(0), tl.program_id(1), tl.program_id(2)
     block = tl.load(BLOCKS + (group * M + row) * C + candidate)
@@ -76,22 +87,22 @@ def _candidate_score(
     valid = (block >= 0) & (n <= pos) & (n < N)
     slots = tl.load(R2T + request * N + n, valid, 0).to(tl.int64)
     kg = 0 if IK == 1 else group
-    d = tl.arange(0, 64)
+    d = tl.arange(0, D)
     if J == 1:
-        q = tl.load(Q + (row * G + group) * 64 + d).to(tl.float32)
+        q = tl.load(Q + (row * G + group) * D + d).to(tl.float32)
         k = tl.load(
-            K + (slots[:, None] * IK + kg) * 64 + d[None, :], valid[:, None], 0
+            K + (slots[:, None] * IK + kg) * D + d[None, :], valid[:, None], 0
         ).to(tl.float32)
         gate = tl.load(W + row * G + group).to(tl.float32)
         scores = tl.maximum(tl.sum(k * q[None, :], axis=1), 0.0) * gate
     else:
         h = tl.arange(0, H)
         q = tl.load(
-            Q + (row * G * J + group * J + h[:, None]) * 64 + d[None, :],
+            Q + (row * G * J + group * J + h[:, None]) * D + d[None, :],
             h[:, None] < J,
             0,
         )
-        k = tl.load(K + (slots[None, :] * IK + kg) * 64 + d[:, None], valid[None, :], 0)
+        k = tl.load(K + (slots[None, :] * IK + kg) * D + d[:, None], valid[None, :], 0)
         dots = tl.maximum(tl.dot(q, k), 0.0)
         gates = tl.load(W + row * G * J + group * J + h, h < J, 0).to(tl.float32)
         scores = tl.sum(dots * gates[:, None], axis=0)
@@ -119,6 +130,7 @@ class TwoStageIndexer(LightningIndexer):
             state.ik.shape[1],
             self.block_size,
             False,
+            state.ik.shape[2],
         )
 
     def shortlist(self, q, w, state, start, end):
@@ -133,6 +145,7 @@ class TwoStageIndexer(LightningIndexer):
             state.length // self.block_size,
             groups,
             state.score_query_tile,
+            num_warps=state.score_warps,
         )
         # Never use a partially filled block's future-dependent mean to rank it.
         current = (
@@ -171,6 +184,7 @@ class TwoStageIndexer(LightningIndexer):
             k_cache.shape[1],
             max(16, triton.next_power_of_2(j)),
             self.block_size,
+            q.shape[-1],
             num_warps=4,
         )
         return scores
@@ -178,13 +192,19 @@ class TwoStageIndexer(LightningIndexer):
     def select(self, q, k_cache, w, state, start, end, top_k):
         if self.score_width(state) < min(top_k, state.length):
             raise ValueError("Candidate token budget must cover final top-k")
-        blocks = self.shortlist(q, w, state, start, end)
-        scores = self.candidate_scores(q, k_cache, w, state, start, end, blocks)
+        with stage("coarse_score_select"):
+            blocks = self.shortlist(q, w, state, start, end)
+        with stage("fine_score"):
+            scores = self.candidate_scores(q, k_cache, w, state, start, end, blocks)
         width = min(top_k, state.length)
-        vals, ordinal = flashinfer.top_k(
-            scores.flatten(0, 1), width, deterministic=True, tie_break=1
-        )
-        ordinal = ordinal.view(self.cfg.num_k_heads, end - start, width).long()
-        block = blocks.gather(2, ordinal // self.block_size)
-        indices = block * self.block_size + ordinal % self.block_size
-        return torch.where(torch.isfinite(vals.view_as(indices)), indices, -1).int()
+        with stage("select"):
+            vals, ordinal = flashinfer.top_k(
+                scores.flatten(0, 1), width, deterministic=True, tie_break=1
+            )
+        with stage("expand"):
+            ordinal = ordinal.view(self.cfg.num_k_heads, end - start, width).long()
+            block = blocks.gather(2, ordinal // self.block_size)
+            indices = block * self.block_size + ordinal % self.block_size
+            return torch.where(
+                torch.isfinite(vals.view_as(indices)), indices, -1
+            ).int()

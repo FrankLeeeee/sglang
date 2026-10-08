@@ -54,23 +54,25 @@ def _score(
     MQ: tl.constexpr,
     H: tl.constexpr,
     BN: tl.constexpr,
+    D: tl.constexpr,
+    BLOCK_MAX: tl.constexpr,
 ):
     tile, group, kb = tl.program_id(0), tl.program_id(1), tl.program_id(2)
     # A query tile belongs to one request. Decode uses MQ=1.
     rh = tl.arange(0, MQ * H)
     row = tile * MQ + rh // H
     head = rh % H
-    d = tl.arange(0, 64)
+    d = tl.arange(0, D)
     n = kb * BN + tl.arange(0, BN)
     request = tl.load(REQ + tile * MQ)
     slots = tl.load(R2T + request * STRIDE_R + n, n < N, 0).to(tl.int64)
     kg = 0 if IK == 1 else group
     q = tl.load(
-        Q + (row[:, None] * G * J + group * J + head[:, None]) * 64 + d[None, :],
+        Q + (row[:, None] * G * J + group * J + head[:, None]) * D + d[None, :],
         (row[:, None] < M) & (head[:, None] < J),
         0,
     )
-    k = tl.load(K + (slots[None, :] * IK + kg) * 64 + d[:, None], n[None, :] < N, 0)
+    k = tl.load(K + (slots[None, :] * IK + kg) * D + d[:, None], n[None, :] < N, 0)
     dot = tl.maximum(tl.dot(q, k), 0.0)
     w = tl.load(W + row * G * J + group * J + head, (row < M) & (head < J), 0).to(
         tl.float32
@@ -80,11 +82,19 @@ def _score(
     qr = tile * MQ + tl.arange(0, MQ)
     pos = tl.load(POS + qr, qr < M, -1)
     scores = tl.where(n[None, :] <= pos[:, None], scores, -float("inf"))
-    tl.store(
-        OUT + (group * M + qr[:, None]) * N + n[None, :],
-        scores,
-        (qr[:, None] < M) & (n[None, :] < N),
-    )
+    if BLOCK_MAX:
+        # BN is the block size: one program scores one block and keeps its max.
+        tl.store(
+            OUT + (group * M + qr) * ((N + BN - 1) // BN) + kb,
+            tl.max(scores, axis=1),
+            qr < M,
+        )
+    else:
+        tl.store(
+            OUT + (group * M + qr[:, None]) * N + n[None, :],
+            scores,
+            (qr[:, None] < M) & (n[None, :] < N),
+        )
 
 
 def lightning_scores(
@@ -97,17 +107,22 @@ def lightning_scores(
     context_len,
     groups,
     query_tile=4,
+    block_max=False,
+    num_warps=4,
 ):
     """Return [G, M, N], fusing ReLU and head reduction into tensor-core GEMM.
 
+    With ``block_max`` the result is [G, M, ceil(N / 128)]: the maximum token
+    score of every 128-token block, so per-token scores are never written.
     No RoPE or score scaling. All rows in a query tile must share a request.
     Keys can be shared (IK=1) or per-group (IK=G).
     """
     m, heads, dim = q.shape
-    assert dim == 64 and heads % groups == 0
+    assert dim in (64, 128) and heads % groups == 0
     assert k_cache.shape[1] in (1, groups)
     j = heads // groups
-    scores = torch.empty((groups, m, context_len), device=q.device, dtype=torch.float32)
+    width = triton.cdiv(context_len, 128) if block_max else context_len
+    scores = torch.empty((groups, m, width), device=q.device, dtype=torch.float32)
     _score[(triton.cdiv(m, query_tile), groups, triton.cdiv(context_len, 128))](
         q,
         k_cache,
@@ -125,6 +140,8 @@ def lightning_scores(
         query_tile,
         max(16 // query_tile, triton.next_power_of_2(j)),
         128,
-        num_warps=4,
+        dim,
+        block_max,
+        num_warps=num_warps,
     )
     return scores

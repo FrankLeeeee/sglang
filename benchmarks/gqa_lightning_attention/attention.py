@@ -6,6 +6,7 @@ import flashinfer
 import torch
 import torch.nn.functional as F
 from kernels import cache_write, lightning_scores, rms_norm_per_head
+from stages import stage
 
 from sglang.kernels.ops.attention.minimax_sparse.token.sparse_attn import (
     gqa_token_sparse_attn,
@@ -56,31 +57,55 @@ class LightningIndexer:
 
     def project(self, x, x_kv):
         c = self.cfg
-        q = F.linear(x, self.wq).view(-1, c.indexer_q_heads, 64)
-        k = F.linear(x_kv, self.wk).view(-1, c.indexer_kv_heads, 64)
+        q = F.linear(x, self.wq).view(-1, c.indexer_q_heads, c.indexer_head_dim)
+        k = F.linear(x_kv, self.wk).view(-1, c.indexer_kv_heads, c.indexer_head_dim)
         w = F.relu(F.linear(x, self.ww))
         return q, k, w
 
     def select(self, q, k_cache, w, state, start, end, top_k):
-        scores = lightning_scores(
-            q[start:end],
-            k_cache,
-            w[start:end],
-            state.req_to_token,
-            state.request_ids[start:end],
-            state.positions[start:end],
-            state.length,
-            self.cfg.num_k_heads,
-            query_tile=state.score_query_tile,
-        )
+        with stage("score"):
+            scores = lightning_scores(
+                q[start:end],
+                k_cache,
+                w[start:end],
+                state.req_to_token,
+                state.request_ids[start:end],
+                state.positions[start:end],
+                state.length,
+                self.cfg.num_k_heads,
+                query_tile=state.score_query_tile,
+                num_warps=state.score_warps,
+            )
         width = min(top_k, state.length)
-        vals, idx = flashinfer.top_k(
-            scores.flatten(0, 1), width, deterministic=True, tie_break=1
-        )
+        with stage("select"):
+            vals, idx = flashinfer.top_k(
+                scores.flatten(0, 1), width, deterministic=True, tie_break=1
+            )
         # Keep -1 untouched: adding a packed document offset to it is a bug in
         # the supplied pseudocode. The attention kernel expects local positions.
-        idx = torch.where(torch.isfinite(vals), idx, -1).to(torch.int32)
-        return idx.view(self.cfg.num_k_heads, end - start, width)
+        with stage("expand"):
+            idx = torch.where(torch.isfinite(vals), idx, -1).to(torch.int32)
+            return idx.view(self.cfg.num_k_heads, end - start, width)
+
+
+def score_launch(cfg, q_per_request):
+    """(queries per tile, warps) for the score kernel, tuned on H200 at 128k.
+
+    Single-head index groups and eight-head groups like 16-query tiles. Larger
+    groups preferred four queries per tile at head dim 64 and eight (with eight
+    warps) at head dim 128. Request boundaries must align with tiles so a tile
+    never mixes caches; decode uses one query per tile.
+    """
+    if q_per_request == 1:
+        return 1, 4
+    heads = cfg.indexer_q_heads // cfg.num_k_heads
+    if heads in (1, 8):
+        tile, warps = 16, 4
+    elif cfg.indexer_head_dim == 128:
+        tile, warps = 8, 8
+    else:
+        tile, warps = 4, 4
+    return (tile, warps) if q_per_request % tile == 0 else (4, 4)
 
 
 class PagedState:
@@ -99,19 +124,7 @@ class PagedState:
         assert q_per_request == 1 or q_per_request % 4 == 0
         self.cfg, self.batch, self.length = cfg, batch, length
         self.q_per_request = q_per_request
-        # H200 tuning: 16-query tiles help the eight-head indexer groups.
-        # Twelve-head groups were fastest at four queries per tile. Require
-        # request boundaries to align with tiles so a tile never mixes caches.
-        self.score_query_tile = (
-            1
-            if q_per_request == 1
-            else (
-                16
-                if cfg.indexer_q_heads // cfg.num_k_heads in (1, 8)
-                and q_per_request % 16 == 0
-                else 4
-            )
-        )
+        self.score_query_tile, self.score_warps = score_launch(cfg, q_per_request)
         self.phase, self.page_size = phase, page_size
         pages_per_req = length // page_size
         pages = torch.randperm(batch * pages_per_req, device="cuda", dtype=torch.int32)
@@ -133,24 +146,12 @@ class PagedState:
         shape = (batch * length, cfg.num_k_heads, cfg.head_dim)
         self.k = torch.randn(shape, device="cuda", dtype=torch.bfloat16)
         self.v = torch.randn_like(self.k)
-        self.ik = (
-            torch.randn(
-                batch * length,
-                cfg.indexer_kv_heads,
-                64,
-                device="cuda",
-                dtype=torch.bfloat16,
-            )
-            if sparse
-            else None
-        )
+        self.ik = None
+        if two_stage and not sparse:
+            raise ValueError("Two-stage indexing requires sparse=True")
+        if sparse:
+            self.attach_indexer(cfg, two_stage)
         self.wrapper = None
-        if two_stage:
-            if not sparse:
-                raise ValueError("Two-stage indexing requires sparse=True")
-            from two_stage import prepare_block_cache
-
-            prepare_block_cache(self)
         if not sparse:
             # FlashInfer tensor-core decode reserves larger split-K workspaces
             # at the 48:1 / 64:1 MQA ratios, even for a short context.
@@ -205,6 +206,30 @@ class PagedState:
                     kv_data_type=torch.bfloat16,
                 )
 
+    def attach_indexer(self, cfg, two_stage=False):
+        """(Re)create the synthetic index-key cache for an indexer configuration.
+
+        Main K/V, page table and positions are kept, so one state can serve
+        several indexer variants. Pooled block means are rebuilt on request.
+        """
+        self.cfg = cfg
+        self.ik = torch.randn(
+            self.batch * self.length,
+            cfg.indexer_kv_heads,
+            cfg.indexer_head_dim,
+            device="cuda",
+            dtype=torch.bfloat16,
+        )
+        self.block_ik = None
+        self.score_query_tile, self.score_warps = score_launch(cfg, self.q_per_request)
+        if two_stage:
+            from two_stage import prepare_block_cache
+
+            prepare_block_cache(self)
+
+    def release_indexer(self):
+        self.ik = self.block_ik = None
+
     def dense(self, q):
         c, p = self.cfg, self.page_size
         return self.wrapper.run(
@@ -231,11 +256,14 @@ class Attention:
         score_budget_mib=256,
         two_stage=False,
         candidate_blocks=64,
+        block=False,
     ):
         self.cfg, self.sparse, self.top_k = cfg, sparse, top_k
         self.two_stage = two_stage
-        if two_stage and not sparse:
-            raise ValueError("Two-stage indexing requires sparse=True")
+        if (two_stage or block) and not sparse:
+            raise ValueError("Two-stage and block indexing require sparse=True")
+        if two_stage and block:
+            raise ValueError("Choose either two-stage or block selection")
         self.score_budget = score_budget_mib * 1024**2
 
         def weight(out):
@@ -251,49 +279,65 @@ class Attention:
             from two_stage import TwoStageIndexer
 
             self.indexer = TwoStageIndexer(cfg, candidate_blocks=candidate_blocks)
+        elif block:
+            from block_select import BlockIndexer
+
+            self.indexer = BlockIndexer(cfg)
         else:
             self.indexer = LightningIndexer(cfg) if sparse else None
+        self.score_width = (
+            self.indexer.score_width if (two_stage or block) else lambda state: state.length
+        )
 
     @torch.no_grad()
     def forward(self, x, state, x_kv=None):
         x_kv = x if x_kv is None else x_kv
         c = self.cfg
-        q = rms_norm_per_head(F.linear(x, self.wq).view(-1, c.num_q_heads, c.head_dim))
-        k = rms_norm_per_head(
-            F.linear(x_kv, self.wk).view(-1, c.num_k_heads, c.head_dim)
-        )
-        v = rms_norm_per_head(
-            F.linear(x_kv, self.wv).view(-1, c.num_k_heads, c.head_dim)
-        )
-        cache_write(k, state.k, state.write_slots)
-        cache_write(v, state.v, state.write_slots)
+        with stage("main_projection"):
+            q = rms_norm_per_head(
+                F.linear(x, self.wq).view(-1, c.num_q_heads, c.head_dim)
+            )
+            k = rms_norm_per_head(
+                F.linear(x_kv, self.wk).view(-1, c.num_k_heads, c.head_dim)
+            )
+            v = rms_norm_per_head(
+                F.linear(x_kv, self.wv).view(-1, c.num_k_heads, c.head_dim)
+            )
+            cache_write(k, state.k, state.write_slots)
+            cache_write(v, state.v, state.write_slots)
         if not self.sparse:
-            return state.dense(q)
-        qi, ki, w = self.indexer.project(x.detach(), x_kv.detach())
-        cache_write(ki, state.ik, state.write_slots)
+            with stage("dense_attention"):
+                return state.dense(q)
+        with stage("index_projection"):
+            qi, ki, w = self.indexer.project(x.detach(), x_kv.detach())
+            cache_write(ki, state.ik, state.write_slots)
         if self.two_stage:
-            self.indexer.update_cache(state)
+            with stage("block_pool"):
+                self.indexer.update_cache(state)
         # Bound score memory independently of prompt and batch size.
         tile = state.score_query_tile
-        score_width = (
-            self.indexer.score_width(state) if self.two_stage else state.length
-        )
         chunk = max(
-            tile, self.score_budget // (c.num_k_heads * score_width * 4) // tile * tile
+            tile,
+            self.score_budget
+            // (c.num_k_heads * self.score_width(state) * 4)
+            // tile
+            * tile,
         )
         outputs = []
         for start in range(0, len(q), chunk):
             end = min(start + chunk, len(q))
             idx = self.indexer.select(qi, state.ik, w, state, start, end, self.top_k)
-            outputs.append(
-                gqa_token_sparse_attn(
-                    q[start:end],
-                    state.k,
-                    state.v,
-                    state.req_to_token,
-                    state.request_ids[start:end],
-                    idx,
-                    num_kv_chunks=None if state.phase == "decode" else 1,
+            with stage("sparse_attention"):
+                outputs.append(
+                    gqa_token_sparse_attn(
+                        q[start:end],
+                        state.k,
+                        state.v,
+                        state.req_to_token,
+                        state.request_ids[start:end],
+                        idx,
+                        num_kv_chunks=None if state.phase == "decode" else 1,
+                    )
                 )
-            )
-        return torch.cat(outputs) if len(outputs) > 1 else outputs[0]
+        with stage("concat"):
+            return torch.cat(outputs) if len(outputs) > 1 else outputs[0]
