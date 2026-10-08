@@ -30,6 +30,7 @@ from sglang.srt.model_executor.runner.shape_key import ShapeKey
 from sglang.srt.model_executor.runner_backend.full_cuda_graph_backend import (
     FullCudaGraphBackend,
 )
+from sglang.srt.runtime_context import get_context
 from sglang.test.ci.ci_register import register_cpu_ci
 from sglang.test.test_utils import CustomTestCase
 
@@ -55,6 +56,7 @@ def _make_backend(runner):
     touch CUDA), wiring just the attributes ``capture_one`` reads."""
     backend = FullCudaGraphBackend.__new__(FullCudaGraphBackend)
     backend._graphs = {}
+    backend._speculative_chunks = {}
     backend._outputs = {}
     backend._pool = None
     backend._capture_stream = None
@@ -86,7 +88,15 @@ def _make_runner(*, enable_profile, profiler, num_tokens_per_bs=1, mode_name="DE
     return runner
 
 
-class TestCaptureOneNoProfiling(CustomTestCase):
+class _FullBackendCase(CustomTestCase):
+    def setUp(self):
+        super().setUp()
+        config = get_context().override_server_args(model_path="dummy")
+        config.install()
+        self.addCleanup(config.restore)
+
+
+class TestCaptureOneNoProfiling(_FullBackendCase):
     def test_runs_two_warmups_and_capture_without_stepping(self):
         runner = _make_runner(enable_profile=False, profiler=None)
         backend = _make_backend(runner)
@@ -149,7 +159,7 @@ class TestCaptureOneNoProfiling(CustomTestCase):
         self.assertEqual(forward_fn.call_count, 3)
 
 
-class TestCaptureOneWithProfiling(CustomTestCase):
+class TestCaptureOneWithProfiling(_FullBackendCase):
     def _run(self, *, size, num_tokens_per_bs, mode_name):
         profiler = SimpleNamespace(step=mock.Mock(name="step"))
         runner = _make_runner(
@@ -176,7 +186,7 @@ class TestCaptureOneWithProfiling(CustomTestCase):
         self.assertEqual(forward_fn.call_count, 3)
 
 
-class TestCleanup(CustomTestCase):
+class TestCleanup(_FullBackendCase):
     def test_resets_graphs_before_releasing_references(self):
         backend = _make_backend(_make_runner(enable_profile=False, profiler=None))
         graphs = [mock.Mock(), mock.Mock()]

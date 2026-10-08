@@ -6,6 +6,7 @@ from typing import Collection, Dict, Tuple
 
 import torch
 
+from sglang.srt.runtime_context import get_context, get_spec
 from sglang.srt.utils import is_npu
 
 # Process-wide pool keyed by (name, numel, dtype, device); see share_input_buffer.
@@ -33,6 +34,13 @@ def share_input_buffer(name: str, new_buffer: torch.Tensor) -> torch.Tensor:
     filled immediately before each replay and the forwards that use them are
     sequential / mutually exclusive.
     """
+    # The speculative microbatch pipeline can suspend or overlap forwards.
+    # Its eager and graph runners need private inputs through the last consumer.
+    if (
+        get_context().is_config_namespace_published("spec")
+        and get_spec().speculative_microbatch_mode != "off"
+    ):
+        return new_buffer
     key: _PoolKey = (name, new_buffer.numel(), new_buffer.dtype, new_buffer.device)
     canonical = _forward_input_buffer_pool.get(key, None)
     if canonical is None:

@@ -212,6 +212,7 @@ class EagleDraftWorker(EagleDraftWorkerBase):
         self.dsa_extend_topk_buf: Optional[torch.Tensor] = None
         self.tree_mask_mode = default_tree_mask_mode()
 
+        self.microbatch_draft_group = None
         self.plan_stream, self.plan_stream_ctx = get_plan_stream(self.device)
 
     def alloc_memory_pool(
@@ -258,9 +259,14 @@ class EagleDraftWorker(EagleDraftWorkerBase):
             self.init_attention_backend()
 
     def init_cuda_graphs(self):
+        if self.microbatch_draft_group is not None:
+            from sglang.srt.speculative.microbatch_overlap import private_microbatch_capture
+            draft_context = private_microbatch_capture(self)
+        else:
+            draft_context = draft_tp_context(self.draft_owns_attention)
         with (
             draft_pp_context(),
-            draft_tp_context(self.draft_owns_attention),
+            draft_context,
             speculative_moe_backend_context(),
             speculative_moe_a2a_backend_context(),
         ):
@@ -672,6 +678,15 @@ class EagleDraftWorker(EagleDraftWorkerBase):
         return verify_input
 
     def draft_forward(self, forward_batch: ForwardBatch):
+        chunks = self.draft_forward_chunks(forward_batch)
+        while True:
+            try:
+                next(chunks)
+            except StopIteration as complete:
+                return complete.value
+
+    def draft_forward_chunks(self, forward_batch: ForwardBatch):
+        """Yield between eager draft steps with all model-forward scopes closed."""
         # Parse args
         spec_info: EagleDraftInput = forward_batch.spec_info
         if forward_batch.forward_mode.is_idle():
@@ -825,6 +840,8 @@ class EagleDraftWorker(EagleDraftWorkerBase):
                 if self.hot_token_id is not None:
                     topk_index = self.hot_token_id[topk_index]
                 hidden_states = logits_output.hidden_states
+                if i + 1 < self.speculative_num_steps - 1:
+                    yield i
 
         draft_probs = (
             torch.stack(draft_probs_list, dim=1) if needs_draft_probs else None
@@ -1223,6 +1240,13 @@ class EAGLEWorkerV2(BaseSpecWorker):
         self.gpu_id = gpu_id
         self.device = get_device().device
         self._target_worker = target_worker
+        self.microbatch_draft_group = None
+        if get_spec().speculative_microbatch_mode != "off":
+            from sglang.srt.speculative.microbatch_overlap import (
+                validate_microbatch_config,
+            )
+
+            validate_microbatch_config(target_worker.model_runner)
         self.page_size = get_schedule().page_size
         self.speculative_algorithm = SpeculativeAlgorithm.from_string(
             get_spec().speculative_algorithm
@@ -1288,6 +1312,9 @@ class EAGLEWorkerV2(BaseSpecWorker):
         )
 
     def init_cuda_graphs(self):
+        if get_spec().speculative_microbatch_mode != "off":
+            from sglang.srt.speculative.microbatch_overlap import ensure_microbatch_group
+            ensure_microbatch_group(self)
         super().init_cuda_graphs()
         # Build adaptive runtime states after target and draft backends exist.
         if self.adaptive_controller is not None:
@@ -1323,6 +1350,14 @@ class EAGLEWorkerV2(BaseSpecWorker):
         grammar_barrier=None,
         pp_proxy_tensors: Optional[PPProxyTensors] = None,
     ):
+        if get_spec().speculative_microbatch_mode != "off":
+            from sglang.srt.speculative.microbatch_overlap import (
+                can_microbatch_overlap,
+                run_microbatch_step,
+            )
+
+            if can_microbatch_overlap(self, batch):
+                return run_microbatch_step(self, batch, on_publish)
         if batch.forward_mode.is_extend() or batch.is_extend_in_batch:
             if not (
                 batch.is_extend_in_batch and self.enable_dp_spec_prefill_coordination
@@ -1383,11 +1418,12 @@ class EAGLEWorkerV2(BaseSpecWorker):
                     verify_input: EagleVerifyInput = self.draft_worker.draft(batch)
             assert verify_input.is_verify_input()
             batch.spec_info = verify_input
-            batch_output = self.verify(
-                batch,
-                pp_proxy_tensors=pp_proxy_tensors,
-                grammar_barrier=grammar_barrier,
-            )
+            with spec_stage_span("verify"):
+                batch_output = self.verify(
+                    batch,
+                    pp_proxy_tensors=pp_proxy_tensors,
+                    grammar_barrier=grammar_barrier,
+                )
             # Publish before draft_extend so the fence is at verify-end.
             if on_publish is not None:
                 on_publish(batch_output.new_seq_lens)

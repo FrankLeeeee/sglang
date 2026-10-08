@@ -6,7 +6,9 @@ import torch
 
 from sglang.srt.model_executor.cuda_graph_config import Backend
 from sglang.srt.runtime_context import (
+    get_context,
     get_exec,
+    get_spec,
 )
 
 if TYPE_CHECKING:
@@ -49,6 +51,12 @@ class GraphSharedOutput:
             return None
 
         device = torch.device(model_runner.device)
+        if (
+            get_context().is_config_namespace_published("spec")
+            and get_spec().speculative_microbatch_mode != "off"
+        ):
+            # Concurrent target/draft forwards must not share vocab-sized logits.
+            return cls(device=device, max_rows=max_rows)
         shared = cls._process_shared
         if (
             shared is not None

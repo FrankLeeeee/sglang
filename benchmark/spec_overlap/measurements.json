@@ -1,0 +1,629 @@
+{
+  "fine-correctness": {
+    "gpt-oss-fine_overlap-b16": {
+      "batch_size": 16,
+      "output_len": 64,
+      "median_tokens_per_second": 94.36446593731934,
+      "trial_tokens_per_second": [
+        94.5294923082336,
+        94.19943956640508
+      ],
+      "matching_requests_between_repeats": [
+        16
+      ],
+      "mean_accept_length": 1.0782823271014434
+    },
+    "gpt-oss-fine_overlap-b5": {
+      "batch_size": 5,
+      "output_len": 64,
+      "median_tokens_per_second": 32.92437854325841,
+      "trial_tokens_per_second": [
+        32.91313536255552,
+        32.9356217239613
+      ],
+      "matching_requests_between_repeats": [
+        5
+      ],
+      "mean_accept_length": 1.0927522195318804
+    },
+    "gpt-oss-fine_serial-b16": {
+      "batch_size": 16,
+      "output_len": 64,
+      "median_tokens_per_second": 94.38671940618548,
+      "trial_tokens_per_second": [
+        94.38337744659648,
+        94.39006136577447
+      ],
+      "matching_requests_between_repeats": [
+        16
+      ],
+      "mean_accept_length": 1.0782823271014434
+    },
+    "gpt-oss-fine_serial-b5": {
+      "batch_size": 5,
+      "output_len": 64,
+      "median_tokens_per_second": 33.083466824323494,
+      "trial_tokens_per_second": [
+        33.044296134814104,
+        33.12263751383289
+      ],
+      "matching_requests_between_repeats": [
+        5
+      ],
+      "mean_accept_length": 1.0927522195318804
+    },
+    "gpt-oss-off-b16": {
+      "batch_size": 16,
+      "output_len": 64,
+      "median_tokens_per_second": 182.7803554455751,
+      "trial_tokens_per_second": [
+        182.1043311932775,
+        183.45637969787273
+      ],
+      "matching_requests_between_repeats": [
+        16
+      ],
+      "mean_accept_length": 1.0782823271014434
+    },
+    "gpt-oss-off-b5": {
+      "batch_size": 5,
+      "output_len": 64,
+      "median_tokens_per_second": 63.72039983973798,
+      "trial_tokens_per_second": [
+        63.87474489587115,
+        63.566054783604805
+      ],
+      "matching_requests_between_repeats": [
+        5
+      ],
+      "mean_accept_length": 1.0927522195318804
+    },
+    "gpt-oss-serial-b16": {
+      "batch_size": 16,
+      "output_len": 64,
+      "median_tokens_per_second": 95.42746166591144,
+      "trial_tokens_per_second": [
+        95.47849777004738,
+        95.37642556177549
+      ],
+      "matching_requests_between_repeats": [
+        16
+      ],
+      "mean_accept_length": 1.0782823271014434
+    },
+    "gpt-oss-serial-b5": {
+      "batch_size": 5,
+      "output_len": 64,
+      "median_tokens_per_second": 32.20686174104816,
+      "trial_tokens_per_second": [
+        32.24681443480682,
+        32.16690904728949
+      ],
+      "matching_requests_between_repeats": [
+        5
+      ],
+      "mean_accept_length": 1.0927522195318804
+    },
+    "llama-fine_overlap-b16": {
+      "batch_size": 16,
+      "output_len": 64,
+      "median_tokens_per_second": 183.02564587028223,
+      "trial_tokens_per_second": [
+        182.69693679479855,
+        183.35435494576592
+      ],
+      "matching_requests_between_repeats": [
+        16
+      ],
+      "mean_accept_length": 1.5345432534315124
+    },
+    "llama-fine_overlap-b5": {
+      "batch_size": 5,
+      "output_len": 64,
+      "median_tokens_per_second": 64.39208839155779,
+      "trial_tokens_per_second": [
+        64.265929691977,
+        64.51824709113859
+      ],
+      "matching_requests_between_repeats": [
+        5
+      ],
+      "mean_accept_length": 1.5272810179673482
+    },
+    "llama-fine_serial-b16": {
+      "batch_size": 16,
+      "output_len": 64,
+      "median_tokens_per_second": 179.4348238362665,
+      "trial_tokens_per_second": [
+        178.29274051595453,
+        180.57690715657844
+      ],
+      "matching_requests_between_repeats": [
+        16
+      ],
+      "mean_accept_length": 1.5345432534315124
+    },
+    "llama-fine_serial-b5": {
+      "batch_size": 5,
+      "output_len": 64,
+      "median_tokens_per_second": 63.09372984176396,
+      "trial_tokens_per_second": [
+        63.211398136611514,
+        62.97606154691641
+      ],
+      "matching_requests_between_repeats": [
+        5
+      ],
+      "mean_accept_length": 1.5272810179673482
+    },
+    "llama-off-b16": {
+      "batch_size": 16,
+      "output_len": 64,
+      "median_tokens_per_second": 348.9765293526219,
+      "trial_tokens_per_second": [
+        349.06465836057964,
+        348.8884003446642
+      ],
+      "matching_requests_between_repeats": [
+        16
+      ],
+      "mean_accept_length": 1.5345432534315124
+    },
+    "llama-off-b5": {
+      "batch_size": 5,
+      "output_len": 64,
+      "median_tokens_per_second": 123.40437068328444,
+      "trial_tokens_per_second": [
+        123.58407471107977,
+        123.2246666554891
+      ],
+      "matching_requests_between_repeats": [
+        5
+      ],
+      "mean_accept_length": 1.5272810179673482
+    },
+    "llama-serial-b16": {
+      "batch_size": 16,
+      "output_len": 64,
+      "median_tokens_per_second": 177.8134707075946,
+      "trial_tokens_per_second": [
+        174.98958923858441,
+        180.63735217660482
+      ],
+      "matching_requests_between_repeats": [
+        16
+      ],
+      "mean_accept_length": 1.5345432534315124
+    },
+    "llama-serial-b5": {
+      "batch_size": 5,
+      "output_len": 64,
+      "median_tokens_per_second": 63.09804937072701,
+      "trial_tokens_per_second": [
+        63.12908688742883,
+        63.0670118540252
+      ],
+      "matching_requests_between_repeats": [
+        5
+      ],
+      "mean_accept_length": 1.5272810179673482
+    }
+  },
+  "fine-graphs-safe": {
+    "gpt-oss-fine_overlap-b16": {
+      "batch_size": 16,
+      "output_len": 64,
+      "median_tokens_per_second": 762.7842258785897,
+      "trial_tokens_per_second": [
+        761.2194633188042,
+        764.3489884383754
+      ],
+      "matching_requests_between_repeats": [
+        16
+      ],
+      "mean_accept_length": 1.0782823271014434
+    },
+    "gpt-oss-fine_overlap-b5": {
+      "batch_size": 5,
+      "output_len": 64,
+      "median_tokens_per_second": 258.64950501378905,
+      "trial_tokens_per_second": [
+        258.50659304991865,
+        258.7924169776595
+      ],
+      "matching_requests_between_repeats": [
+        5
+      ],
+      "mean_accept_length": 1.0927522195318804
+    },
+    "gpt-oss-fine_serial-b16": {
+      "batch_size": 16,
+      "output_len": 64,
+      "median_tokens_per_second": 744.7448905952929,
+      "trial_tokens_per_second": [
+        743.876866186992,
+        745.6129150035938
+      ],
+      "matching_requests_between_repeats": [
+        16
+      ],
+      "mean_accept_length": 1.0782823271014434
+    },
+    "gpt-oss-fine_serial-b5": {
+      "batch_size": 5,
+      "output_len": 64,
+      "median_tokens_per_second": 250.46444327675408,
+      "trial_tokens_per_second": [
+        250.6101764640831,
+        250.31871008942508
+      ],
+      "matching_requests_between_repeats": [
+        5
+      ],
+      "mean_accept_length": 1.0927522195318804
+    },
+    "gpt-oss-off-b16": {
+      "batch_size": 16,
+      "output_len": 64,
+      "median_tokens_per_second": 1231.2565440717885,
+      "trial_tokens_per_second": [
+        1230.714156308795,
+        1231.7989318347823
+      ],
+      "matching_requests_between_repeats": [
+        16
+      ],
+      "mean_accept_length": 1.0782823271014434
+    },
+    "gpt-oss-off-b5": {
+      "batch_size": 5,
+      "output_len": 64,
+      "median_tokens_per_second": 433.54108294705696,
+      "trial_tokens_per_second": [
+        433.17224496577853,
+        433.9099209283354
+      ],
+      "matching_requests_between_repeats": [
+        5
+      ],
+      "mean_accept_length": 1.0927522195318804
+    },
+    "llama-fine_overlap-b16": {
+      "batch_size": 16,
+      "output_len": 64,
+      "median_tokens_per_second": 637.0993610830099,
+      "trial_tokens_per_second": [
+        637.876826581872,
+        636.3218955841476
+      ],
+      "matching_requests_between_repeats": [
+        16
+      ],
+      "mean_accept_length": 1.5345432534315124
+    },
+    "llama-fine_overlap-b5": {
+      "batch_size": 5,
+      "output_len": 64,
+      "median_tokens_per_second": 206.7335435210625,
+      "trial_tokens_per_second": [
+        206.6846418370509,
+        206.7824452050741
+      ],
+      "matching_requests_between_repeats": [
+        5
+      ],
+      "mean_accept_length": 1.5272810179673482
+    },
+    "llama-fine_serial-b16": {
+      "batch_size": 16,
+      "output_len": 64,
+      "median_tokens_per_second": 626.141999400648,
+      "trial_tokens_per_second": [
+        626.2592527754448,
+        626.0247460258512
+      ],
+      "matching_requests_between_repeats": [
+        16
+      ],
+      "mean_accept_length": 1.5345432534315124
+    },
+    "llama-fine_serial-b5": {
+      "batch_size": 5,
+      "output_len": 64,
+      "median_tokens_per_second": 201.7472837137267,
+      "trial_tokens_per_second": [
+        201.5626247049111,
+        201.93194272254226
+      ],
+      "matching_requests_between_repeats": [
+        5
+      ],
+      "mean_accept_length": 1.5272810179673482
+    },
+    "llama-off-b16": {
+      "batch_size": 16,
+      "output_len": 64,
+      "median_tokens_per_second": 1203.538645882573,
+      "trial_tokens_per_second": [
+        1204.0604662663784,
+        1203.0168254987677
+      ],
+      "matching_requests_between_repeats": [
+        16
+      ],
+      "mean_accept_length": 1.5345432534315124
+    },
+    "llama-off-b5": {
+      "batch_size": 5,
+      "output_len": 64,
+      "median_tokens_per_second": 359.2832984232426,
+      "trial_tokens_per_second": [
+        358.5096732629615,
+        360.05692358352377
+      ],
+      "matching_requests_between_repeats": [
+        5
+      ],
+      "mean_accept_length": 1.5272810179673482
+    }
+  },
+  "fine-normal-graphs": {
+    "gpt-oss-fine_overlap-b16": {
+      "batch_size": 16,
+      "output_len": 128,
+      "median_tokens_per_second": 1301.401863585615,
+      "trial_tokens_per_second": [
+        1301.401863585615,
+        1306.0510251526537,
+        1299.897948144489
+      ],
+      "matching_requests_between_repeats": [
+        16,
+        16
+      ],
+      "mean_accept_length": 1.0908486026904178
+    },
+    "gpt-oss-fine_overlap-b32": {
+      "batch_size": 32,
+      "output_len": 128,
+      "median_tokens_per_second": 2184.723812112309,
+      "trial_tokens_per_second": [
+        2182.4620290134185,
+        2184.723812112309,
+        2184.8149658420043
+      ],
+      "matching_requests_between_repeats": [
+        32,
+        32
+      ],
+      "mean_accept_length": 1.0769391572205245
+    },
+    "gpt-oss-fine_serial-b16": {
+      "batch_size": 16,
+      "output_len": 128,
+      "median_tokens_per_second": 1287.093118664899,
+      "trial_tokens_per_second": [
+        1286.751309882295,
+        1292.459120102143,
+        1287.093118664899
+      ],
+      "matching_requests_between_repeats": [
+        15,
+        16
+      ],
+      "mean_accept_length": 1.0926479729108407
+    },
+    "gpt-oss-fine_serial-b32": {
+      "batch_size": 32,
+      "output_len": 128,
+      "median_tokens_per_second": 2159.829940282611,
+      "trial_tokens_per_second": [
+        2153.0034135897,
+        2166.118052367439,
+        2159.829940282611
+      ],
+      "matching_requests_between_repeats": [
+        32,
+        32
+      ],
+      "mean_accept_length": 1.0769391572205245
+    },
+    "gpt-oss-off-b16": {
+      "batch_size": 16,
+      "output_len": 128,
+      "median_tokens_per_second": 1975.2761740578408,
+      "trial_tokens_per_second": [
+        1983.191794922834,
+        1973.0374052768823,
+        1975.2761740578408
+      ],
+      "matching_requests_between_repeats": [
+        16,
+        15
+      ],
+      "mean_accept_length": 1.0871836064511657
+    },
+    "gpt-oss-off-b32": {
+      "batch_size": 32,
+      "output_len": 128,
+      "median_tokens_per_second": 3346.7930110534085,
+      "trial_tokens_per_second": [
+        3231.1326063616907,
+        3356.441075389976,
+        3346.7930110534085
+      ],
+      "matching_requests_between_repeats": [
+        32,
+        32
+      ],
+      "mean_accept_length": 1.0753760150791172
+    },
+    "llama-fine_overlap-b16": {
+      "batch_size": 16,
+      "output_len": 128,
+      "median_tokens_per_second": 2021.6395826314106,
+      "trial_tokens_per_second": [
+        1945.299505819585,
+        2021.6395826314106,
+        2022.692110716779
+      ],
+      "matching_requests_between_repeats": [
+        15,
+        16
+      ],
+      "mean_accept_length": 1.703282998629783
+    },
+    "llama-fine_overlap-b32": {
+      "batch_size": 32,
+      "output_len": 128,
+      "median_tokens_per_second": 3581.428760534046,
+      "trial_tokens_per_second": [
+        3647.740915729136,
+        3581.428760534046,
+        3577.825950603889
+      ],
+      "matching_requests_between_repeats": [
+        32,
+        31
+      ],
+      "mean_accept_length": 1.708608382693447
+    },
+    "llama-fine_serial-b16": {
+      "batch_size": 16,
+      "output_len": 128,
+      "median_tokens_per_second": 2062.639794181754,
+      "trial_tokens_per_second": [
+        2062.1467598987733,
+        2062.639794181754,
+        2066.5184396047002
+      ],
+      "matching_requests_between_repeats": [
+        15,
+        16
+      ],
+      "mean_accept_length": 1.703282998629783
+    },
+    "llama-fine_serial-b32": {
+      "batch_size": 32,
+      "output_len": 128,
+      "median_tokens_per_second": 3716.6248831278076,
+      "trial_tokens_per_second": [
+        3713.303603359097,
+        3716.6248831278076,
+        3723.9808454045487
+      ],
+      "matching_requests_between_repeats": [
+        32,
+        32
+      ],
+      "mean_accept_length": 1.708608382693447
+    },
+    "llama-off-b16": {
+      "batch_size": 16,
+      "output_len": 128,
+      "median_tokens_per_second": 3405.710286442916,
+      "trial_tokens_per_second": [
+        3406.170327423549,
+        3375.089975027823,
+        3405.710286442916
+      ],
+      "matching_requests_between_repeats": [
+        15,
+        16
+      ],
+      "mean_accept_length": 1.709875948534925
+    },
+    "llama-off-b32": {
+      "batch_size": 32,
+      "output_len": 128,
+      "median_tokens_per_second": 5827.630037344018,
+      "trial_tokens_per_second": [
+        5827.630037344018,
+        5820.968450133398,
+        5837.463133420107
+      ],
+      "matching_requests_between_repeats": [
+        32,
+        32
+      ],
+      "mean_accept_length": 1.7035407378761682
+    }
+  },
+  "fine-normal-eager": {
+    "gpt-oss-fine_serial-b16": {
+      "batch_size": 16,
+      "output_len": 128,
+      "median_tokens_per_second": 120.45415469616678,
+      "trial_tokens_per_second": [
+        120.7754235073744,
+        120.24827882657422,
+        120.45415469616678
+      ],
+      "matching_requests_between_repeats": [
+        16,
+        16
+      ],
+      "mean_accept_length": 1.0926479729108407
+    },
+    "gpt-oss-off-b16": {
+      "batch_size": 16,
+      "output_len": 128,
+      "median_tokens_per_second": 238.16784207365595,
+      "trial_tokens_per_second": [
+        235.02308998719835,
+        238.50258654334817,
+        238.16784207365595
+      ],
+      "matching_requests_between_repeats": [
+        16,
+        16
+      ],
+      "mean_accept_length": 1.0871836064511657
+    },
+    "llama-fine_overlap-b16": {
+      "batch_size": 16,
+      "output_len": 128,
+      "median_tokens_per_second": 324.9291186286098,
+      "trial_tokens_per_second": [
+        321.3844023815419,
+        324.98927145207773,
+        324.9291186286098
+      ],
+      "matching_requests_between_repeats": [
+        15,
+        15
+      ],
+      "mean_accept_length": 1.701802065642001
+    },
+    "llama-fine_serial-b16": {
+      "batch_size": 16,
+      "output_len": 128,
+      "median_tokens_per_second": 320.6906485520043,
+      "trial_tokens_per_second": [
+        333.78043842300826,
+        320.6906485520043,
+        319.0768844973869
+      ],
+      "matching_requests_between_repeats": [
+        15,
+        15
+      ],
+      "mean_accept_length": 1.6949265526697772
+    },
+    "llama-off-b16": {
+      "batch_size": 16,
+      "output_len": 128,
+      "median_tokens_per_second": 663.5452446362068,
+      "trial_tokens_per_second": [
+        656.7790447896056,
+        663.5452446362068,
+        668.6567373541836
+      ],
+      "matching_requests_between_repeats": [
+        16,
+        16
+      ],
+      "mean_accept_length": 1.7223964367006903
+    }
+  }
+}

@@ -53,6 +53,7 @@ from sglang.srt.layers.vocab_parallel_embedding import (
     ParallelLMHead,
     VocabParallelEmbedding,
 )
+from sglang.srt.model_executor.forward_context import get_forward_context
 from sglang.srt.model_executor.forward_batch_info import ForwardBatch, PPProxyTensors
 from sglang.srt.model_loader.weight_utils import (
     default_weight_loader,
@@ -462,6 +463,7 @@ class LlamaModel(nn.Module):
             )
 
         aux_hidden_states = AuxHiddenStateList()
+        continuation = get_forward_context().layer_continuation
         for i in range(self.start_layer, self.end_layer):
             hidden_states = self.layers[i](
                 positions,
@@ -471,6 +473,9 @@ class LlamaModel(nn.Module):
                 if i in self.layers_to_capture
                 else None,
             )
+
+            if continuation is not None:
+                continuation(i)
 
         if not self.pp_group.is_last_rank:
             return residual_batch.to_pp(hidden_states, forward_batch)

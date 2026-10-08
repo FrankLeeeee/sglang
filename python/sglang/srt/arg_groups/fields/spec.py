@@ -59,6 +59,13 @@ class Spec(msgspec.Struct):
         Optional[int],
         "The number of steps sampled from draft model in Speculative Decoding.",
     ] = None
+    speculative_microbatch_mode: A[
+        Literal["off", "serial", "overlap", "fine_serial", "fine_overlap"],
+        "Experimental EAGLE3 throughput pipeline: split greedy decode batches into "
+        "two microbatches. Requires NCCL all-reduce. Fine modes support eager or "
+        "full decode graphs; prefill graphs must be disabled. Use fine_serial "
+        "as the same-schedule control for fine_overlap.",
+    ] = "off"
     speculative_eagle_topk: A[
         Optional[int],
         "The number of tokens sampled from the draft model in eagle2 each step.",

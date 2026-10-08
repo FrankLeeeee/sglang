@@ -750,6 +750,10 @@ class ForwardFlags:
         else:
             self._vars[name].set(value)
 
+    def snapshot(self):
+        """Copy all current flags for a suspended eager forward continuation."""
+        return {name: getattr(self, name) for name in self._DEFAULTS}
+
     @contextmanager
     def scoped(self, **kwargs):
         """Set flags for the current scope, restoring on exit. Transactional

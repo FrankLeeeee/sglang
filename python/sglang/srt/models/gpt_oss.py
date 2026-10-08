@@ -62,6 +62,7 @@ from sglang.srt.layers.vocab_parallel_embedding import (
     ParallelLMHead,
     VocabParallelEmbedding,
 )
+from sglang.srt.model_executor.forward_context import get_forward_context
 from sglang.srt.model_executor.forward_batch_info import ForwardBatch, PPProxyTensors
 from sglang.srt.model_executor.runner_backend_utils.tc_piecewise_cuda_graph import (
     get_tc_piecewise_forward_context,
@@ -696,6 +697,7 @@ class GptOssModel(nn.Module):
         # Capture hidden-state boundaries: boundary 0 is the embedding output,
         # and boundary i + 1 is the output after transformer block i.
         aux_hidden_states = AuxHiddenStateList()
+        continuation = get_forward_context().layer_continuation
         for i in range(self.start_layer, self.end_layer):
             with get_global_expert_distribution_recorder().with_current_layer(i):
                 layer = self.layers[i]
@@ -707,6 +709,8 @@ class GptOssModel(nn.Module):
                     if i in self.layers_to_capture
                     else None,
                 )
+            if continuation is not None:
+                continuation(i)
         if not self.pp_group.is_last_rank:
             return residual_batch.to_pp(hidden_states, forward_batch)
         else:

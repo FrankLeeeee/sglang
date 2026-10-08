@@ -24,7 +24,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Callable, Optional
 
 if TYPE_CHECKING:
     from sglang.srt.layers.attention.base_attn_backend import AttentionBackend
@@ -38,6 +38,10 @@ class ForwardContext:
     write time — use dataclasses.replace for per-call overrides."""
 
     attn_backend: AttentionBackend
+    # Optional eager continuation between completed transformer layers.
+    # Draft scopes install their own context and therefore never inherit it.
+    layer_continuation: Optional[Callable[[int], None]] = None
+    graph_continuation: Optional[Callable[[int], None]] = None
 
 
 _current: Optional[ForwardContext] = None

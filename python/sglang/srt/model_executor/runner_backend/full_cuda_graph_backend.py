@@ -36,7 +36,7 @@ from sglang.srt.model_executor.runner_utils.pool import (
     graph_pool_capture_scope,
     graph_pool_replay_scope,
 )
-from sglang.srt.runtime_context import get_parallel
+from sglang.srt.runtime_context import get_parallel, get_spec
 from sglang.srt.utils import get_bool_env_var
 from sglang.srt.utils.torch_memory_saver_adapter import TorchMemorySaverAdapter
 
@@ -89,6 +89,7 @@ class FullCudaGraphBackend(BaseCudaGraphBackend):
     ) -> None:
         self._graphs: Dict[Any, torch.cuda.CUDAGraph] = {}
         self._outputs: Dict[Any, Any] = {}
+        self._speculative_chunks = {}
         self._pool = None
         self._cuda_graph_runner = cuda_graph_runner
         self._device_module = cuda_graph_runner.device_module
@@ -158,7 +159,15 @@ class FullCudaGraphBackend(BaseCudaGraphBackend):
             self._reuse_output_buffer = self._output_buffer is not None
         del warmup_output
 
-        graph = torch.cuda.CUDAGraph()
+        partition = (
+            get_spec().speculative_microbatch_mode in {"fine_serial", "fine_overlap"}
+            and not runner.model_runner.is_draft_worker
+        )
+        graph = (
+            torch.cuda.CUDAGraph(keep_graph=True)
+            if partition
+            else torch.cuda.CUDAGraph()
+        )
 
         graph_ctx: Callable[..., AbstractContextManager]
         if (
@@ -191,6 +200,10 @@ class FullCudaGraphBackend(BaseCudaGraphBackend):
         if profiler is not None:
             profiler.step()
 
+        if partition:
+            from sglang.srt.speculative.graph_chunks import SpeculativeGraphChunks
+
+            self._speculative_chunks[shape_key] = SpeculativeGraphChunks(graph)
         self._graphs[shape_key] = graph
         self._outputs[shape_key] = out
 
@@ -207,11 +220,30 @@ class FullCudaGraphBackend(BaseCudaGraphBackend):
         static_forward_batch: ForwardBatch,
         **kwargs,
     ) -> Any:
+        from sglang.srt.model_executor.forward_context import get_forward_context
+
+        continuation = (
+            get_forward_context().graph_continuation
+            if self._speculative_chunks
+            else None
+        )
         with graph_pool_replay_scope():
-            self._graphs[shape_key].replay()
+            if continuation is not None:
+                chunks = self._speculative_chunks[shape_key]
+                for index in range(len(chunks.executables)):
+                    from sglang.srt.speculative.spec_utils import spec_stage_span
+
+                    with spec_stage_span("microbatch.target_chunk"):
+                        chunks.replay(index)
+                    continuation(index)
+            else:
+                self._graphs[shape_key].replay()
         return self._outputs[shape_key]
 
     def cleanup(self) -> None:
+        for chunks in self._speculative_chunks.values():
+            chunks.close()
+        self._speculative_chunks.clear()
         for graph in self._graphs.values():
             graph.reset()
         self._graphs.clear()
