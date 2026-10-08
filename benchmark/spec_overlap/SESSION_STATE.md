@@ -26,16 +26,16 @@
 
 ## Active and pending
 
-- Normal rounds 1–6 completed. Original round 2 moved into
-  `results/revision/diagnostics/02-tree-shared-mask` and excluded: tree-mask
-  ownership was not isolated. Corrected round 2 rerun completed.
-- Driver `run_refinements.py --rounds 2 7 8 9 10` is active; later rounds adapt to
-  the best measured chain schedule. Owned process cleans up each server.
-- After normal experiments: select a schedule, run deterministic token gates
-  against full-batch original for all five configs; do not treat normal-kernel
-  shape-dependent output mismatches as proof of correctness or failure.
-- Finish Chinese second document and local follow-up report, archive ALL raw
-  evidence (including superseded diagnostics), upload archives, commit/push.
+- All ten normal refinement rounds completed; second round rerun with private
+  tree masks. Superseded shared-mask data is retained under diagnostics.
+- Both reports now contain concise Chinese tables/plots and explicit GPU evidence.
+  Baseline 38 MB and refinements 56 MB raw archives are uploaded and verified.
+- Selected schedule: one target graph launch, release index zero, split 50%.
+- Deterministic gates found a GPT-OSS router tinygemm cutoff problem at 128 rows.
+  Split serial and overlap agreed exactly; the mismatch was independent of overlap.
+  Router bypass in batch-invariant mode fixes config 4-1-5 at batches 1/5/8/16/32.
+- Driver is checking remaining configs under results/revision/correctness-router-fixed.
+  Finish quality table, archive final correctness/source evidence, then final commit/push.
 
 ## Evidence and commands
 
@@ -53,10 +53,12 @@ Remote docs:
 ## Findings so far / guardrails
 
 - Baseline `3-1-4` is fastest at every batch; batch 16 is 1918.4 tok/s.
-- Old eight-cut overlap: 1309.6 tok/s; actual bidirectional GEMM/communication
-  intersection 0.0361 ms across six profiled cycles, not critical-path time saved.
+- Round-one eight-cut overlap: 1309.6 tok/s; bidirectional GEMM/communication
+  intersection 0.0361 ms across seven profiled cycles, not critical-path time saved.
 - Immediate release before target graph gives zero useful overlap in these runs.
-- All split schedules remain slower than the original full batch so far.
+- All ten split schedules remain slower than the original full batch. Round ten
+  is nominally fastest: 1324.2 tok/s (+1.1% vs round one, +1.3% vs own serial,
+  -31.0% vs original). Three trials do not establish significance.
 - EP=1 uses TP AllReduce/AllGather, not All2All; GPT-OSS DeepEP forward unsupported.
 - Keep graph extension-A / verification-B fence. No model graph/kernel fusion
   implemented; round 10 launches a whole target graph and separate draft graph.

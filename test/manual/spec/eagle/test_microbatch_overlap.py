@@ -2,7 +2,7 @@
 
 import unittest
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import PropertyMock, patch
 
 import torch
 
@@ -69,6 +69,45 @@ class TestMicrobatchSnapshot(CustomTestCase):
                 flags.set("attn_input_scattered", False)
                 flags.set("moe_output_buffer", torch.ones(1))
             self.assertEqual(flags.snapshot(), suspended)
+
+    def test_gpt_oss_router_avoids_tinygemm_in_batch_invariant_mode(self):
+        from sglang.srt.models.gpt_oss import TinyGemmLinear
+
+        router = TinyGemmLinear(64, 32, params_dtype=torch.bfloat16)
+        router._use_tinygemm = True
+        router.weight = torch.nn.Parameter(
+            torch.arange(32 * 64).float().reshape(32, 64)
+        )
+        router.bias = torch.nn.Parameter(torch.arange(32).float())
+        router.output_size = 32
+        inputs = torch.arange(2 * 64).float().reshape(2, 64).to(torch.bfloat16)
+        router.weight.data = router.weight.data.to(torch.bfloat16)
+        router.bias.data = router.bias.data.to(torch.bfloat16)
+        expected = torch.nn.functional.linear(inputs, router.weight, router.bias)
+
+        # Keep real tensor shapes/values and test the small-row fast-path gate;
+        # only GPU availability, the mode flag, and the CUDA kernel are stubbed.
+        with (
+            get_context().override_server_args(
+                model_path="dummy", bf16_gemm_backend="cublas"
+            ),
+            patch.object(
+                torch.Tensor, "is_cuda", new_callable=PropertyMock, return_value=True
+            ),
+            patch(
+                "sglang.srt.batch_invariant_ops.is_batch_invariant_mode_enabled",
+                return_value=True,
+            ),
+            patch(
+                "sglang.srt.models.gpt_oss.tinygemm_bf16",
+                side_effect=AssertionError(
+                    "Batch-invariant router used shape-dependent tinygemm"
+                ),
+            ),
+        ):
+            actual, bias = router(inputs)
+        torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+        self.assertIsNone(bias)
 
     def test_tree_verify_masks_remain_private_until_target_consumes_them(self):
         from sglang.srt.layers.attention.verify_mask import VerifyMask

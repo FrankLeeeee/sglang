@@ -38,7 +38,8 @@ def main():
                 previous = json.loads(experiment.read_text())
                 measured = experiment.parent / "gpt-oss-fine_overlap-b16.json"
                 if (
-                    previous["spec_config"] == config
+                    previous["round"] < index
+                    and previous["spec_config"] == config
                     and previous.get("deterministic", False) == args.deterministic
                     and not list(experiment.parent.glob("*-error.json"))
                     and (experiment.parent / "gpt-oss-fine_serial-b16.json").exists()

@@ -154,8 +154,13 @@ class TinyGemmLinear(ReplicatedLinear):
         )
 
     def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
+        from sglang.srt.batch_invariant_ops import is_batch_invariant_mode_enabled
+
         if (
             self._use_tinygemm
+            # The row-count cutoff changes accumulation between full and split
+            # batches. Use the invariant linear path for deterministic decoding.
+            and not is_batch_invariant_mode_enabled()
             and x.ndim == 2
             and x.is_cuda
             and x.shape[0] <= 128

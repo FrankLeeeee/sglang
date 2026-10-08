@@ -1,5 +1,10 @@
 # Same-GPU speculative decoding overlap experiment
 
+The follow-up measurements, twenty baseline cases and ten refinement rounds are
+in [REVISION_REPORT.md](REVISION_REPORT.md). Its selected experimental schedule
+uses one target graph launch, release index zero and a 50% request split;
+the compatibility defaults below remain eight chunks and release index one.
+
 This experiment targets throughput with multiple independent requests. Both
 models use the same TP=2 GPU allocation. It does not put the draft on a dedicated
 GPU. `--speculative-microbatch-mode off` preserves the existing path; `serial`
@@ -72,41 +77,47 @@ Split sequential control:
 
 `T_serial = 2[D(b) + V(b) + E(b)] + H_serial`.
 
-非对称两组的事件递推（从本轮开始计时；同一模型串行）：
+一般非对称事件递推（以 `D_A` 开始为零；同一模型串行）：
 
 ```text
 F_DA = D_A
-F_VA = F_DA + V_A
-F_DB = F_DA + delta + D_B
-F_EA = max(F_VA, F_DB) + E_A
-F_VB = max(F_VA, F_DB) + V_B              # 无 extend/verify fence
-F_EB = max(F_EA, F_VB) + E_B
-T_ideal = F_EB + H_overlap
+F_VA = F_DA + g_VA + V_A
+F_DB = F_DA + g_DB + D_B
+F_EA = max(F_VA, F_DB) + g_EA + E_A
+F_VB = max(F_VA, F_DB) + g_VB + V_B       # 无 extend/verify fence
+F_EB = max(F_EA, F_VB) + g_EB + E_B
+T = F_EB + H_residual
 ```
 
-`E_A` 与 `D_B` 使用同一 draft stream，因此即使 `V_A` 先完成，
-`E_A` 也必须等 `D_B`。保留 fence 时，将 `F_VB` 改为
-`max(F_VA, F_DB, F_EA) + V_B`。这避免漏算延迟释放 `D_B` 后的等待。
+- `g_X >= 0` 是该阶段依赖已就绪到实际开始之间的间隙，包括暴露的准备/
+  提交延迟；阶段范围内的 gap 留在阶段时长中，不再计入 `g_X`。
+- `D_B -> E_A` 来自同一 draft stream。保留 fence 时：
+  `F_VB = max(F_VA, F_DB, F_EA) + g_VB + V_B`。
+- 实际偏移 `delta = start(D_B) - start(V_A) = g_DB - g_VA` 可为负。
+  立即提交 draft B 后，target 准备可能推迟 verify A；不能将两分支的准备时间
+  合并成 `max(...)` 之外的单个 H。
+- `H_residual` 只包括尚未计入阶段或 `g_X` 的轮前/轮后串行开销；避免重复计算。
 
-For symmetric groups this gives
-`T_overlap,ideal = D + max(V, delta + D) + max(V, E) + E + H_overlap`.
-For uneven groups it gives
-`D_A + max(V_A, delta + D_B) + max(V_B, E_A) + E_B + H_overlap`.
-The retained graph/coarse fence gives
-`T_fenced,ideal = D_A + max(V_A, delta + D_B) + E_A + V_B + E_B + H_fenced`.
-Its symmetric ideal saving against split serial is `min(D, V - delta)`
-before incremental overhead; a negative value means release delay exceeds V.
+仅当 `g_VA = g_EA = g_VB = g_EB = 0`、`g_DB = delta >= 0`，
+且并发不改变阶段服务时长时，才得到此前的理想化简：
 
-`delta` 是 GPU 时间线上 `D_B` 开始相对 `V_A` 开始的偏移；上述释放模型假设
-`delta >= 0`。当前 callback 只控制 CPU 提交顺序，没有 target-release event
-或 draft wait，因此“第 2 个 graph chunk 后提交”不保证 GPU 已运行到该节点。
-需要从 trace 测量偏移，或增加 event edge 后再使用固定释放时间模型。
+`T_overlap,ideal = D_A + max(V_A, delta + D_B) + max(V_B, E_A) + E_B + H_residual`。
 
-These expressions include startup and drain for **one round**, assuming stage
-costs independent of concurrency. The prototype rejoins each scheduler iteration;
-it does not implement an infinite steady-state conveyor. For asymmetric groups,
-use the recurrence with measured stages. Wait-inclusive measured ranges must not
-be reused as independent service costs: that would count the same waits twice.
+对称组为 `D + max(V, delta + D) + max(V, E) + E + H_residual`。
+保留 fence 的理想式为
+`D_A + max(V_A, delta + D_B) + E_A + V_B + E_B + H_residual`。
+对称 fenced 理想式相对 split serial 的节省为 `min(D, V - delta)`，
+仅适用于上述假设且未计增量开销；负值表示释放延迟超过 V。
+
+当前 callback 只控制 CPU 提交顺序，没有 target-release event / draft wait；
+“第 2 个 graph chunk 后提交”不保证 GPU 已运行到该节点。必须测量 GPU
+实际开始/结束和分支 gap，或增加 event edge 后再使用固定释放模型。
+
+These expressions include startup and drain for **one round**. The prototype
+rejoins each scheduler iteration, rather than running an infinite conveyor.
+Wait-inclusive measured ranges must not be reused as independent service costs;
+that would count waits twice. Predictions need contention-adjusted stage costs
+or separate incremental penalties, never both for the same effect.
 
 For each stage, decompose the profile into compute, communication, memory work,
 and exposed launch gaps. Count interval unions when measuring wall time:
@@ -133,7 +144,7 @@ Report `T_serial / T_overlap` to isolate scheduling benefit **and**
 
 ## Supported experiment
 
-CUDA EAGLE3, greedy decoding, topk=1, fixed budget, PP=DP=CP=EP=1, no LoRA,
+CUDA EAGLE3, greedy decoding, topk>=1, fixed budget, PP=DP=CP=EP=1, no LoRA,
 no grammar, no logprobs/hidden-state returns, and no hybrid state tracking.
 The current implementation supports Llama and GPT-OSS with FA3 attention.
 Disable custom all-reduce, FlashInfer all-reduce fusion, and CPU overlap
@@ -145,13 +156,14 @@ is not implemented by this TP experiment. GPT-OSS being MoE does not by itself
 mean its trace contains all-to-all.
 
 ```bash
-python benchmark/spec_overlap/run_matrix.py --models llama gpt-oss \
+python benchmark/spec_overlap/run_matrix.py --models gpt-oss \
   --modes off fine_serial fine_overlap --batch-sizes 16 --repeats 3 \
   --output-len 128 --decode-cuda-graph full
 ```
 
 For a separate correctness comparison across changing batch shapes, append
-`--deterministic`. On this host that runner disables JIT DeepGEMM, because
+`--deterministic`. GPT-OSS bypasses its row-count-dependent tinygemm router in
+batch-invariant mode. On this host the runner also disables JIT DeepGEMM, because
 batch-invariant BF16 GEMM would otherwise select an incompatible nvcc >=12.9
 path. This changes the compute kernels; keep its performance results separate
 from the normal serving matrix.

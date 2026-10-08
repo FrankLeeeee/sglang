@@ -35,6 +35,7 @@ def main():
     parser.add_argument("--output-len", type=int, default=256)
     parser.add_argument("--port", type=int, default=31080)
     parser.add_argument("--deterministic", action="store_true")
+    parser.add_argument("--sanity-eval", action="store_true")
     parser.add_argument(
         "--decode-cuda-graph", choices=["disabled", "full"], default="disabled"
     )
@@ -169,6 +170,47 @@ def main():
                         time.sleep(1)
                     else:
                         raise TimeoutError(f"{name} did not become ready")
+                    if args.sanity_eval:
+                        evaluation = args.results / f"{name}-gsm8k"
+                        with (args.results / f"{name}-gsm8k.log").open("w") as eval_log:
+                            subprocess.run(
+                                [
+                                    "sgl-eval",
+                                    "run",
+                                    "gsm8k",
+                                    "--base-url",
+                                    url + "/v1",
+                                    "--model",
+                                    target,
+                                    "--num-examples",
+                                    "20",
+                                    "--num-threads",
+                                    "4",
+                                    "--max-tokens",
+                                    "1024",
+                                    "--reasoning-effort",
+                                    "low",
+                                    "--temperature",
+                                    "0",
+                                    "--out-dir",
+                                    str(evaluation.resolve()),
+                                ],
+                                stdout=eval_log,
+                                stderr=subprocess.STDOUT,
+                                check=True,
+                            )
+                        metrics_path = max(
+                            evaluation.glob("*/metrics.json"),
+                            key=lambda p: p.stat().st_mtime,
+                        )
+                        metrics = json.loads(metrics_path.read_text())
+                        if (
+                            metrics["num_examples"] != 20
+                            or metrics["aggregate"]["score"] <= 0.8
+                        ):
+                            raise RuntimeError(
+                                f"GSM8K sanity check failed: {metrics_path}"
+                            )
                     for batch_size in args.batch_sizes:
                         output = args.results / f"{name}-b{batch_size}.json"
                         probe = [
@@ -211,13 +253,28 @@ def main():
                         if all(
                             list(
                                 (args.results / f"{name}-b{bs}-profile").glob(
-                                    "*.trace.json.gz"
+                                    f"*TP-{rank}.trace.json.gz"
                                 )
                             )
                             for bs in args.batch_sizes
+                            for rank in range(2)
                         ):
                             break
                         time.sleep(1)
+                    missing = [
+                        (bs, rank)
+                        for bs in args.batch_sizes
+                        for rank in range(2)
+                        if not list(
+                            (args.results / f"{name}-b{bs}-profile").glob(
+                                f"*TP-{rank}.trace.json.gz"
+                            )
+                        )
+                    ]
+                    if missing:
+                        raise RuntimeError(
+                            f"Missing per-rank profiler artifacts: {missing}"
+                        )
                     if mode != "off":
                         for bs in args.batch_sizes:
                             if bs == 1:

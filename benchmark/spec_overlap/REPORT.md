@@ -33,28 +33,34 @@ Let D(b), V(b), and E(b) include draft/tree preparation, verification/sampling/c
 
 - Original full batch: `T_original(2b) = D(2b) + V(2b) + E(2b) + H_original`.
 - Split serial control: `T_serial = 2[D(b) + V(b) + E(b)] + H_serial`.
-- Fully isolated overlap, with draft B released delta into verify A: `T_ideal = D + max(V, delta + D) + max(V, E) + E + H_overlap`.
-- Validated prototype, which fences extend A before verify B: `T_prototype = D + max(V, delta + D) + E + V + E + H_prototype`.
 
-非对称组的完整事件递推如下；`D_B` 与 `E_A` 在同一 draft stream 上串行：
+一般非对称模型需保留分支准备/提交间隙：
 
 ```text
-F_DA = D_A; F_VA = F_DA + V_A
-F_DB = F_DA + delta + D_B
-F_EA = max(F_VA, F_DB) + E_A
-F_VB = max(F_VA, F_DB) + V_B                  # 无 fence
-F_EB = max(F_EA, F_VB) + E_B
-T_ideal = F_EB + H_overlap
+F_DA = D_A
+F_VA = F_DA + g_VA + V_A
+F_DB = F_DA + g_DB + D_B
+F_EA = max(F_VA, F_DB) + g_EA + E_A
+F_VB = max(F_VA, F_DB) + g_VB + V_B          # 无 fence
+F_EB = max(F_EA, F_VB) + g_EB + E_B
+T = F_EB + H_residual
 ```
 
-- 上述 ideal 化简为
-  `D_A + max(V_A, delta + D_B) + max(V_B, E_A) + E_B + H_overlap`。
-- 本文保留 fence：`F_VB = max(F_VA, F_DB, F_EA) + V_B`；
-  对应 `T_fenced = D_A + max(V_A, delta + D_B) + E_A + V_B + E_B + H_fenced`。
-- `delta` 是 GPU 实际释放偏移（固定释放模型假设非负），不是 host callback 的提交位置；
-  没有 target-release event 时必须从 trace 确认。
-- 这是单轮含启动/排空的理想独立阶段模型；每轮都会重新 join。
-  包含等待的 profiler stage range 不能直接作为独立服务时间，否则重复计算等待。
+- `g_X >= 0` 为依赖就绪至实际开始的间隙；阶段内部 gap 已计入阶段时长。
+  `H_residual` 只包含未计入阶段/gap 的轮前/轮后串行开销。
+- `D_B -> E_A` 来自同一 draft stream；本文保留 fence：
+  `F_VB = max(F_VA, F_DB, F_EA) + g_VB + V_B`。
+- 实际 `delta = start(D_B) - start(V_A) = g_DB - g_VA` 可为负；
+  分支准备延迟不能统一移到 `max(...)` 之外的 H。
+- 仅在 `g_VA = g_EA = g_VB = g_EB = 0`、`g_DB = delta >= 0`，
+  且并发不改变服务时长时，无 fence 理想式化简为
+  `D_A + max(V_A, delta + D_B) + max(V_B, E_A) + E_B + H_residual`；
+  fenced 理想式为
+  `D_A + max(V_A, delta + D_B) + E_A + V_B + E_B + H_residual`。
+- 对称组相应使用 `D_A = D_B = D`、`V_A = V_B = V`、`E_A = E_B = E`。
+  这些是单轮含启动/排空的模型；每轮重新 join。
+- callback 的提交位置不是 GPU 释放时刻；没有 target-release event 时，
+  必须从 trace 测量阶段开始/结束和 gap。已含等待的范围不能再作独立服务时间。
 
 The practical model is `T_overlap = T_serial - O_feasible + P_contention + P_launch + P_sync`. Only independent, ready operations contribute to O. NCCL kernels consume SMs/HBM and can spend time waiting for peer ranks; their duration is not automatically usable compute slack. Resource demand and the event DAG provide lower bounds, not guaranteed speedup. Throughput is useful generated tokens divided by elapsed time, with measured acceptance included.
 
