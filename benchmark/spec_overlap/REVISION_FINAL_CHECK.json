@@ -1,0 +1,236 @@
+[
+  {
+    "mode": "off",
+    "batch_size": 16,
+    "config": "3-1-4",
+    "chunks": 1,
+    "release_chunk": 0,
+    "split_percent": 50,
+    "median_tps": 1986.9055858971797,
+    "repeat_tps": [
+      1982.9829294115411,
+      1986.9055858971797,
+      1993.732567292603
+    ],
+    "gsm8k_correct": 19,
+    "gsm8k_examples": 20,
+    "cycles": 6,
+    "draft_gemm_target_comm_ms_per_cycle": 0.0,
+    "target_gemm_draft_comm_ms_per_cycle": 0.0,
+    "trace_summary": {
+      "trace": "benchmark/spec_overlap/results/revision/final-normal/gpt-oss-off-b16-profile/1791478617.1629763-TP-0.trace.json.gz",
+      "draft_gemm_target_communication_intersection_ms": 0.0,
+      "target_gemm_draft_communication_intersection_ms": 0.0,
+      "draft_compute_target_communication_intersection_ms": 0.0,
+      "target_compute_draft_communication_intersection_ms": 0.0,
+      "stage_ranges": {
+        "verify": {
+          "count": 6,
+          "median_ms": 4.983817993164062,
+          "median_kernel_union_ms": 1.4349393310546876,
+          "median_unoccupied_stream_ms": 3.5229267036132814
+        },
+        "step[VERIFY bs=16]": {
+          "count": 12,
+          "median_ms": 4.281402954101562,
+          "median_kernel_union_ms": 2.088891418457031,
+          "median_unoccupied_stream_ms": 2.1495655976562498
+        },
+        "step[DRAFT bs=16]": {
+          "count": 6,
+          "median_ms": 0.22564947509765626,
+          "median_kernel_union_ms": 0.20001727294921873,
+          "median_unoccupied_stream_ms": 0.02539357470703124
+        },
+        "draft_extend": {
+          "count": 6,
+          "median_ms": 0.2819854736328125,
+          "median_kernel_union_ms": 0.22771356201171875,
+          "median_unoccupied_stream_ms": 0.05395441748046875
+        },
+        "draft": {
+          "count": 6,
+          "median_ms": 0.9090239868164063,
+          "median_kernel_union_ms": 0.19153448486328123,
+          "median_unoccupied_stream_ms": 0.6809770600585937
+        },
+        "step[DRAFT bs=1 toks=2]": {
+          "count": 1,
+          "median_ms": 3.46860400390625,
+          "median_kernel_union_ms": 2.468476806640625,
+          "median_unoccupied_stream_ms": 1.0001271933593752
+        },
+        "step[DRAFT bs=15 toks=30]": {
+          "count": 1,
+          "median_ms": 3.928251953125,
+          "median_kernel_union_ms": 3.2086014404296876,
+          "median_unoccupied_stream_ms": 0.7196505595703124
+        }
+      },
+      "draft_target_stage_intersection_ms": 0.0,
+      "compute_communication_kernel_intersection_ms": 0.0246063232421875,
+      "communication_kernel_union_ms": 64.49368334960937,
+      "compute_kernel_union_ms": 30.675729125976563
+    }
+  },
+  {
+    "mode": "fine_serial",
+    "batch_size": 16,
+    "config": "3-1-4",
+    "chunks": 1,
+    "release_chunk": 0,
+    "split_percent": 50,
+    "median_tps": 1299.711002759531,
+    "repeat_tps": [
+      1299.2668055364995,
+      1299.711002759531,
+      1299.8310164929721
+    ],
+    "gsm8k_correct": 19,
+    "gsm8k_examples": 20,
+    "cycles": 6.0,
+    "draft_gemm_target_comm_ms_per_cycle": 0.0,
+    "target_gemm_draft_comm_ms_per_cycle": 0.0,
+    "trace_summary": {
+      "trace": "benchmark/spec_overlap/results/revision/final-normal/gpt-oss-fine_serial-b16-profile/1791478685.98427-TP-0.trace.json.gz",
+      "draft_gemm_target_communication_intersection_ms": 0.0,
+      "target_gemm_draft_communication_intersection_ms": 0.0,
+      "draft_compute_target_communication_intersection_ms": 0.0003841552734375,
+      "target_compute_draft_communication_intersection_ms": 0.0003841552734375,
+      "stage_ranges": {
+        "microbatch.draft_extend": {
+          "count": 12,
+          "median_ms": 1.3155669555664062,
+          "median_kernel_union_ms": 0.20774365234375,
+          "median_unoccupied_stream_ms": 1.0099035478515626
+        },
+        "step[DRAFT bs=8]": {
+          "count": 12,
+          "median_ms": 0.9984959716796875,
+          "median_kernel_union_ms": 0.1813427734375,
+          "median_unoccupied_stream_ms": 0.7187997719726562
+        },
+        "microbatch.target_chunk": {
+          "count": 12,
+          "median_ms": 3.944843505859375,
+          "median_kernel_union_ms": 1.8906834106445314,
+          "median_unoccupied_stream_ms": 2.0681760654296877
+        },
+        "microbatch.verify": {
+          "count": 12,
+          "median_ms": 4.839914001464844,
+          "median_kernel_union_ms": 1.4754865722656252,
+          "median_unoccupied_stream_ms": 3.4359634384765623
+        },
+        "microbatch.draft": {
+          "count": 24,
+          "median_ms": 0.3459210205078125,
+          "median_kernel_union_ms": 0.17025616455078124,
+          "median_unoccupied_stream_ms": 0.17584150634765627
+        },
+        "step[VERIFY bs=8]": {
+          "count": 18,
+          "median_ms": 3.7204119873046877,
+          "median_kernel_union_ms": 1.2807801513671877,
+          "median_unoccupied_stream_ms": 1.312161340332031
+        },
+        "step[DRAFT bs=2 toks=4]": {
+          "count": 1,
+          "median_ms": 2.78102099609375,
+          "median_kernel_union_ms": 0.1804168701171875,
+          "median_unoccupied_stream_ms": 2.6006041298828126
+        },
+        "step[DRAFT bs=14 toks=28]": {
+          "count": 1,
+          "median_ms": 2.7648609619140627,
+          "median_kernel_union_ms": 0.227038818359375,
+          "median_unoccupied_stream_ms": 2.5378221816406246
+        }
+      },
+      "draft_target_stage_intersection_ms": 2.3620550537109377,
+      "compute_communication_kernel_intersection_ms": 0.0271385498046875,
+      "communication_kernel_union_ms": 13.313069091796875,
+      "compute_kernel_union_ms": 51.41759301757813
+    }
+  },
+  {
+    "mode": "fine_overlap",
+    "batch_size": 16,
+    "config": "3-1-4",
+    "chunks": 1,
+    "release_chunk": 0,
+    "split_percent": 50,
+    "median_tps": 1315.9417723549275,
+    "repeat_tps": [
+      1311.990849308435,
+      1319.963047778861,
+      1315.9417723549275
+    ],
+    "gsm8k_correct": 19,
+    "gsm8k_examples": 20,
+    "cycles": 6.0,
+    "draft_gemm_target_comm_ms_per_cycle": 0.022213399251302085,
+    "target_gemm_draft_comm_ms_per_cycle": 0.041887634277343745,
+    "trace_summary": {
+      "trace": "benchmark/spec_overlap/results/revision/final-normal/gpt-oss-fine_overlap-b16-profile/1791478759.440111-TP-0.trace.json.gz",
+      "draft_gemm_target_communication_intersection_ms": 0.1332803955078125,
+      "target_gemm_draft_communication_intersection_ms": 0.2513258056640625,
+      "draft_compute_target_communication_intersection_ms": 0.2300482177734375,
+      "target_compute_draft_communication_intersection_ms": 0.4346527099609375,
+      "stage_ranges": {
+        "step[VERIFY bs=8]": {
+          "count": 18,
+          "median_ms": 3.7225880126953124,
+          "median_kernel_union_ms": 1.3193272094726562,
+          "median_unoccupied_stream_ms": 1.327069625
+        },
+        "microbatch.verify": {
+          "count": 12,
+          "median_ms": 4.7786339721679685,
+          "median_kernel_union_ms": 1.361681640625,
+          "median_unoccupied_stream_ms": 3.3768923212890622
+        },
+        "microbatch.target_chunk": {
+          "count": 12,
+          "median_ms": 4.060107543945312,
+          "median_kernel_union_ms": 1.9538232421875001,
+          "median_unoccupied_stream_ms": 2.1495219526367184
+        },
+        "step[DRAFT bs=7 toks=14]": {
+          "count": 1,
+          "median_ms": 4.143642944335937,
+          "median_kernel_union_ms": 1.7293431396484376,
+          "median_unoccupied_stream_ms": 2.414299860351562
+        },
+        "step[DRAFT bs=9 toks=18]": {
+          "count": 1,
+          "median_ms": 4.868474975585937,
+          "median_kernel_union_ms": 4.42937060546875,
+          "median_unoccupied_stream_ms": 0.43910439453124983
+        },
+        "step[DRAFT bs=8]": {
+          "count": 12,
+          "median_ms": 1.1831844482421876,
+          "median_kernel_union_ms": 0.34926354980468755,
+          "median_unoccupied_stream_ms": 0.6603366772460938
+        },
+        "microbatch.draft_extend": {
+          "count": 12,
+          "median_ms": 1.4127994995117188,
+          "median_kernel_union_ms": 0.3751353149414063,
+          "median_unoccupied_stream_ms": 0.8270088442382814
+        },
+        "microbatch.draft": {
+          "count": 24,
+          "median_ms": 0.6475045166015625,
+          "median_kernel_union_ms": 0.185103271484375,
+          "median_unoccupied_stream_ms": 0.44939419775390627
+        }
+      },
+      "draft_target_stage_intersection_ms": 6.138657958984375,
+      "compute_communication_kernel_intersection_ms": 0.7015972900390625,
+      "communication_kernel_union_ms": 69.14570629882813,
+      "compute_kernel_union_ms": 50.89930078125
+    }
+  }
+]

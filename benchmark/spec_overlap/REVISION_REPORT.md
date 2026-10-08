@@ -103,7 +103,12 @@ Batch16，128 output tokens。C/R/A% = target graph chunks / release index / A �
 
 ## 正确性与复现
 
-正确性矩阵及最终验证结果将在完成独立检查后记录；普通性能运行的 shape 数值差异不能作为 token 一致性证据。
+- 选定配置：C/R/A%=1/0/50；五组 speculative 配置 × batch1/5/8/16/32，共 **25 组**。两次64-token greedy输出全部与完整 batch 逐 token 一致（620条序列比较）。
+- Batch1 明确回退原始 pipeline；奇数 batch5 验证 split/merge。100份双 rank traces 均存在，非 fallback batch 有真实 microbatch/graph annotation。
+- 修正 GPT-OSS router：tinygemm 的128-row cutoff 使 config4 B32 完整160 rows、切半80 rows使用不同数值路径；旧 serial 与 overlap 相同，但13/32请求不同于完整 batch。batch-invariant 模式使用 invariant linear 后，全部配置通过。
+- `3-1-4` 的20题 GSM8K sanity：off / overlap 均19/20（95%）；只是小样本检查，不代表整体能力评估。
+- 46 graph/backend/input-registry、23 runtime配置、8 microbatch、2 parser检查通过；GPU fork/join graph replay在实际1/3/4 cuts下一致。deterministic kernels 与正常吞吐 kernels 分开计时。
+
 
 ```bash
 python benchmark/spec_overlap/profile_matrix.py --results benchmark/spec_overlap/results/revision
@@ -113,4 +118,20 @@ python benchmark/spec_overlap/run_correctness.py --results benchmark/spec_overla
 
 - [原始 profiling 飞书报告](https://my.feishu.cn/docx/D1uPdOb4gozVGmxIdLQcyCQgnOb)
 - [调度改进飞书报告与证据附件](https://my.feishu.cn/docx/BbutdflyNoq5oAx7p9Ycapi3nZg)
+- 正确性记录见 [REVISION_CORRECTNESS.json](REVISION_CORRECTNESS.json)。
 - 紧凑测量数据见 [REVISION_MEASUREMENTS.json](REVISION_MEASUREMENTS.json)；原始双 rank traces、日志、命令、输出 token、source hashes 保存到飞书附件。
+
+## 最终源码 normal-kernel 复测
+
+相同选定调度、batch16、3-1-4、128 tokens、3次计时；每台服务器先运行20题 GSM8K sanity，再预热并计时/独立 profiling。
+
+| 模式 | tok/s | GSM8K | Draft GEMM∩Target comm ms/cycle | Target GEMM∩Draft comm ms/cycle |
+|---|---:|---:|---:|---:|
+| off | 1986.9 | 19/20 | 0.0000 | 0.0000 |
+| fine_serial | 1299.7 | 19/20 | 0.0000 | 0.0000 |
+| fine_overlap | 1315.9 | 19/20 | 0.0222 | 0.0419 |
+
+- Overlap 较匹配 serial +1.25%，较本次完整 batch -33.8%；与十轮结论一致。旧矩阵保留原值，不能把跨服务器的小幅波动当作优化收益。
+- 三种 normal 模式均通过小样本 accuracy sanity；原始失败、正常测量与 deterministic验证均分开归档。
+
+- 全部原始证据的 SHA256 与飞书附件 token 见 [REVISION_EVIDENCE.json](REVISION_EVIDENCE.json)；9份归档共321MB，已回读确认。

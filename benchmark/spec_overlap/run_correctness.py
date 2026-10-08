@@ -16,8 +16,11 @@ def main():
     parser.add_argument("--chunks", type=int, default=1)
     parser.add_argument("--release-chunk", type=int, default=0)
     parser.add_argument("--split-percent", type=int, default=50)
+    parser.add_argument("--summarize-only", action="store_true")
     args = parser.parse_args()
     for config in args.configs:
+        if args.summarize_only:
+            continue
         directory = args.results / config
         directory.mkdir(parents=True, exist_ok=True)
         command = [
@@ -76,6 +79,12 @@ def main():
                 ids == expected
                 for ids in baseline["repeat_outputs"] + overlap["repeat_outputs"]
             )
+            for mode in ("off", "fine_overlap"):
+                profile = directory / f"gpt-oss-{mode}-b{batch_size}-profile"
+                for rank in range(2):
+                    assert list(profile.glob(f"*TP-{rank}.trace.json.gz")), (
+                        f"Missing trace: {config}/{mode}/{batch_size}/TP-{rank}"
+                    )
             rows.append(
                 {
                     "config": config,

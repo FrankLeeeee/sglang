@@ -1,4 +1,4 @@
-# GPT-OSS overlap follow-up — active checkpoint (2026-10-09)
+# GPT-OSS overlap follow-up — completed record (2026-10-09)
 
 ## User scope and deadline
 
@@ -19,23 +19,30 @@
 - Previous README/REPORT/FINE_REPORT math corrected: asymmetric D/V/E recurrence,
   D_B -> E_A draft-stream dependency, graph fence and CPU enqueue vs GPU release.
 - Graph replay equivalence, 46 graph/backend tests, 23 namespace/config tests,
-  seven manual microbatch tests and two profiler-analysis tests passed.
+  eight manual microbatch tests and two profiler-analysis tests passed.
 - Runtime supports configurable cuts/release/split and greedy tree drafting.
   Private tree masks prevent B proposal overwriting A metadata inputs.
 - Source patch + new scripts checkpoint attached to second Feishu document.
 
-## Active and pending
+## Final status
 
-- All ten normal refinement rounds completed; second round rerun with private
-  tree masks. Superseded shared-mask data is retained under diagnostics.
-- Both reports now contain concise Chinese tables/plots and explicit GPU evidence.
-  Baseline 38 MB and refinements 56 MB raw archives are uploaded and verified.
-- Selected schedule: one target graph launch, release index zero, split 50%.
-- Deterministic gates found a GPT-OSS router tinygemm cutoff problem at 128 rows.
-  Split serial and overlap agreed exactly; the mismatch was independent of overlap.
-  Router bypass in batch-invariant mode fixes config 4-1-5 at batches 1/5/8/16/32.
-- Driver is checking remaining configs under results/revision/correctness-router-fixed.
-  Finish quality table, archive final correctness/source evidence, then final commit/push.
+- All ten normal refinement rounds completed. Second round rerun with private
+  tree masks; superseded shared-mask data remains under diagnostics.
+- Both Chinese reports contain tables/plots, branch-gap equations, GPU overlap
+  evidence and accuracy/correctness results. Document readbacks verified.
+- Selected experimental schedule: one target graph launch, release zero, split50%.
+- All five configs at batches1/5/8/16/32 pass two64-token exact comparisons:
+  25cases, 620sequences and100rank traces. Batch1 follows the original path.
+- GPT-OSS router tinygemm cutoff caused the old config4 B32 mismatch; split serial
+  and overlap agreed. Batch-invariant router bypass fixes the entire matrix.
+- Final-source normal recheck: off1986.9, serial1299.7, overlap1315.9 tok/s;
+  overlap+1.25% vs serial, -33.8% vs off. Each mode GSM8K19/20.
+- Nine raw-evidence archives (321MB) are uploaded and verified, including all
+  baseline/refinement/correctness/diagnostic/final-normal traces and outputs.
+  REVISION_EVIDENCE.json records names, SHA256 hashes and attachment tokens.
+- Source checkpoints e6e38692f2 and1d123103d4 already pushed; final report commit
+  follows this record. Complete source bundle/patch and summary archive are also
+  attached to the second document. No owned GPU server remains running.
 
 ## Evidence and commands
 
@@ -50,7 +57,7 @@ Remote docs:
 - https://my.feishu.cn/docx/D1uPdOb4gozVGmxIdLQcyCQgnOb (baseline)
 - https://my.feishu.cn/docx/BbutdflyNoq5oAx7p9Ycapi3nZg (prototype/refinement)
 
-## Findings so far / guardrails
+## Findings / guardrails
 
 - Baseline `3-1-4` is fastest at every batch; batch 16 is 1918.4 tok/s.
 - Round-one eight-cut overlap: 1309.6 tok/s; bidirectional GEMM/communication

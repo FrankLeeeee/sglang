@@ -1,0 +1,56 @@
+[
+  {
+    "name": "baseline-all-evidence.tar.gz",
+    "size_bytes": 39360457,
+    "sha256": "0612d4d416b7955dab5b87be7dd05dc44331bb625c9b11433bacd316ae5ad6c1",
+    "feishu_attachment_token": "BZsAbmCezoQoctxemgZcTCdvnkf"
+  },
+  {
+    "name": "correctness-10-4-11.tar.gz",
+    "size_bytes": 38836788,
+    "sha256": "b4aad9be909370046297534ea63b1354a3f8de2e110495026201bddc06766a23",
+    "feishu_attachment_token": "QsSSbpPeHoBsVYxPaxccXeBknpf"
+  },
+  {
+    "name": "correctness-3-1-4.tar.gz",
+    "size_bytes": 26062886,
+    "sha256": "d33f1646bad6466cc0512b5b3542a937dddc4d46808814a3d7501ad55498479e",
+    "feishu_attachment_token": "PKiXbl0fPoeMt8xRy8EcwmHJncb"
+  },
+  {
+    "name": "correctness-4-1-5.tar.gz",
+    "size_bytes": 26606732,
+    "sha256": "278f5b0d6cf0c18117882d545d7749a7e808bdf6f726f5c33ca489c1a614c8d5",
+    "feishu_attachment_token": "JzJ4b3mXdofsWbx8YTpcz52pncd"
+  },
+  {
+    "name": "correctness-5-2-6.tar.gz",
+    "size_bytes": 33539017,
+    "sha256": "4c2404e16a4e135698f538ebee32e07d33499c013797d10f32184e8945b3347f",
+    "feishu_attachment_token": "Dm6Gb83pNofbnUxZxvgcpsU2n5g"
+  },
+  {
+    "name": "correctness-7-3-8.tar.gz",
+    "size_bytes": 35505822,
+    "sha256": "03f59f360ed86451efe09390efae95d7ea52eb4fa4d26e916db32a82e1f74e46",
+    "feishu_attachment_token": "VKrhbh88ao6ToaxGUIqc636Fnce"
+  },
+  {
+    "name": "final-normal-evidence.tar.gz",
+    "size_bytes": 6400794,
+    "sha256": "a7cea4333714c89a17369b294c24c562350419438d71eec8050d1bab30833b53",
+    "feishu_attachment_token": "OGFMbtjU9oCFgsx70Qnc1Cudnfd"
+  },
+  {
+    "name": "initial-correctness-and-router-diagnostic.tar.gz",
+    "size_bytes": 57150328,
+    "sha256": "911ade276e904e552dc17ddccfba965c8d8a8461cb6ca7af13683e11654ccdca",
+    "feishu_attachment_token": "J9V7b1njAoB7qEx67xlcYrQAnQc"
+  },
+  {
+    "name": "refinements-all-evidence.tar.gz",
+    "size_bytes": 57885786,
+    "sha256": "16c0d664e2cbd5e13a0708ea22558730652891107d02ec878cf674fe9442a9c8",
+    "feishu_attachment_token": "X9labjgpGozLHMxfDwmcQbJsnjb"
+  }
+]

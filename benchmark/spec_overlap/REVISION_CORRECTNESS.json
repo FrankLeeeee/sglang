@@ -1,0 +1,202 @@
+[
+  {
+    "config": "3-1-4",
+    "batch_size": 1,
+    "requests_per_repeat": 1,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": true
+  },
+  {
+    "config": "3-1-4",
+    "batch_size": 5,
+    "requests_per_repeat": 5,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "3-1-4",
+    "batch_size": 8,
+    "requests_per_repeat": 8,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "3-1-4",
+    "batch_size": 16,
+    "requests_per_repeat": 16,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "3-1-4",
+    "batch_size": 32,
+    "requests_per_repeat": 32,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "4-1-5",
+    "batch_size": 1,
+    "requests_per_repeat": 1,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": true
+  },
+  {
+    "config": "4-1-5",
+    "batch_size": 5,
+    "requests_per_repeat": 5,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "4-1-5",
+    "batch_size": 8,
+    "requests_per_repeat": 8,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "4-1-5",
+    "batch_size": 16,
+    "requests_per_repeat": 16,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "4-1-5",
+    "batch_size": 32,
+    "requests_per_repeat": 32,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "5-2-6",
+    "batch_size": 1,
+    "requests_per_repeat": 1,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": true
+  },
+  {
+    "config": "5-2-6",
+    "batch_size": 5,
+    "requests_per_repeat": 5,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "5-2-6",
+    "batch_size": 8,
+    "requests_per_repeat": 8,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "5-2-6",
+    "batch_size": 16,
+    "requests_per_repeat": 16,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "5-2-6",
+    "batch_size": 32,
+    "requests_per_repeat": 32,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "7-3-8",
+    "batch_size": 1,
+    "requests_per_repeat": 1,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": true
+  },
+  {
+    "config": "7-3-8",
+    "batch_size": 5,
+    "requests_per_repeat": 5,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "7-3-8",
+    "batch_size": 8,
+    "requests_per_repeat": 8,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "7-3-8",
+    "batch_size": 16,
+    "requests_per_repeat": 16,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "7-3-8",
+    "batch_size": 32,
+    "requests_per_repeat": 32,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "10-4-11",
+    "batch_size": 1,
+    "requests_per_repeat": 1,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": true
+  },
+  {
+    "config": "10-4-11",
+    "batch_size": 5,
+    "requests_per_repeat": 5,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "10-4-11",
+    "batch_size": 8,
+    "requests_per_repeat": 8,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "10-4-11",
+    "batch_size": 16,
+    "requests_per_repeat": 16,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  },
+  {
+    "config": "10-4-11",
+    "batch_size": 32,
+    "requests_per_repeat": 32,
+    "repeat_count": 2,
+    "exact_match": true,
+    "batch_one_fallback": false
+  }
+]
