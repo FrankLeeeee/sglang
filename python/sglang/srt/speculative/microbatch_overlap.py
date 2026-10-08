@@ -45,6 +45,17 @@ from sglang.srt.speculative.spec_utils import (
 def validate_microbatch_config(target_runner):
     if get_spec().speculative_microbatch_mode == "off":
         return
+    spec = get_spec()
+    if not 1 <= spec.speculative_microbatch_split_percent <= 99:
+        raise ValueError("Microbatch split percent must be in [1, 99]")
+    if spec.speculative_microbatch_graph_chunks < 1:
+        raise ValueError("Microbatch graph chunk count must be positive")
+    if (
+        not -1
+        <= spec.speculative_microbatch_release_chunk
+        < spec.speculative_microbatch_graph_chunks
+    ):
+        raise ValueError("Microbatch release chunk must be -1 or a valid chunk index")
     if target_runner.model.__class__.__name__ not in {
         "LlamaForCausalLM",
         "GptOssForCausalLM",
@@ -75,7 +86,6 @@ def validate_microbatch_config(target_runner):
         and get_parallel().attn_cp_size == 1
         and get_parallel().moe_ep_size == 1
         and not get_parallel().attn_dp_enabled
-        and get_spec().speculative_eagle_topk == 1
         and not get_spec().speculative_adaptive
         and not get_spec().speculative_use_rejection_sampling
         and not get_lora().enable_lora
@@ -83,7 +93,7 @@ def validate_microbatch_config(target_runner):
     ):
         raise ValueError(
             "Experimental speculative microbatch execution requires EAGLE3, "
-            "topk=1, PP=DP=CP=EP=1, no attention DP, disabled prefill graphs, eager or full decode graphs for fine modes, disabled custom all-reduce, "
+            "greedy sampling, PP=DP=CP=EP=1, no attention DP, disabled prefill graphs, eager or full decode graphs for fine modes, disabled custom all-reduce, "
             "disabled FlashInfer all-reduce fusion, disabled overlap scheduling, "
             "and no LoRA/adaptive/rejection sampling."
         )
@@ -100,7 +110,6 @@ def can_microbatch_overlap(worker, batch):
         and get_parallel().attn_cp_size == 1
         and get_parallel().moe_ep_size == 1
         and not get_parallel().attn_dp_enabled
-        and worker.topk == 1
         and worker.speculative_num_steps > 0
         and not get_spec().speculative_adaptive
         and not get_spec().speculative_use_rejection_sampling
@@ -141,8 +150,8 @@ def can_microbatch_overlap(worker, batch):
     )
 
 
-def _split(batch):
-    midpoint = len(batch.reqs) // 2
+def _split(batch, split_percent=50):
+    midpoint = max(1, min(len(batch.reqs) - 1, len(batch.reqs) * split_percent // 100))
     children = []
     for start, end in ((0, midpoint), (midpoint, len(batch.reqs))):
         rows = slice(start, end)
@@ -373,7 +382,7 @@ def private_microbatch_capture(draft_worker):
 
 def run_microbatch_step(worker, batch, on_publish=None):
     ensure_microbatch_group(worker)
-    children = _split(batch)
+    children = _split(batch, get_spec().speculative_microbatch_split_percent)
     # draft() rebinds child.spec_info. Retain the caller-stream split tensors
     # separately so the allocator cannot recycle them while draft reads them.
     input_refs = [copy(child.spec_info) for child in children]
@@ -409,18 +418,28 @@ def run_microbatch_step(worker, batch, on_publish=None):
 
                 def release_graph_draft(chunk_index):
                     nonlocal done, second_draft_done
-                    if done or chunk_index != 1:
+                    if (
+                        done
+                        or chunk_index
+                        != get_spec().speculative_microbatch_release_chunk
+                    ):
                         return
                     with torch.cuda.stream(draft_stream):
                         _draft(worker, second)
                         second_draft_done = draft_stream.record_event()
                     done = True
 
+                # -1 has no target-progress prerequisite: A and B are independent.
+                release_graph_draft(-1)
                 first_result = _verify(
                     worker,
                     first,
                     continuation=lambda layer: (
-                        release_graph_draft(1) if layer == len(layers) // 4 else None
+                        release_graph_draft(
+                            get_spec().speculative_microbatch_release_chunk
+                        )
+                        if layer == len(layers) // 4
+                        else None
                     ),
                     graph_continuation=release_graph_draft,
                 )

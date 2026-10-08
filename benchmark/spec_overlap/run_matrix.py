@@ -41,7 +41,12 @@ def main():
     parser.add_argument(
         "--results", type=Path, default=Path(__file__).parent / "results"
     )
+    parser.add_argument("--extra-server-args", nargs=argparse.REMAINDER, default=[])
+    parser.add_argument(
+        "--spec-config", default="3-1-4", help="steps-topk-draft_tokens"
+    )
     args = parser.parse_args()
+    steps, topk, draft_tokens = map(int, args.spec_config.split("-"))
     if args.decode_cuda_graph != "disabled" and any(
         mode not in {"off", "fine_serial", "fine_overlap"} for mode in args.modes
     ):
@@ -64,6 +69,7 @@ def main():
                 "python/sglang/srt/speculative/microbatch_overlap.py",
                 "python/sglang/srt/speculative/graph_chunks.py",
                 "python/sglang/srt/speculative/eagle_worker_v2.py",
+                "python/sglang/srt/speculative/eagle_worker_common.py",
                 "python/sglang/srt/model_executor/input_buffers.py",
                 "python/sglang/srt/model_executor/graph_shared_output.py",
                 "python/sglang/srt/model_executor/forward_context.py",
@@ -95,15 +101,17 @@ def main():
                 "--speculative-algorithm",
                 "EAGLE3",
                 "--speculative-num-steps",
-                "3",
+                str(steps),
                 "--speculative-eagle-topk",
-                "1",
+                str(topk),
                 "--speculative-num-draft-tokens",
-                "4",
+                str(draft_tokens),
                 "--speculative-microbatch-mode",
                 mode,
                 "--tp-size",
                 "2",
+                "--attention-backend",
+                "fa3",
                 "--context-length",
                 "2048",
                 "--port",
@@ -121,12 +129,16 @@ def main():
                 "--random-seed",
                 "42",
             ]
+            command.extend(args.extra_server_args)
             if args.decode_cuda_graph == "full":
                 command.extend(
                     ["--cuda-graph-bs-decode", "1", "2", "4", "8", "16", "32"]
                 )
             if args.deterministic:
                 command.append("--enable-deterministic-inference")
+            (args.results / f"{name}-command.json").write_text(
+                json.dumps(command, indent=2)
+            )
             env = dict(os.environ, SGLANG_DEEPGEMM_PDL="0")
             if args.deterministic:
                 env["SGLANG_ENABLE_JIT_DEEPGEMM"] = "0"
@@ -208,6 +220,8 @@ def main():
                         time.sleep(1)
                     if mode != "off":
                         for bs in args.batch_sizes:
+                            if bs == 1:
+                                continue  # A single request follows the original pipeline.
                             traces = sorted(
                                 (args.results / f"{name}-b{bs}-profile").glob(
                                     "*TP-0.trace.json.gz"

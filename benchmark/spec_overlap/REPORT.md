@@ -1,3 +1,5 @@
+> 历史范围：本文保留原始 coarse、topk=1、TP=2/EP=1 测量，不代表当前 tree-topk 参数支持或本次 20 组矩阵。新矩阵仅使用指定 GPT-OSS target/draft；历史 Llama 结果不作本次结论。
+>
 > Initial coarse-pipeline investigation. The subsequent fine-grained implementation, shared-input-buffer fix, and new benchmarks are documented in [FINE_REPORT.md](FINE_REPORT.md). Statements below about removed variants describe the initial experiment.
 
 # Same-GPU EAGLE3 overlap: initial experiments
@@ -34,11 +36,29 @@ Let D(b), V(b), and E(b) include draft/tree preparation, verification/sampling/c
 - Fully isolated overlap, with draft B released delta into verify A: `T_ideal = D + max(V, delta + D) + max(V, E) + E + H_overlap`.
 - Validated prototype, which fences extend A before verify B: `T_prototype = D + max(V, delta + D) + E + V + E + H_prototype`.
 
-For uneven groups, replace the symmetric ideal expression with `D_A + max(V_A, delta + D_B) + max(V_B, E_A) + E_B + H_overlap`. These are one-round makespans including startup/drain; the prototype rejoins each scheduler iteration.
+非对称组的完整事件递推如下；`D_B` 与 `E_A` 在同一 draft stream 上串行：
+
+```text
+F_DA = D_A; F_VA = F_DA + V_A
+F_DB = F_DA + delta + D_B
+F_EA = max(F_VA, F_DB) + E_A
+F_VB = max(F_VA, F_DB) + V_B                  # 无 fence
+F_EB = max(F_EA, F_VB) + E_B
+T_ideal = F_EB + H_overlap
+```
+
+- 上述 ideal 化简为
+  `D_A + max(V_A, delta + D_B) + max(V_B, E_A) + E_B + H_overlap`。
+- 本文保留 fence：`F_VB = max(F_VA, F_DB, F_EA) + V_B`；
+  对应 `T_fenced = D_A + max(V_A, delta + D_B) + E_A + V_B + E_B + H_fenced`。
+- `delta` 是 GPU 实际释放偏移（固定释放模型假设非负），不是 host callback 的提交位置；
+  没有 target-release event 时必须从 trace 确认。
+- 这是单轮含启动/排空的理想独立阶段模型；每轮都会重新 join。
+  包含等待的 profiler stage range 不能直接作为独立服务时间，否则重复计算等待。
 
 The practical model is `T_overlap = T_serial - O_feasible + P_contention + P_launch + P_sync`. Only independent, ready operations contribute to O. NCCL kernels consume SMs/HBM and can spend time waiting for peer ranks; their duration is not automatically usable compute slack. Resource demand and the event DAG provide lower bounds, not guaranteed speedup. Throughput is useful generated tokens divided by elapsed time, with measured acceptance included.
 
-The validated schedule submits verify A's host call completely before draft B, allowing pending GPU work to overlap. It uses a separate draft CUDA stream and NCCL communicator on the same ranks. Events retain D_A -> V_A, V_A -> E_A, D_B -> V_B, E_A -> V_B, and V_B -> E_B dependencies. Each model remains serial with itself; results rejoin in request order.
+The validated schedule submits verify A's host call completely before draft B, allowing pending GPU work to overlap. It uses a separate draft CUDA stream and NCCL communicator on the same ranks. Events and draft-stream ordering retain D_A -> V_A, V_A -> E_A, D_B -> E_A, D_B -> V_B, E_A -> V_B, E_A -> E_B, and V_B -> E_B dependencies. Each model remains serial with itself; results rejoin in request order.
 
 ## Normal-kernel throughput
 

@@ -22,7 +22,7 @@ from sglang.srt.model_executor.forward_batch_info import (
     ForwardMode,
     PPProxyTensors,
 )
-from sglang.srt.runtime_context import mamba_track_grid
+from sglang.srt.runtime_context import get_spec, mamba_track_grid
 from sglang.srt.speculative.eagle_info import EagleDraftInput, EagleVerifyInput
 from sglang.srt.speculative.eagle_utils import (
     TreeMaskMode,
@@ -398,6 +398,15 @@ def build_eagle_verify_input(
     else:
         mask_mode, fill_mask = verify_mask.mode, verify_mask.is_read
         tree_mask_buf = verify_mask.buffer if verify_mask.fits(bs) else None
+        if (
+            tree_mask_buf is not None
+            and topk > 1
+            and get_spec().speculative_microbatch_mode != "off"
+        ):
+            # Draft B can build its tree while target A is still extracting its
+            # attention metadata. The runner's reusable verify mask is not a
+            # cross-stream publication buffer; each proposal needs private storage.
+            tree_mask_buf = torch.empty_like(tree_mask_buf)
 
     # build_tree_kernel uses seq_lens_sum only to size the (non-preallocated)
     # FULL_MASK tree mask; over-size is safe. Skip per-iter .sum().item() D2H via UB.

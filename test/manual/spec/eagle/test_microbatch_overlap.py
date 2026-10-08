@@ -2,6 +2,7 @@
 
 import unittest
 from types import SimpleNamespace
+from unittest.mock import patch
 
 import torch
 
@@ -18,6 +19,7 @@ from sglang.srt.speculative.microbatch_overlap import (
     _merge,
     _split,
     can_microbatch_overlap,
+    validate_microbatch_config,
 )
 from sglang.srt.speculative.spec_info import SpeculativeAlgorithm
 from sglang.test.test_utils import CustomTestCase
@@ -67,6 +69,221 @@ class TestMicrobatchSnapshot(CustomTestCase):
                 flags.set("attn_input_scattered", False)
                 flags.set("moe_output_buffer", torch.ones(1))
             self.assertEqual(flags.snapshot(), suspended)
+
+    def test_tree_verify_masks_remain_private_until_target_consumes_them(self):
+        from sglang.srt.layers.attention.verify_mask import VerifyMask
+        from sglang.srt.speculative.eagle_utils import TreeMaskMode
+        from sglang.srt.speculative.eagle_worker_common import build_eagle_verify_input
+
+        size, num_draft_tokens = 2, 6
+        reusable = torch.zeros(4 * num_draft_tokens**2, dtype=torch.bool)
+        backend = SimpleNamespace(
+            verify_mask=VerifyMask(
+                buffer=reusable, mode=TreeMaskMode.QLEN_ONLY, max_bs=4
+            )
+        )
+        target_worker = SimpleNamespace(
+            model_runner=SimpleNamespace(attn_backend=backend)
+        )
+        batch = SimpleNamespace(
+            forward_mode=ForwardMode.DECODE,
+            seq_lens=torch.tensor([10, 20]),
+            seq_lens_sum=None,
+        )
+
+        # Stub only the CUDA tree-builder boundary: emulate its in-place write
+        # and returned view, keeping the real publication/allocation logic.
+        def build_tree(
+            bonus,
+            parents,
+            scores,
+            tokens,
+            seq_lens,
+            seq_lens_sum,
+            topk,
+            steps,
+            token_count,
+            mask_mode,
+            mask_buf,
+            **kwargs,
+        ):
+            mask = mask_buf[: size * token_count**2]
+            mask.fill_(bool(bonus[0].item()))
+            positions = torch.arange(size * token_count)
+            retrieval = torch.zeros((size, token_count), dtype=torch.int64)
+            return (
+                mask,
+                positions,
+                retrieval,
+                retrieval.clone(),
+                retrieval.clone(),
+                tokens,
+            )
+
+        def proposal(marker, topk):
+            return build_eagle_verify_input(
+                batch,
+                EagleDraftInput(bonus_tokens=torch.full((size,), marker)),
+                torch.zeros((size, 2), dtype=torch.int64),
+                torch.zeros((size, num_draft_tokens - 1), dtype=torch.int64),
+                torch.zeros((size, num_draft_tokens), dtype=torch.int64),
+                None,
+                target_worker=target_worker,
+                topk=topk,
+                num_steps=5,
+                num_draft_tokens=num_draft_tokens,
+                tree_mask_mode=TreeMaskMode.QLEN_ONLY,
+                device="cpu",
+            )
+
+        with patch(
+            "sglang.srt.speculative.eagle_worker_common.build_tree_kernel_efficient",
+            side_effect=build_tree,
+        ):
+            for topk in (2, 3, 4):
+                with self.subTest(topk=topk):
+                    reusable.zero_()
+                    with get_context().override_server_args(
+                        model_path="dummy", speculative_microbatch_mode="fine_overlap"
+                    ):
+                        first = proposal(1, topk)
+                        second = proposal(0, topk)
+                    self.assertNotEqual(
+                        first.custom_mask.data_ptr(), second.custom_mask.data_ptr()
+                    )
+                    self.assertNotEqual(
+                        first.custom_mask.data_ptr(), reusable.data_ptr()
+                    )
+                    self.assertNotEqual(
+                        second.custom_mask.data_ptr(), reusable.data_ptr()
+                    )
+                    second.custom_mask.fill_(True)
+                    torch.testing.assert_close(
+                        first.custom_mask, torch.ones_like(first.custom_mask)
+                    )
+                    torch.testing.assert_close(reusable, torch.zeros_like(reusable))
+                    second.custom_mask.zero_()
+                    torch.testing.assert_close(
+                        first.custom_mask, torch.ones_like(first.custom_mask)
+                    )
+
+            with get_context().override_server_args(
+                model_path="dummy", speculative_microbatch_mode="off"
+            ):
+                first = proposal(1, 2)
+                self.assertEqual(first.custom_mask.data_ptr(), reusable.data_ptr())
+                second = proposal(0, 2)
+                self.assertEqual(second.custom_mask.data_ptr(), reusable.data_ptr())
+                torch.testing.assert_close(
+                    first.custom_mask, torch.zeros_like(first.custom_mask)
+                )
+
+    def test_tree_rows_survive_asymmetric_split_and_merge(self):
+        """Splits select requests, preserving every tree candidate and state row."""
+        for size, percent, expected_sizes in (
+            (2, 1, [1, 1]),
+            (5, 25, [1, 4]),
+            (5, 75, [3, 2]),
+            (5, 99, [4, 1]),
+            (8, 25, [2, 6]),
+        ):
+            for topk in (2, 3, 4):
+                with self.subTest(size=size, percent=percent, topk=topk):
+                    rows = torch.arange(size)
+                    candidates = torch.arange(size * topk).reshape(size, topk)
+                    spec = EagleDraftInput(
+                        topk_p=candidates.float() / (size * topk),
+                        topk_index=candidates,
+                        hidden_states=torch.arange(size * 3).float().reshape(size, 3),
+                        bonus_tokens=rows + 100,
+                        draft_probs=torch.arange(size * 7).float().reshape(size, 7),
+                        dsa_topk_indices=candidates + 200,
+                    )
+                    sampling = SimpleNamespace(
+                        temperatures=rows.float().view(-1, 1),
+                        top_ps=rows.float(),
+                        top_ks=rows,
+                        min_ps=rows.float(),
+                        sampling_seed=rows + 20,
+                        rids_int=rows + 30,
+                        bootstrap_room_ids_int=rows + 40,
+                        grammars=None,
+                        return_sampling_masks=[False] * size,
+                        return_sampling_support_logprobs=None,
+                        sampling_mask_top_ks=list(range(size)),
+                    )
+                    batch = SimpleNamespace(
+                        reqs=[SimpleNamespace(rid=str(i)) for i in range(size)],
+                        req_pool_indices=rows,
+                        req_pool_indices_cpu=rows,
+                        seq_lens=rows + 10,
+                        orig_seq_lens=rows + 10,
+                        seq_lens_cpu=rows + 10,
+                        spec_info=spec,
+                        sampling_info=sampling,
+                    )
+                    children = _split(batch, percent)
+                    self.assertEqual([len(c.reqs) for c in children], expected_sizes)
+                    self.assertEqual(
+                        [r.rid for c in children for r in c.reqs],
+                        [str(i) for i in range(size)],
+                    )
+                    fields = (
+                        "topk_p",
+                        "topk_index",
+                        "hidden_states",
+                        "bonus_tokens",
+                        "draft_probs",
+                        "dsa_topk_indices",
+                    )
+                    for name in fields:
+                        torch.testing.assert_close(
+                            torch.cat([getattr(c.spec_info, name) for c in children]),
+                            getattr(spec, name),
+                        )
+                    torch.testing.assert_close(
+                        torch.cat([c.sampling_info.sampling_seed for c in children]),
+                        sampling.sampling_seed,
+                    )
+                    self.assertEqual(
+                        [
+                            i
+                            for c in children
+                            for i in c.sampling_info.sampling_mask_top_ks
+                        ],
+                        list(range(size)),
+                    )
+                    children[0].spec_info.merge_batch(children[1].spec_info)
+                    for name in fields:
+                        torch.testing.assert_close(
+                            getattr(children[0].spec_info, name), getattr(spec, name)
+                        )
+                    # Filtering and merging rebind child fields, never parent state.
+                    self.assertEqual(spec.topk_index.shape, (size, topk))
+
+    def test_invalid_schedule_configuration_is_rejected(self):
+        invalid = (
+            ({"speculative_microbatch_split_percent": 0}, "split percent"),
+            ({"speculative_microbatch_split_percent": 100}, "split percent"),
+            ({"speculative_microbatch_graph_chunks": 0}, "chunk count"),
+            ({"speculative_microbatch_release_chunk": -2}, "release chunk"),
+            (
+                {
+                    "speculative_microbatch_graph_chunks": 2,
+                    "speculative_microbatch_release_chunk": 2,
+                },
+                "release chunk",
+            ),
+        )
+        for overrides, message in invalid:
+            with self.subTest(overrides=overrides):
+                with get_context().override_server_args(
+                    model_path="dummy",
+                    speculative_microbatch_mode="fine_overlap",
+                    **overrides,
+                ):
+                    with self.assertRaisesRegex(ValueError, message):
+                        validate_microbatch_config(SimpleNamespace())
 
     def test_odd_batch_round_trip_without_scheduler_penalizer(self):
         """A forward-only snapshot must split without filtering a missing penalizer.
@@ -126,7 +343,10 @@ class TestMicrobatchSnapshot(CustomTestCase):
             ),
             disable_custom_all_reduce=True,
         ):
-            self.assertTrue(can_microbatch_overlap(worker, batch))
+            for topk in (1, 2, 3, 4):
+                with self.subTest(topk=topk):
+                    worker.topk = topk
+                    self.assertTrue(can_microbatch_overlap(worker, batch))
             sampling.return_sampling_masks[0] = True
             self.assertFalse(can_microbatch_overlap(worker, batch))
             sampling.return_sampling_masks[0] = False

@@ -12,6 +12,8 @@ import torch
 
 class SpeculativeGraphChunks:
     def __init__(self, graph, num_chunks=8):
+        if num_chunks < 1:
+            raise ValueError("Graph chunk count must be positive")
         from cuda.bindings import runtime
 
         self.runtime = runtime

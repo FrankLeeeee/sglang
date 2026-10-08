@@ -114,8 +114,39 @@ def trace_summary(path):
             for span in stage_events
         )
 
+    # Captured graphs may repeat "draft" on internal streams. The outer
+    # stage range measures the complete proposal, rather than one graph step.
+    outer_streams = {
+        (e["pid"], e["tid"])
+        for e in stage_events
+        if e["name"] in {"verify", "microbatch.verify"}
+    }
+    measured_spans = [
+        e
+        for e in stage_events
+        if e["name"] != "draft"
+        or not outer_streams
+        or (e["pid"], e["tid"]) in outer_streams
+    ]
+    # Prefill also extends the draft KV cache; exclude it from decode E.
+    first_verify = min(
+        (
+            e["ts"]
+            for e in measured_spans
+            if e["name"] in {"verify", "microbatch.verify"}
+        ),
+        default=0,
+    )
+    measured_spans = [
+        e
+        for e in measured_spans
+        if e["name"] != "draft_extend" or e["ts"] >= first_verify
+    ]
+    measured_stages = {}
+    for e in measured_spans:
+        measured_stages.setdefault(e["name"], []).append((e["ts"], e["ts"] + e["dur"]))
     activity = {}
-    for span in stage_events:
+    for span in measured_spans:
         active = (
             duration(
                 [(e["ts"], e["ts"] + e["dur"]) for e in kernels if inside(e, span)]
@@ -182,7 +213,7 @@ def trace_summary(path):
                     g for _, g in activity[name]
                 ),
             }
-            for name, values in stages.items()
+            for name, values in measured_stages.items()
         },
         "draft_target_stage_intersection_ms": intersection(draft, target) / 1000,
         "compute_communication_kernel_intersection_ms": intersection(compute, comm)
@@ -205,7 +236,7 @@ def main():
         runs[path.stem] = data
     report = {"throughput": {}, "traces": []}
     for name, data in runs.items():
-        model, mode, batch = name.rsplit("-", 2)
+        model, _mode, batch = name.rsplit("-", 2)
         baseline = runs.get(f"{model}-off-{batch}")
         serial = runs.get(f"{model}-serial-{batch}")
         fine_serial = runs.get(f"{model}-fine_serial-{batch}")

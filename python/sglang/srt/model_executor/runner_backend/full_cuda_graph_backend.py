@@ -203,7 +203,14 @@ class FullCudaGraphBackend(BaseCudaGraphBackend):
         if partition:
             from sglang.srt.speculative.graph_chunks import SpeculativeGraphChunks
 
-            self._speculative_chunks[shape_key] = SpeculativeGraphChunks(graph)
+            self._speculative_chunks[shape_key] = SpeculativeGraphChunks(
+                graph, get_spec().speculative_microbatch_graph_chunks
+            )
+            if get_spec().speculative_microbatch_release_chunk >= len(
+                self._speculative_chunks[shape_key].executables
+            ):
+                self._speculative_chunks.pop(shape_key).close()
+                raise ValueError("Release chunk exceeds actual target graph partitions")
         self._graphs[shape_key] = graph
         self._outputs[shape_key] = out
 

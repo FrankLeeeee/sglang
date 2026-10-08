@@ -72,25 +72,41 @@ Split sequential control:
 
 `T_serial = 2[D(b) + V(b) + E(b)] + H_serial`.
 
-For fully isolated symmetric microbatches and ideal independent stage durations, if draft B is
-released delta time into verify A:
+非对称两组的事件递推（从本轮开始计时；同一模型串行）：
 
+```text
+F_DA = D_A
+F_VA = F_DA + V_A
+F_DB = F_DA + delta + D_B
+F_EA = max(F_VA, F_DB) + E_A
+F_VB = max(F_VA, F_DB) + V_B              # 无 extend/verify fence
+F_EB = max(F_EA, F_VB) + E_B
+T_ideal = F_EB + H_overlap
+```
+
+`E_A` 与 `D_B` 使用同一 draft stream，因此即使 `V_A` 先完成，
+`E_A` 也必须等 `D_B`。保留 fence 时，将 `F_VB` 改为
+`max(F_VA, F_DB, F_EA) + V_B`。这避免漏算延迟释放 `D_B` 后的等待。
+
+For symmetric groups this gives
 `T_overlap,ideal = D + max(V, delta + D) + max(V, E) + E + H_overlap`.
-
-For uneven groups the corresponding ideal makespan is
+For uneven groups it gives
 `D_A + max(V_A, delta + D_B) + max(V_B, E_A) + E_B + H_overlap`.
+The retained graph/coarse fence gives
+`T_fenced,ideal = D_A + max(V_A, delta + D_B) + E_A + V_B + E_B + H_fenced`.
+Its symmetric ideal saving against split serial is `min(D, V - delta)`
+before incremental overhead; a negative value means release delay exceeds V.
 
-The coarse `overlap` control additionally fences extend A before verify B, giving
-`T_prototype,ideal = D + max(V, delta + D) + E + V + E + H_prototype`.
-That control's maximum ideal saving over the split-serial control is
-`min(D, V - delta)`, before launch and synchronization penalties. A negative
-value represents a release delay longer than verification.
+`delta` 是 GPU 时间线上 `D_B` 开始相对 `V_A` 开始的偏移；上述释放模型假设
+`delta >= 0`。当前 callback 只控制 CPU 提交顺序，没有 target-release event
+或 draft wait，因此“第 2 个 graph chunk 后提交”不保证 GPU 已运行到该节点。
+需要从 trace 测量偏移，或增加 event edge 后再使用固定释放时间模型。
 
-These expressions include startup and drain for **one round**.
-The prototype rejoins each scheduler iteration; it does not implement an
-infinite steady-state conveyor. For uneven batches use the actual event DAG,
-not the symmetric expression. With ideal overlap, extra delay from the release
-point is `max(0, delta + D - V)`.
+These expressions include startup and drain for **one round**, assuming stage
+costs independent of concurrency. The prototype rejoins each scheduler iteration;
+it does not implement an infinite steady-state conveyor. For asymmetric groups,
+use the recurrence with measured stages. Wait-inclusive measured ranges must not
+be reused as independent service costs: that would count the same waits twice.
 
 For each stage, decompose the profile into compute, communication, memory work,
 and exposed launch gaps. Count interval unions when measuring wall time:

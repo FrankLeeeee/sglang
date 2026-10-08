@@ -58,14 +58,28 @@ For release delta into verify A, an ideal independent-resource pipeline takes
 `D + max(V, delta + D) + max(V, E) + E + H_overlap`.
 The retained graph fence instead gives
 `D + max(V, delta + D) + E + V + E + H_graph`.
-With multiple draft chunks, each chunk has a release time and a dependency on the
-previous chunk; compute its finish recursively as
-`finish_i = max(release_i, finish_(i-1)) + duration_i`.
-Replace `delta + D` by the final chunk's finish relative to verify A's start.
-The release delta must be measured; a quarter of layers or nodes need not take
-a quarter of GPU time. Actual durations must include resource contention, graph-cut barriers, launch
-work and waits. NCCL kernel residency can include peer arrival/spinning and is
-not a measure of communication available to hide compute.
+非对称组应使用事件递推，而非直接相加各阶段范围：
+
+```text
+F_DA = D_A; F_VA = F_DA + V_A
+F_DB = F_DA + delta + D_B
+F_EA = max(F_VA, F_DB) + E_A
+F_VB = max(F_VA, F_DB) + V_B
+F_EB = max(F_EA, F_VB) + E_B
+T_ideal = F_EB + H
+```
+
+- `D_B -> E_A` 来自同一 draft stream；延迟 drafting 也会推迟 extension。
+- 保留 graph fence 时：`F_VB = max(F_VA, F_DB, F_EA) + V_B`。
+- 多 draft chunk：以 `V_A` 起点为零，
+  `finish_i = max(release_i, finish_(i-1)) + duration_i`；
+  用最终 `finish_i` 替换 `delta + D_B`。
+- callback 控制 CPU 提交点，当前没有 target-release event / draft wait；
+  graph 节点的四分之一不等于 GPU 时长的四分之一。`delta` 必须从 trace 测量；
+  固定释放模型假设 `delta >= 0`。
+- 这是单轮含启动/排空的理想模型；并发资源争用、graph-cut barriers、
+  launch gaps 与事件等待另计。包含等待的 stage range 不能再当作独立服务时长。
+- NCCL 驻留时间可包含等待其他 rank，不能直接当作可隐藏计算的通信窗口。
 
 ## Validation and measurements
 

@@ -66,6 +66,18 @@ class Spec(msgspec.Struct):
         "full decode graphs; prefill graphs must be disabled. Use fine_serial "
         "as the same-schedule control for fine_overlap.",
     ] = "off"
+    speculative_microbatch_graph_chunks: A[
+        int,
+        "Number of ordered target graph partitions in experimental fine modes.",
+    ] = 8
+    speculative_microbatch_release_chunk: A[
+        int,
+        "Enqueue independent draft after this target chunk; -1 releases immediately.",
+    ] = 1
+    speculative_microbatch_split_percent: A[
+        int,
+        "Percentage of requests in the first experimental microbatch (1-99).",
+    ] = 50
     speculative_eagle_topk: A[
         Optional[int],
         "The number of tokens sampled from the draft model in eagle2 each step.",
