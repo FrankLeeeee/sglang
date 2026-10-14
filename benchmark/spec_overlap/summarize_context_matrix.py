@@ -186,16 +186,6 @@ def summarize(root):
                 row[f"rank{rank}_profiled_gpu_iterations"] = len(gpu_iterations)
                 if len(gpu_iterations) != len(iteration_parents):
                     errors.append(f"rank{rank}_missing_gpu_iteration")
-                gpu_steps = [
-                    e["dur"] / 1000
-                    for e in events
-                    if e.get("cat") == "gpu_user_annotation"
-                    and re.match(r"step\[(?:DECODE|VERIFY) bs=", e.get("name", ""))
-                ]
-                if gpu_steps:
-                    row[f"rank{rank}_profiled_gpu_model_call_median_ms"] = (
-                        statistics.median(gpu_steps)
-                    )
                 row[f"rank{rank}_graph_launches"] = sum(
                     "cudaGraphLaunch" in e.get("name", "") for e in events
                 )
