@@ -1,0 +1,91 @@
+{
+  "date_local": "2026-10-15",
+  "timezone": "Asia/Shanghai",
+  "initial_commit": "36059bfb1d81bfee769799d8251928d25bf7118a",
+  "selected_runtime_commit": "be4f6eff1b",
+  "hardware": {
+    "gpus": 2,
+    "model": "NVIDIA H200",
+    "memory_mib_per_gpu": 143771,
+    "interconnect": "NV18",
+    "driver": "595.71.05"
+  },
+  "packages": {
+    "torch": "2.14.1",
+    "cuda-bindings": "13.4.4",
+    "flashinfer-python": "0.7.0.post1",
+    "triton": "3.8.0",
+    "sglang-kernel": "0.4.9",
+    "transformers": "5.17.0"
+  },
+  "model_revisions": {
+    "openai/gpt-oss-20b": {
+      "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+      "config_sha256": "3a2a26ded679375b7928ddeca59764df7cea83220c1961035f6d6e232659e9ce"
+    },
+    "zhuyksir/EAGLE3-gpt-oss-20b-bf16": {
+      "revision": "0f48def8c7b633b5459745c4b11581bcdd8a4b51",
+      "config_sha256": "83827b9db02fce107e57ad658142b3006474fa24f6ba1bfe455b5341f0ad0a9c"
+    }
+  },
+  "resolved_target_moe": {
+    "method": "Mxfp4MoEMethod",
+    "expert_weight_dtype": "bfloat16",
+    "local_weight_shape": [
+      16,
+      5760,
+      2880
+    ],
+    "runner": "TRITON",
+    "moe_a2a_backend": "none"
+  },
+  "tp": 2,
+  "ep": 2,
+  "batches": [
+    1,
+    4,
+    8,
+    16,
+    32,
+    64,
+    128,
+    256
+  ],
+  "context_budgets": [
+    4096,
+    16384,
+    32768,
+    65536,
+    131072
+  ],
+  "output_tokens": 128,
+  "boundary_reserve_tokens": 6,
+  "timed_repetitions": 3,
+  "seed": 42,
+  "mem_fraction_static": 0.8,
+  "swa_full_tokens_ratio": 0.1,
+  "draft_context_extension_authorized": true,
+  "draft_rope_scaling_changed": false,
+  "selection": {
+    "schedule": "phase",
+    "compute_chunks": 4,
+    "internal_dependencies": "full_completion",
+    "split_percent": 50
+  },
+  "native_tbo_on": {
+    "global_startup_attempts": 2,
+    "status": "unsupported_configuration",
+    "cells_per_case": 40
+  },
+  "main_sweep": {
+    "measured_cells_per_mode": 34,
+    "configured_capacity_skips_per_mode": 6,
+    "modes": [
+      "no-spec",
+      "spec",
+      "launch",
+      "phase"
+    ]
+  },
+  "measurement": "One concurrency wave; cold request plus warmup then three cached-prefix unprofiled repeats. Separate eight-step profiles on both ranks; seven decode iterations per trace. Natural completion tails included."
+}

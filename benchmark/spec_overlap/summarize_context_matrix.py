@@ -389,7 +389,16 @@ def plot_phase_ratio(rows, output):
         aspect="auto",
     )
     for (i, j), label in labels.items():
-        ax.text(j, i, label, ha="center", va="center", fontsize=9)
+        dark = np.isfinite(values[i, j]) and abs(values[i, j] - 1) > extent * 0.65
+        ax.text(
+            j,
+            i,
+            label,
+            ha="center",
+            va="center",
+            fontsize=9,
+            color="white" if dark else "black",
+        )
     ax.set(
         xticks=range(len(batches)),
         xticklabels=batches,
