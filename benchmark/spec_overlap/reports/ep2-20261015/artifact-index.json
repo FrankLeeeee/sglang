@@ -1,0 +1,48 @@
+{
+  "document_results": "https://my.feishu.cn/docx/VJeHdhDUboeaBSxC9MSc1ui7noe#doxcn4YjnQXt7LqA3KGhXAUCUob",
+  "validation_bundle_source_commit": "6ba8ed43122b0f5650799c54c619e1c28b273d76",
+  "archives": [
+    {
+      "name": "ep2-granularity-controls.tar.gz",
+      "bytes": 58469495,
+      "sha256": "4910de1e331e1d92b11c07e189a4f2b01e1294281b16ae18ec81d6fa4bf7c5b3",
+      "manifest_file_count": 263,
+      "document_link": "https://my.feishu.cn/docx/VJeHdhDUboeaBSxC9MSc1ui7noe#doxcn8kfSXyZT60dKHbElLvfm8b"
+    },
+    {
+      "name": "ep2-previous-overlap.tar.gz",
+      "bytes": 71521382,
+      "sha256": "5bd0c737e04a8fa8ddd1dd4847b155cd1329a880d69ba3ce244ee69a7a3fa7a7",
+      "manifest_file_count": 218,
+      "document_link": "https://my.feishu.cn/docx/VJeHdhDUboeaBSxC9MSc1ui7noe#doxcn3fZeQJ7C8dxgVUAORpzPqe"
+    },
+    {
+      "name": "ep2-standard-eagle3.tar.gz",
+      "bytes": 50668864,
+      "sha256": "e548a85f4f6110f897eaca26f4bc1e4c1c7d89020f12635e334a08e44344b3cd",
+      "manifest_file_count": 145,
+      "document_link": "https://my.feishu.cn/docx/VJeHdhDUboeaBSxC9MSc1ui7noe#doxcnH1AZmJi8fE3R50z21YWQac"
+    },
+    {
+      "name": "ep2-target-only.tar.gz",
+      "bytes": 34908318,
+      "sha256": "333c928018c41dad41987c2c7de8162444ef6f429578b878d8fa75c8e4fb073c",
+      "manifest_file_count": 148,
+      "document_link": "https://my.feishu.cn/docx/VJeHdhDUboeaBSxC9MSc1ui7noe#doxcnzc4itOjK1uikQeXRhMg3rf"
+    },
+    {
+      "name": "ep2-selected-phase.tar.gz",
+      "bytes": 73539883,
+      "sha256": "563194b0f36a0f993572aea12278153a1d23d9576ab456d89a062c2a0b57ef0f",
+      "manifest_file_count": 220,
+      "document_link": "https://my.feishu.cn/docx/VJeHdhDUboeaBSxC9MSc1ui7noe#doxcnmzCOWh7f005LG7THMwvEAb"
+    },
+    {
+      "name": "ep2-final-validation.tar.gz",
+      "bytes": 68848830,
+      "sha256": "849b8b56f61e509c4dcc28cc4e8f1d317b5aa720a9b9734a6842180c07844395",
+      "manifest_file_count": 304,
+      "document_link": "https://my.feishu.cn/docx/VJeHdhDUboeaBSxC9MSc1ui7noe#doxcnSXwuKCjvkbzLef9F1YfE8c"
+    }
+  ]
+}

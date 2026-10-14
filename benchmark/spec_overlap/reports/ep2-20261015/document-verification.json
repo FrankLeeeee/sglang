@@ -1,0 +1,20 @@
+{
+  "document": "VJeHdhDUboeaBSxC9MSc1ui7noe",
+  "revision": 62,
+  "verified_table_files": [
+    "protocol.xml",
+    "controls.xml",
+    "throughput-4k.xml",
+    "throughput-16k.xml",
+    "throughput-32k.xml",
+    "throughput-64k.xml",
+    "throughput-128k.xml",
+    "overlap.xml",
+    "correctness.xml"
+  ],
+  "table_values_match": true,
+  "original_images_preserved": true,
+  "image_count": 10,
+  "verified_archives": 6,
+  "source_count": 7
+}
