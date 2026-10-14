@@ -1,5 +1,6 @@
 """CPU contract checks for the experimental forward-snapshot split and join."""
 
+import itertools
 import unittest
 from types import SimpleNamespace
 from unittest.mock import PropertyMock, patch
@@ -26,6 +27,33 @@ from sglang.test.test_utils import CustomTestCase
 
 
 class TestMicrobatchSnapshot(CustomTestCase):
+    def test_phase_placement_preserves_order_and_forbids_same_phase_overlap(self):
+        """Suffix reservation must not strand a later communication segment."""
+        from sglang.srt.speculative.graph_interleave import place_segments
+
+        for target_size in range(1, 7):
+            target = ["compute", "communication"] * target_size
+            target = target[:target_size]
+            for draft_size in range(1, 6):
+                for draft in itertools.product(
+                    ("compute", "communication"), repeat=draft_size
+                ):
+                    possible = any(
+                        all(target[slot] != kind for slot, kind in zip(slots, draft))
+                        for slots in itertools.combinations_with_replacement(
+                            range(target_size), draft_size
+                        )
+                    )
+                    if not possible:
+                        with self.assertRaises(ValueError):
+                            place_segments(target, draft)
+                        continue
+                    positions = place_segments(target, draft)
+                    self.assertEqual(positions, sorted(positions))
+                    self.assertEqual(len(positions), len(draft))
+                    for slot, kind in zip(positions, draft):
+                        self.assertNotEqual(target[slot], kind)
+
     def test_concurrent_graph_runners_do_not_alias_vocab_logits(self):
         from sglang.srt.model_executor.graph_shared_output import GraphSharedOutput
 

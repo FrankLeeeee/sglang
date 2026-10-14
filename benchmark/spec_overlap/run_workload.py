@@ -1,6 +1,7 @@
 """Reproducible fixed-length throughput probe and optional torch trace capture."""
 
 import argparse
+import hashlib
 import json
 import statistics
 import time
@@ -14,7 +15,7 @@ def post(url, route, payload):
         data=json.dumps(payload).encode(),
         headers={"Content-Type": "application/json"},
     )
-    with urllib.request.urlopen(request, timeout=600) as response:
+    with urllib.request.urlopen(request, timeout=3600) as response:
         body = response.read().decode()
         try:
             return json.loads(body)
@@ -30,8 +31,22 @@ def main():
     parser.add_argument("--output-len", type=int, default=256)
     parser.add_argument("--repeats", type=int, default=5)
     parser.add_argument("--profile", action="store_true")
+    parser.add_argument(
+        "--context-tokens",
+        type=int,
+        default=0,
+        help="Total sequence budget: prompt tokens plus output tokens",
+    )
     args = parser.parse_args()
+    workload_sha256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     args.output.parent.mkdir(parents=True, exist_ok=True)
+    with urllib.request.urlopen(args.url + "/get_server_info") as response:
+        initial_server_info = json.load(response)
+    # SGLang reserves two positions at the server's hard context boundary.
+    # Leave that headroom in the prompt, rather than silently shortening output.
+    context_reserve_tokens = (
+        2 if args.context_tokens == initial_server_info.get("context_length") else 0
+    )
     prompts = [
         f"Problem {i}: Explain how a computer executes a program. Discuss memory, "
         "instructions, and arithmetic with examples. Give a detailed explanation."
@@ -45,8 +60,46 @@ def main():
             "ignore_eos": True,
         },
     }
-    for _ in range(2):
-        post(args.url, "/generate", payload)
+    if args.context_tokens:
+        from transformers import AutoTokenizer
+
+        tokenizer = AutoTokenizer.from_pretrained("openai/gpt-oss-20b")
+        paragraph = tokenizer.encode(
+            "A computer executes instructions by fetching them from memory, decoding "
+            "the operation, and using registers and arithmetic units to calculate "
+            "results. Caches reduce memory latency. Programs combine these simple "
+            "steps into useful work. The following notes explain this process.\n",
+            add_special_tokens=False,
+        )
+        input_len = args.context_tokens - args.output_len - context_reserve_tokens
+        suffix = tokenizer.encode(
+            "\nSummarize these notes in detail:", add_special_tokens=False
+        )
+        inputs = []
+        for index in range(args.batch_size):
+            prefix = tokenizer.encode(
+                f"Document {index:06d}:\n", add_special_tokens=False
+            )
+            count = input_len - len(prefix) - len(suffix)
+            if count < 0:
+                raise ValueError("Context budget is too small")
+            inputs.append(
+                prefix
+                + (paragraph * ((count + len(paragraph) - 1) // len(paragraph)))[:count]
+                + suffix
+            )
+        payload.pop("text")
+        payload["input_ids"] = inputs
+        prompts = {
+            "recipe": "unique document prefix + repeated computer paragraph + summary suffix",
+            "input_tokens_per_request": input_len,
+            "sha256": hashlib.sha256(json.dumps(inputs).encode()).hexdigest(),
+        }
+        post(args.url, "/flush_cache", {})
+    cold_start = time.perf_counter()
+    cold_outputs = post(args.url, "/generate", payload)
+    cold_seconds = time.perf_counter() - cold_start
+    post(args.url, "/generate", payload)
     runs = []
     repeat_outputs = []
     for _ in range(args.repeats):
@@ -69,6 +122,11 @@ def main():
         server_info = json.load(response)
     result = {
         "batch_size": args.batch_size,
+        "context_tokens": args.context_tokens,
+        "context_reserve_tokens": context_reserve_tokens,
+        "workload_sha256": workload_sha256,
+        "cold_seconds": cold_seconds,
+        "cold_outputs": cold_outputs,
         "output_len": args.output_len,
         "prompts": prompts,
         "runs": runs,

@@ -1,6 +1,7 @@
 """Own server lifecycle for original, split-serial, and split-overlap trials."""
 
 import argparse
+import contextlib
 import gzip
 import hashlib
 import json
@@ -27,7 +28,7 @@ def main():
     parser.add_argument(
         "--modes",
         nargs="+",
-        choices=["off", "serial", "overlap", "fine_serial", "fine_overlap"],
+        choices=["no_spec", "off", "serial", "overlap", "fine_serial", "fine_overlap"],
         default=["off", "serial", "overlap"],
     )
     parser.add_argument("--batch-sizes", nargs="+", type=int, default=[16])
@@ -35,7 +36,10 @@ def main():
     parser.add_argument("--output-len", type=int, default=256)
     parser.add_argument("--port", type=int, default=31080)
     parser.add_argument("--deterministic", action="store_true")
+    parser.add_argument("--context-tokens", type=int, default=0)
     parser.add_argument("--sanity-eval", action="store_true")
+    parser.add_argument("--graph-node-map", action="store_true")
+    parser.add_argument("--allow-draft-context-extension", action="store_true")
     parser.add_argument(
         "--decode-cuda-graph", choices=["disabled", "full"], default="disabled"
     )
@@ -49,7 +53,8 @@ def main():
     args = parser.parse_args()
     steps, topk, draft_tokens = map(int, args.spec_config.split("-"))
     if args.decode_cuda_graph != "disabled" and any(
-        mode not in {"off", "fine_serial", "fine_overlap"} for mode in args.modes
+        mode not in {"no_spec", "off", "fine_serial", "fine_overlap"}
+        for mode in args.modes
     ):
         parser.error("Full decode graphs support off/fine_serial/fine_overlap only")
     if args.deterministic and "off" not in args.modes:
@@ -69,6 +74,7 @@ def main():
             source_files = [
                 "python/sglang/srt/speculative/microbatch_overlap.py",
                 "python/sglang/srt/speculative/graph_chunks.py",
+                "python/sglang/srt/speculative/graph_interleave.py",
                 "python/sglang/srt/speculative/eagle_worker_v2.py",
                 "python/sglang/srt/speculative/eagle_worker_common.py",
                 "python/sglang/srt/model_executor/input_buffers.py",
@@ -114,7 +120,7 @@ def main():
                 "--attention-backend",
                 "fa3",
                 "--context-length",
-                "2048",
+                str(max(2048, args.context_tokens)),
                 "--port",
                 str(args.port),
                 "--mem-fraction-static",
@@ -130,30 +136,57 @@ def main():
                 "--random-seed",
                 "42",
             ]
+            if args.graph_node_map:
+                command[1:3] = [
+                    str(Path(__file__).with_name("launch_profiled_server.py"))
+                ]
+            if mode == "no_spec":
+                start = command.index("--speculative-draft-model-path")
+                end = command.index("--tp-size")
+                del command[start:end]
             command.extend(args.extra_server_args)
             if args.decode_cuda_graph == "full":
                 command.extend(
-                    ["--cuda-graph-bs-decode", "1", "2", "4", "8", "16", "32"]
+                    ["--cuda-graph-bs-decode", "1", "2", "4", "8", "16", "32", "64"]
                 )
             if args.deterministic:
                 command.append("--enable-deterministic-inference")
             (args.results / f"{name}-command.json").write_text(
                 json.dumps(command, indent=2)
             )
-            env = dict(os.environ, SGLANG_DEEPGEMM_PDL="0")
-            if args.deterministic:
-                env["SGLANG_ENABLE_JIT_DEEPGEMM"] = "0"
+            (args.results / f"{name}-experiment-options.json").write_text(
+                json.dumps(
+                    {
+                        "allow_draft_context_extension": args.allow_draft_context_extension,
+                        "deterministic": args.deterministic,
+                    },
+                    indent=2,
+                )
+            )
             print(f"Launching {name}; log={log}", flush=True)
             process = None
             try:
                 with log.open("w") as stream:
-                    process = subprocess.Popen(
-                        command,
-                        stdout=stream,
-                        stderr=subprocess.STDOUT,
-                        env=env,
-                        start_new_session=True,
-                    )
+                    from sglang.srt.environ import envs
+
+                    with contextlib.ExitStack() as stack:
+                        stack.enter_context(envs.SGLANG_DEEPGEMM_PDL.override(False))
+                        if args.deterministic:
+                            stack.enter_context(
+                                envs.SGLANG_ENABLE_JIT_DEEPGEMM.override(False)
+                            )
+                        if args.allow_draft_context_extension:
+                            stack.enter_context(
+                                envs.SGLANG_ALLOW_OVERWRITE_LONGER_CONTEXT_LEN.override(
+                                    True
+                                )
+                            )
+                        process = subprocess.Popen(
+                            command,
+                            stdout=stream,
+                            stderr=subprocess.STDOUT,
+                            start_new_session=True,
+                        )
                     url = f"http://127.0.0.1:{args.port}"
                     deadline = time.monotonic() + 900
                     while time.monotonic() < deadline:
@@ -227,6 +260,8 @@ def main():
                             "--repeats",
                             str(args.repeats),
                             "--profile",
+                            "--context-tokens",
+                            str(args.context_tokens),
                         ]
                         subprocess.run(probe, check=True)
                         if args.deterministic:
@@ -234,6 +269,11 @@ def main():
                             baseline_path = (
                                 args.results / f"{model}-off-b{batch_size}.json"
                             )
+                            no_spec_baseline = (
+                                args.results / f"{model}-no_spec-b{batch_size}.json"
+                            )
+                            if mode in {"no_spec", "off"} and no_spec_baseline.exists():
+                                baseline_path = no_spec_baseline
                             if baseline_path.exists():
                                 baseline = json.loads(baseline_path.read_text())
                                 expected = [
@@ -253,7 +293,7 @@ def main():
                         if all(
                             list(
                                 (args.results / f"{name}-b{bs}-profile").glob(
-                                    f"*TP-{rank}.trace.json.gz"
+                                    f"*TP-{rank}*.trace.json.gz"
                                 )
                             )
                             for bs in args.batch_sizes
@@ -267,7 +307,7 @@ def main():
                         for rank in range(2)
                         if not list(
                             (args.results / f"{name}-b{bs}-profile").glob(
-                                f"*TP-{rank}.trace.json.gz"
+                                f"*TP-{rank}*.trace.json.gz"
                             )
                         )
                     ]
@@ -275,13 +315,13 @@ def main():
                         raise RuntimeError(
                             f"Missing per-rank profiler artifacts: {missing}"
                         )
-                    if mode != "off":
+                    if mode not in {"no_spec", "off"}:
                         for bs in args.batch_sizes:
                             if bs == 1:
                                 continue  # A single request follows the original pipeline.
                             traces = sorted(
                                 (args.results / f"{name}-b{bs}-profile").glob(
-                                    "*TP-0.trace.json.gz"
+                                    "*TP-0*.trace.json.gz"
                                 )
                             )
                             if not traces:
@@ -297,7 +337,8 @@ def main():
                                     f"{name}, batch {bs} fell back: no microbatch stage in trace"
                                 )
                             if args.decode_cuda_graph == "full" and not any(
-                                e.get("name") == "microbatch.target_chunk"
+                                e.get("name")
+                                in {"microbatch.target_chunk", "microbatch.phase_pair"}
                                 for e in events
                             ):
                                 raise RuntimeError(

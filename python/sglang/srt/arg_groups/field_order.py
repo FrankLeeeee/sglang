@@ -267,6 +267,8 @@ POSITIONAL_FIELD_ORDER = (
     "speculative_draft_load_format",
     "speculative_num_steps",
     "speculative_microbatch_mode",
+    "speculative_microbatch_schedule",
+    "speculative_microbatch_compute_chunks",
     "speculative_microbatch_graph_chunks",
     "speculative_microbatch_release_chunk",
     "speculative_microbatch_split_percent",

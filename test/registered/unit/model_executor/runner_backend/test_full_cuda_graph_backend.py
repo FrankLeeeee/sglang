@@ -57,6 +57,7 @@ def _make_backend(runner):
     backend = FullCudaGraphBackend.__new__(FullCudaGraphBackend)
     backend._graphs = {}
     backend._speculative_chunks = {}
+    backend._speculative_phases = {}
     backend._outputs = {}
     backend._pool = None
     backend._capture_stream = None
@@ -97,6 +98,21 @@ class _FullBackendCase(CustomTestCase):
 
 
 class TestCaptureOneNoProfiling(_FullBackendCase):
+    def test_draft_replay_without_forward_context_uses_original_graph(self):
+        # EAGLE's ordinary draft path replays directly, outside ModelRunner's
+        # context scope, even when phase graphs were captured for microbatching.
+        from sglang.srt.model_executor.forward_context import forward_context
+
+        backend = _make_backend(_make_runner(enable_profile=False, profiler=None))
+        shape = ShapeKey(size=4)
+        graph = mock.Mock()
+        backend._graphs[shape] = graph
+        backend._speculative_phases[shape] = object()
+        backend._outputs[shape] = sentinel = object()
+        with forward_context(None):
+            self.assertIs(backend.replay(shape, None), sentinel)
+        graph.replay.assert_called_once_with()
+
     def test_runs_two_warmups_and_capture_without_stepping(self):
         runner = _make_runner(enable_profile=False, profiler=None)
         backend = _make_backend(runner)

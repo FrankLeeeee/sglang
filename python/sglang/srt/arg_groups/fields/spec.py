@@ -66,6 +66,16 @@ class Spec(msgspec.Struct):
         "full decode graphs; prefill graphs must be disabled. Use fine_serial "
         "as the same-schedule control for fine_overlap.",
     ] = "off"
+    speculative_microbatch_schedule: A[
+        Literal["launch", "phase", "phase_serial"],
+        "Experimental full-graph schedule: launch the original draft graph, or "
+        "spread opposite compute/communication phases with GPU fences. "
+        "phase_serial is the serialized control for phase.",
+    ] = "launch"
+    speculative_microbatch_compute_chunks: A[
+        int,
+        "Number of pieces per draft compute phase for phase scheduling.",
+    ] = 4
     speculative_microbatch_graph_chunks: A[
         int,
         "Number of ordered target graph partitions in experimental fine modes.",

@@ -46,6 +46,15 @@ def validate_microbatch_config(target_runner):
     if get_spec().speculative_microbatch_mode == "off":
         return
     spec = get_spec()
+    if spec.speculative_microbatch_schedule != "launch":
+        if (
+            spec.speculative_microbatch_mode != "fine_overlap"
+            or not check_cuda_graph_backend(Phase.DECODE, Backend.FULL)
+            or spec.speculative_microbatch_compute_chunks < 1
+        ):
+            raise ValueError(
+                "Phase scheduling requires fine_overlap, full decode graphs, and positive compute chunks"
+            )
     if not 1 <= spec.speculative_microbatch_split_percent <= 99:
         raise ValueError("Microbatch split percent must be in [1, 99]")
     if spec.speculative_microbatch_graph_chunks < 1:
@@ -84,7 +93,7 @@ def validate_microbatch_config(target_runner):
         and get_parallel().pp_size == 1
         and get_parallel().dp_size == 1
         and get_parallel().attn_cp_size == 1
-        and get_parallel().moe_ep_size == 1
+        and get_exec().moe.moe_a2a_backend == "none"
         and not get_parallel().attn_dp_enabled
         and not get_spec().speculative_adaptive
         and not get_spec().speculative_use_rejection_sampling
@@ -93,7 +102,7 @@ def validate_microbatch_config(target_runner):
     ):
         raise ValueError(
             "Experimental speculative microbatch execution requires EAGLE3, "
-            "greedy sampling, PP=DP=CP=EP=1, no attention DP, disabled prefill graphs, eager or full decode graphs for fine modes, disabled custom all-reduce, "
+            "greedy sampling, PP=DP=CP=1, NCCL EP (no all-to-all backend), no attention DP, disabled prefill graphs, eager or full decode graphs for fine modes, disabled custom all-reduce, "
             "disabled FlashInfer all-reduce fusion, disabled overlap scheduling, "
             "and no LoRA/adaptive/rejection sampling."
         )
@@ -108,7 +117,7 @@ def can_microbatch_overlap(worker, batch):
         and get_parallel().pp_size == 1
         and get_parallel().dp_size == 1
         and get_parallel().attn_cp_size == 1
-        and get_parallel().moe_ep_size == 1
+        and get_exec().moe.moe_a2a_backend == "none"
         and not get_parallel().attn_dp_enabled
         and worker.speculative_num_steps > 0
         and not get_spec().speculative_adaptive
@@ -202,13 +211,16 @@ def _split(batch, split_percent=50):
     return children
 
 
-def _draft(worker, batch):
+def _draft(worker, batch, graph_phase_continuation=None):
     draft_worker = worker.draft_worker
     with (
         get_forward().scoped(**get_forward().snapshot()),
         patch_tensor_parallel_group(worker.microbatch_draft_group, owns_attention=True),
         forward_context(
-            ForwardContext(attn_backend=draft_worker.draft_runner.attn_backend)
+            ForwardContext(
+                attn_backend=draft_worker.draft_runner.attn_backend,
+                graph_phase_continuation=graph_phase_continuation,
+            )
         ),
         speculative_moe_backend_context(),
         speculative_moe_a2a_backend_context(),
@@ -304,13 +316,20 @@ def _extend(worker, batch, result):
                     setattr(result.next_draft_input, name, value.clone())
 
 
-def _verify(worker, batch, continuation=None, graph_continuation=None):
+def _verify(
+    worker,
+    batch,
+    continuation=None,
+    graph_continuation=None,
+    graph_phase_continuation=None,
+):
     with (
         forward_context(
             ForwardContext(
                 attn_backend=worker._target_worker.model_runner.attn_backend,
                 layer_continuation=continuation,
                 graph_continuation=graph_continuation,
+                graph_phase_continuation=graph_phase_continuation,
             )
         ),
         spec_stage_span("microbatch.verify"),
@@ -412,7 +431,44 @@ def run_microbatch_step(worker, batch, on_publish=None):
 
         if mode in {"fine_serial", "fine_overlap"}:
             layers = worker._target_worker.model_runner.model.model.layers
-            if check_cuda_graph_backend(Phase.DECODE, Backend.FULL):
+            if get_spec().speculative_microbatch_schedule != "launch":
+                second_draft_done = None
+                invoked = False
+
+                def compose_target(target_phases):
+                    nonlocal second_draft_done, invoked
+                    # Target metadata must be ready before the joint graph. The
+                    # draft prep is independent, and has private graph storage.
+                    draft_stream.wait_stream(target_stream)
+
+                    def compose_draft(draft_phases):
+                        nonlocal invoked
+                        if invoked:
+                            raise RuntimeError(
+                                "Expected one complete draft graph replay"
+                            )
+                        pair = target_phases.pair(
+                            draft_phases,
+                            serial=get_spec().speculative_microbatch_schedule
+                            == "phase_serial",
+                        )
+                        with spec_stage_span("microbatch.phase_pair"):
+                            pair.replay()
+                        invoked = True
+
+                    with torch.cuda.stream(draft_stream):
+                        _draft(worker, second, graph_phase_continuation=compose_draft)
+                        second_draft_done = draft_stream.record_event()
+                    target_stream.wait_event(second_draft_done)
+
+                first_result = _verify(
+                    worker, first, graph_phase_continuation=compose_target
+                )
+                if not invoked:
+                    raise RuntimeError(
+                        "Phase schedule requires both captured model graphs"
+                    )
+            elif check_cuda_graph_backend(Phase.DECODE, Backend.FULL):
                 done = False
                 second_draft_done = None
 

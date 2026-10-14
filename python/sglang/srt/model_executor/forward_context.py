@@ -42,6 +42,7 @@ class ForwardContext:
     # Draft scopes install their own context and therefore never inherit it.
     layer_continuation: Optional[Callable[[int], None]] = None
     graph_continuation: Optional[Callable[[int], None]] = None
+    graph_phase_continuation: Optional[Callable[[object], None]] = None
 
 
 _current: Optional[ForwardContext] = None

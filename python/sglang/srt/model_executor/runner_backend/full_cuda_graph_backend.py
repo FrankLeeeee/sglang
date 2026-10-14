@@ -90,6 +90,7 @@ class FullCudaGraphBackend(BaseCudaGraphBackend):
         self._graphs: Dict[Any, torch.cuda.CUDAGraph] = {}
         self._outputs: Dict[Any, Any] = {}
         self._speculative_chunks = {}
+        self._speculative_phases = {}
         self._pool = None
         self._cuda_graph_runner = cuda_graph_runner
         self._device_module = cuda_graph_runner.device_module
@@ -163,9 +164,13 @@ class FullCudaGraphBackend(BaseCudaGraphBackend):
             get_spec().speculative_microbatch_mode in {"fine_serial", "fine_overlap"}
             and not runner.model_runner.is_draft_worker
         )
+        phase_partition = (
+            get_spec().speculative_microbatch_mode == "fine_overlap"
+            and get_spec().speculative_microbatch_schedule != "launch"
+        )
         graph = (
             torch.cuda.CUDAGraph(keep_graph=True)
-            if partition
+            if partition or phase_partition
             else torch.cuda.CUDAGraph()
         )
 
@@ -200,7 +205,18 @@ class FullCudaGraphBackend(BaseCudaGraphBackend):
         if profiler is not None:
             profiler.step()
 
-        if partition:
+        if phase_partition:
+            from sglang.srt.speculative.graph_interleave import GraphPhases
+
+            self._speculative_phases[shape_key] = GraphPhases(
+                graph,
+                compute_chunks=(
+                    get_spec().speculative_microbatch_compute_chunks
+                    if runner.model_runner.is_draft_worker
+                    else 1
+                ),
+            )
+        elif partition:
             from sglang.srt.speculative.graph_chunks import SpeculativeGraphChunks
 
             self._speculative_chunks[shape_key] = SpeculativeGraphChunks(
@@ -227,15 +243,25 @@ class FullCudaGraphBackend(BaseCudaGraphBackend):
         static_forward_batch: ForwardBatch,
         **kwargs,
     ) -> Any:
-        from sglang.srt.model_executor.forward_context import get_forward_context
+        from sglang.srt.model_executor.forward_context import (
+            get_forward_context,
+            has_forward_context,
+        )
 
         continuation = (
             get_forward_context().graph_continuation
             if self._speculative_chunks
             else None
         )
+        phase_continuation = (
+            get_forward_context().graph_phase_continuation
+            if self._speculative_phases and has_forward_context()
+            else None
+        )
         with graph_pool_replay_scope():
-            if continuation is not None:
+            if phase_continuation is not None:
+                phase_continuation(self._speculative_phases[shape_key])
+            elif continuation is not None:
                 chunks = self._speculative_chunks[shape_key]
                 for index in range(len(chunks.executables)):
                     from sglang.srt.speculative.spec_utils import spec_stage_span
@@ -248,6 +274,9 @@ class FullCudaGraphBackend(BaseCudaGraphBackend):
         return self._outputs[shape_key]
 
     def cleanup(self) -> None:
+        for phases in self._speculative_phases.values():
+            phases.close()
+        self._speculative_phases.clear()
         for chunks in self._speculative_chunks.values():
             chunks.close()
         self._speculative_chunks.clear()
