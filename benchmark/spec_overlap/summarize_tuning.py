@@ -6,10 +6,13 @@ import json
 import statistics
 from pathlib import Path
 
+from run_matrix import compare_tokens
+
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--results", type=Path, required=True)
+    parser.add_argument("--reference", type=Path)
     args = parser.parse_args()
     rows = []
     for directory in sorted(args.results.iterdir()):
@@ -41,7 +44,19 @@ def main():
                     for rank in ranks
                     for value in rank["maximum_forbidden_ms"].values()
                 ),
+                repeated_outputs_stable=all(
+                    count == status["batch"]
+                    for count in result["matching_requests_between_repeats"]
+                ),
+                reference_token_status="not_checked",
             )
+            if args.reference:
+                comparison = compare_tokens(
+                    result,
+                    json.loads((args.reference / status["output"]).read_text()),
+                )
+                row["reference_token_status"] = comparison["status"]
+                row["mismatched_sequences"] = len(comparison["mismatches"])
             for key in (
                 "span_ms",
                 "draft_compute_coverage",

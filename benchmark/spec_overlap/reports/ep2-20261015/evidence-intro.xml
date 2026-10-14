@@ -1,0 +1,2 @@
+<h2>Raw evidence archives</h2>
+<p>These archives retain both-rank compressed torch traces, workload token outputs and timing repetitions, server commands/logs, source hashes, and per-file SHA-256 manifests. The granularity archive also retains the rejected PDL variants. Trace JSON can be decompressed and loaded in Perfetto or Chrome tracing.</p>
