@@ -30,8 +30,8 @@ python benchmark/spec_overlap/run_context_matrix.py \
 ```
 
 The default grid is batches 1/4/8/16/32/64/128/256 and total prompt-plus-output
-budgets 4k/16k/32k/64k/128k. Two prompt positions are reserved at the server context
-boundary. The draft extension is an explicit experimental opt-in: this checkpoint
+budgets 4k/16k/32k/64k/128k. Six prompt positions are reserved at the server context
+boundary (four draft-token slots plus two scheduler positions). The draft extension is an explicit experimental opt-in: this checkpoint
 declares only 4096 positions. Capacity-limited batches are recorded instead of
 silently queuing smaller batches. `--mode launch` reproduces the previous selected
 whole-graph release schedule; `--mode phase_serial` supplies the composition

@@ -5,6 +5,7 @@ import hashlib
 import json
 import statistics
 import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -15,12 +16,17 @@ def post(url, route, payload):
         data=json.dumps(payload).encode(),
         headers={"Content-Type": "application/json"},
     )
-    with urllib.request.urlopen(request, timeout=3600) as response:
-        body = response.read().decode()
-        try:
-            return json.loads(body)
-        except json.JSONDecodeError:
-            return body
+    try:
+        with urllib.request.urlopen(request, timeout=3600) as response:
+            body = response.read().decode()
+            try:
+                return json.loads(body)
+            except json.JSONDecodeError:
+                return body
+    except urllib.error.HTTPError as error:
+        raise RuntimeError(
+            f"{route}: HTTP {error.code}: {error.read().decode()}"
+        ) from error
 
 
 def main():
@@ -42,10 +48,11 @@ def main():
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with urllib.request.urlopen(args.url + "/get_server_info") as response:
         initial_server_info = json.load(response)
-    # SGLang reserves two positions at the server's hard context boundary.
-    # Leave that headroom in the prompt, rather than silently shortening output.
+    # Reserve the four-token speculative tree plus two scheduler positions at
+    # the hard context boundary. Use the same prompt in every compared mode,
+    # including the non-speculative baseline.
     context_reserve_tokens = (
-        2 if args.context_tokens == initial_server_info.get("context_length") else 0
+        6 if args.context_tokens == initial_server_info.get("context_length") else 0
     )
     prompts = [
         f"Problem {i}: Explain how a computer executes a program. Discuss memory, "
