@@ -36,9 +36,14 @@ def summarize(root):
             metadata = [o["meta_info"] for o in outputs]
             batch, context = status["batch"], status["context"]
             expected = result["output_len"]
+            cold_outputs = result["cold_outputs"]
+            if isinstance(cold_outputs, dict):
+                cold_outputs = [cold_outputs]
+            cold_tokens = [o["meta_info"]["completion_tokens"] for o in cold_outputs]
             row.update(
                 tokens_per_second=result["median_tokens_per_second"],
                 cold_seconds=result["cold_seconds"],
+                cold_output_tokens_per_second=sum(cold_tokens) / result["cold_seconds"],
                 warm_seconds=statistics.median(r["seconds"] for r in result["runs"]),
                 throughput_min=min(r["tokens_per_second"] for r in result["runs"]),
                 throughput_max=max(r["tokens_per_second"] for r in result["runs"]),
@@ -47,8 +52,14 @@ def summarize(root):
                 cached_tokens_min=min(m["cached_tokens"] for m in metadata),
                 prompt_tokens_min=min(m["prompt_tokens"] for m in metadata),
                 completion_tokens_min=min(m["completion_tokens"] for m in metadata),
+                repeated_outputs_stable=all(
+                    count == batch
+                    for count in result["matching_requests_between_repeats"]
+                ),
             )
             errors = []
+            if len(cold_tokens) != batch or any(n != expected for n in cold_tokens):
+                errors.append("incomplete_cold_outputs")
             verify_count = sum(m.get("spec_verify_ct", 0) for m in metadata)
             proposed = sum(m.get("spec_num_proposed_drafts", 0) for m in metadata)
             if verify_count:
@@ -64,6 +75,14 @@ def summarize(root):
                 m["completion_tokens"] != expected for m in metadata
             ):
                 errors.append("incomplete_outputs")
+            if any(run["tokens"] != batch * expected for run in result["runs"]):
+                errors.append("incomplete_timed_repeat")
+            if any(
+                len(sequences) != batch
+                or any(len(ids) != expected for ids in sequences)
+                for sequences in result["repeat_outputs"]
+            ):
+                errors.append("incomplete_repeated_token_ids")
             if any(
                 m["prompt_tokens"]
                 != context - expected - result.get("context_reserve_tokens", 0)
@@ -188,6 +207,7 @@ def main():
         writer.writeheader()
         writer.writerows(rows)
     plot(rows, args.output / "throughput.png")
+    plot_cold(rows, args.output / "cold-latency-b16.png")
     print(
         json.dumps(
             {
@@ -207,6 +227,46 @@ def main():
             indent=2,
         )
     )
+
+
+def plot_cold(rows, output):
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    for mode in MODES:
+        data = sorted(
+            (
+                row
+                for row in rows
+                if row["mode"] == mode
+                and row["batch"] == 16
+                and row.get("validation") == "passed"
+            ),
+            key=lambda row: row["context"],
+        )
+        if data:
+            ax.plot(
+                [row["context"] // 1024 for row in data],
+                [row["cold_seconds"] for row in data],
+                marker="o",
+                label=LABELS[mode],
+            )
+    ax.set(
+        xscale="log",
+        yscale="log",
+        xlabel="Total context budget (k tokens)",
+        ylabel="Cold request latency (seconds)",
+        title="Batch 16: cold prefix cache, prefill + 128 output tokens/request",
+    )
+    ax.set_xticks([4, 16, 32, 64, 128], ["4", "16", "32", "64", "128"])
+    ax.grid(alpha=0.2)
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(output, dpi=180)
+    plt.close(fig)
 
 
 if __name__ == "__main__":

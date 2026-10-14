@@ -49,6 +49,31 @@ def install():
                 if self._cuda_graph_runner.model_runner.is_draft_worker
                 else "target"
             )
+            model = self._cuda_graph_runner.model_runner.model
+            if not captured[role] and type(model).__name__ == "GptOssForCausalLM":
+                experts = model.model.layers[0].mlp.experts
+                method = experts.quant_method
+                weight = getattr(experts, "w13_weight", None)
+                print(
+                    "PHASE_MODEL_BACKEND "
+                    + json.dumps(
+                        {
+                            "pid": os.getpid(),
+                            "role": role,
+                            "quant_method": type(method).__name__,
+                            "expert_weight_dtype": str(getattr(weight, "dtype", None)),
+                            "expert_weight_shape": list(getattr(weight, "shape", ())),
+                            "moe_runner": str(
+                                getattr(
+                                    getattr(method, "runner", None),
+                                    "runner_backend",
+                                    getattr(method, "_fi_kernel", None),
+                                )
+                            ),
+                        }
+                    ),
+                    flush=True,
+                )
             phases = self._speculative_phases[shape_key]
             captured[role].append(phases)
             driver = phases.driver

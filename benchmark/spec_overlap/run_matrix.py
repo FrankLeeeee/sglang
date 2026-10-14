@@ -22,6 +22,37 @@ PAIRS = {
 }
 
 
+def compare_tokens(measured, baseline):
+    for key in ("prompts", "context_tokens", "output_len", "batch_size"):
+        if measured[key] != baseline[key]:
+            raise ValueError(f"Token comparison differs in {key}")
+    expected = [output["output_ids"] for output in baseline["outputs"]]
+    if len(expected) != baseline["batch_size"] or not measured["repeat_outputs"]:
+        raise ValueError("Token comparison has incomplete requests or repeats")
+    mismatches = []
+    for repeat, sequences in enumerate(measured["repeat_outputs"]):
+        if len(sequences) != len(expected):
+            raise ValueError("Token comparison has different request counts")
+        for request, (actual, reference) in enumerate(zip(sequences, expected)):
+            if actual != reference:
+                first = next(
+                    (
+                        index
+                        for index, (a, b) in enumerate(zip(actual, reference))
+                        if a != b
+                    ),
+                    min(len(actual), len(reference)),
+                )
+                mismatches.append(
+                    dict(repeat=repeat, request=request, first_difference=first)
+                )
+    return {
+        "status": "mismatch" if mismatches else "passed",
+        "compared_sequences": len(expected) * len(measured["repeat_outputs"]),
+        "mismatches": mismatches,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--models", nargs="+", choices=PAIRS, default=list(PAIRS))
@@ -36,6 +67,11 @@ def main():
     parser.add_argument("--output-len", type=int, default=256)
     parser.add_argument("--port", type=int, default=31080)
     parser.add_argument("--deterministic", action="store_true")
+    parser.add_argument(
+        "--continue-on-token-mismatch",
+        action="store_true",
+        help="Collect all correctness cases, then exit nonzero if any token check failed",
+    )
     parser.add_argument("--context-tokens", type=int, default=0)
     parser.add_argument("--sanity-eval", action="store_true")
     parser.add_argument("--graph-node-map", action="store_true")
@@ -51,6 +87,8 @@ def main():
         "--spec-config", default="3-1-4", help="steps-topk-draft_tokens"
     )
     args = parser.parse_args()
+    if args.continue_on_token_mismatch and not args.deterministic:
+        parser.error("--continue-on-token-mismatch requires --deterministic")
     steps, topk, draft_tokens = map(int, args.spec_config.split("-"))
     if args.decode_cuda_graph != "disabled" and any(
         mode not in {"no_spec", "off", "fine_serial", "fine_overlap"}
@@ -66,6 +104,7 @@ def main():
                         f"Exact token checks require {baseline}; include --modes off first"
                     )
     args.results.mkdir(parents=True, exist_ok=True)
+    token_failures = []
     for model in args.models:
         target, draft = PAIRS[model]
         for mode in args.modes:
@@ -276,17 +315,23 @@ def main():
                                 baseline_path = no_spec_baseline
                             if baseline_path.exists():
                                 baseline = json.loads(baseline_path.read_text())
-                                expected = [
-                                    o["output_ids"] for o in baseline["outputs"]
-                                ]
-                                if any(
-                                    ids != expected
-                                    for ids in measured["repeat_outputs"]
-                                ):
-                                    raise RuntimeError(
-                                        f"{name}, batch {batch_size} failed exact token checks; "
-                                        "do not interpret its speedup"
+                                comparison = dict(
+                                    reference=str(baseline_path),
+                                    measured=str(output),
+                                    **compare_tokens(measured, baseline),
+                                )
+                                output.with_suffix(".correctness.json").write_text(
+                                    json.dumps(comparison, indent=2)
+                                )
+                                if comparison["status"] != "passed":
+                                    token_failures.append(comparison)
+                                    message = (
+                                        f"{name}, batch {batch_size} failed exact token "
+                                        "checks; do not interpret its speedup"
                                     )
+                                    if not args.continue_on_token_mismatch:
+                                        raise RuntimeError(message)
+                                    print(f"TOKEN_MISMATCH: {message}", flush=True)
                     # Let the profiler complete its export before stopping workers.
                     deadline = time.monotonic() + 120
                     while time.monotonic() < deadline:
@@ -360,6 +405,11 @@ def main():
                         process.wait()
                     except ProcessLookupError:
                         pass
+    if token_failures:
+        (args.results / "token-mismatches.json").write_text(
+            json.dumps(token_failures, indent=2)
+        )
+        raise SystemExit("Collected correctness cases; exact token checks failed")
 
 
 if __name__ == "__main__":
