@@ -13,6 +13,8 @@ import time
 import urllib.request
 from pathlib import Path
 
+from run_workload import warm_phase_mapping
+
 PAIRS = {
     "llama": (
         "meta-llama/Llama-3.1-8B-Instruct",
@@ -242,6 +244,10 @@ def main():
                         time.sleep(1)
                     else:
                         raise TimeoutError(f"{name} did not become ready")
+                    if args.graph_node_map and mode in {"fine_serial", "fine_overlap"}:
+                        warm_phase_mapping(
+                            url, args.results / f"{name}-phase-map-warmup.json"
+                        )
                     if args.sanity_eval:
                         evaluation = args.results / f"{name}-gsm8k"
                         with (args.results / f"{name}-gsm8k.log").open("w") as eval_log:

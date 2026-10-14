@@ -1,6 +1,5 @@
 """Two-rank NCCL graph composition equivalence (run with torchrun)."""
 
-import argparse
 import os
 
 import torch
@@ -10,9 +9,6 @@ from sglang.srt.speculative.graph_interleave import GraphPhases
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--preserve-internal-pdl", action="store_true")
-    args = parser.parse_args()
     rank = int(os.environ["LOCAL_RANK"])
     torch.cuda.set_device(rank)
     dist.init_process_group("gloo")
@@ -71,11 +67,7 @@ def main():
         draft_phases = GraphPhases(draft, compute_chunks=chunks)
         try:
             for serial in (False, True):
-                pair = target_phases.pair(
-                    draft_phases,
-                    serial=serial,
-                    preserve_internal_pdl=args.preserve_internal_pdl,
-                )
+                pair = target_phases.pair(draft_phases, serial=serial)
                 for node, role in pair.node_roles.items():
                     node = driver.CUgraphNode(node)
                     status, kind = driver.cuGraphNodeGetType(node)
@@ -102,8 +94,7 @@ def main():
                         draft_output, expected_draft, rtol=0, atol=0
                     )
                 print(
-                    f"PASS rank={rank} chunks={chunks} serial={serial} "
-                    f"preserved_pdl_edges={pair.preserved_programmatic_edges} slots={pair.positions}",
+                    f"PASS rank={rank} chunks={chunks} serial={serial} slots={pair.positions}",
                     flush=True,
                 )
         finally:

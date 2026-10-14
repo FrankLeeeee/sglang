@@ -451,7 +451,6 @@ def run_microbatch_step(worker, batch, on_publish=None):
                             draft_phases,
                             serial=get_spec().speculative_microbatch_schedule
                             == "phase_serial",
-                            preserve_internal_pdl=get_spec().speculative_microbatch_preserve_internal_pdl,
                         )
                         with spec_stage_span("microbatch.phase_pair"):
                             pair.replay()

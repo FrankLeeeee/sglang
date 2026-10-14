@@ -7,6 +7,7 @@ import unittest
 from pathlib import Path
 
 from analyze_results import duration, intersection, trace_summary, union
+from summarize_context_matrix import gpu_iteration_span_ms
 
 from sglang.test.test_utils import CustomTestCase
 
@@ -29,6 +30,35 @@ def kernel(name, start, duration_us, stream):
 
 
 class TestProfileAnalysis(CustomTestCase):
+    def test_iteration_span_includes_nested_launches_only(self):
+        parent = dict(
+            ph="X",
+            cat="user_annotation",
+            pid=10,
+            tid=11,
+            ts=100,
+            dur=100,
+            args={"External id": 1},
+        )
+        nested = dict(
+            ph="X",
+            cat="cuda_runtime",
+            pid=10,
+            tid=11,
+            ts=110,
+            dur=10,
+            args={"External id": 2, "correlation": 20},
+        )
+        direct = dict(cat="gpu_user_annotation", ts=300, dur=2, args={"External id": 1})
+        nested_gpu = dict(cat="kernel", ts=310, dur=90, args={"correlation": 20})
+        unrelated = dict(cat="kernel", ts=1000, dur=1000, args={"correlation": 30})
+        self.assertAlmostEqual(
+            gpu_iteration_span_ms(
+                [parent, nested, direct, nested_gpu, unrelated], parent
+            ),
+            0.1,
+        )
+
     def test_graph_duplicates_do_not_bias_stage_time_or_hide_overlap(self):
         # Captured graph annotations repeat on internal streams. Use the outer
         # range for stage timing, but retain internal ranges for kernel ownership.

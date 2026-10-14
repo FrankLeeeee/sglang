@@ -16,11 +16,10 @@ serializes the same segments as a control. These experimental modes require
 They preserve the extension-A / verification-B fence. Better paired-region
 overlap does not by itself imply better end-to-end throughput.
 
-`--speculative-microbatch-preserve-internal-pdl` optionally preserves captured
-programmatic dependencies inside each phase segment. Phase boundaries still wait
-for every node in the segment, since a programmatic successor can finish before
-its predecessor. The context runner exposes this as `--preserve-internal-pdl`;
-compare it with the default full-dependency reconstruction before using it.
+An internal-PDL preservation experiment at commit `46f0b5d29b` failed
+token repeatability on the GPT-OSS workload. Its apparent speedup is rejected;
+the final schedule uses full completion dependencies. The failed experiment
+is retained in the report and raw evidence, and its public flag was removed.
 
 The reproducible EP=2 matrix is:
 

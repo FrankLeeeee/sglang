@@ -29,6 +29,24 @@ def post(url, route, payload):
         ) from error
 
 
+def warm_phase_mapping(url, output):
+    # Batch one takes the ordinary EAGLE path. Initialize pair mappings before
+    # any torch profile claims CUPTI, even when the measured grid starts at one.
+    result = post(
+        url,
+        "/generate",
+        {
+            "input_ids": [[1, 2, 3, 4], [1, 2, 3, 5]],
+            "sampling_params": {
+                "temperature": 0,
+                "max_new_tokens": 8,
+                "ignore_eos": True,
+            },
+        },
+    )
+    output.write_text(json.dumps(result, indent=2))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", default="http://127.0.0.1:31080")

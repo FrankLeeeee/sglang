@@ -1,8 +1,7 @@
 """Experimental communication-aware composition of two independent CUDA DAGs.
 
 Each graph retains its capture-time storage and dependency order. Internal edges
-default to full completion dependencies, with an opt-in to preserve their types.
-A draft segment is
+are conservatively recreated as full completion dependencies. A draft segment is
 bounded by the target segment before/after its assigned slot. Opposite phases
 may execute together; communication/communication and draft compute/communication
 cannot. These fences can lengthen target windows, so measure end-to-end latency.
@@ -147,12 +146,10 @@ class GraphPhases:
             raise RuntimeError(f"CUDA graph operation failed: {status}")
         return tuple(values)
 
-    def pair(self, draft, serial=False, preserve_internal_pdl=False):
-        key = (draft, serial, preserve_internal_pdl)
+    def pair(self, draft, serial=False):
+        key = (draft, serial)
         if key not in self.pairs:
-            self.pairs[key] = InterleavedGraph(
-                self, draft, serial, preserve_internal_pdl
-            )
+            self.pairs[key] = InterleavedGraph(self, draft, serial)
         return self.pairs[key]
 
     def close(self):
@@ -167,15 +164,13 @@ class GraphPhases:
 class InterleavedGraph:
     """A single launch, with fork/join dependencies at each occupied target slot."""
 
-    def __init__(self, target, draft, serial=False, preserve_internal_pdl=False):
+    def __init__(self, target, draft, serial=False):
         self.target = target
         self.draft = draft
         self.driver = target.driver
         self.check = target.check
         self.executable = None
         self.node_roles = {}
-        self.preserve_internal_pdl = preserve_internal_pdl
-        self.preserved_programmatic_edges = 0
         self.positions = place_segments(target.kinds, draft.kinds)
         (self.graph,) = self.check(self.driver.cuGraphCreate(0))
         try:
@@ -209,9 +204,7 @@ class InterleavedGraph:
         _, count = self.check(driver.cuGraphGetNodes(graph, 0))
         nodes, _ = self.check(driver.cuGraphGetNodes(graph, count))
         _, _, _, count = self.check(driver.cuGraphGetEdges(graph, 0))
-        sources, destinations, edge_data, _ = self.check(
-            driver.cuGraphGetEdges(graph, count)
-        )
+        sources, destinations, _, _ = self.check(driver.cuGraphGetEdges(graph, count))
         parents = {int(node): [] for node in nodes}
         children = {int(node): [] for node in nodes}
         by_id = {int(node): node for node in nodes}
@@ -226,9 +219,6 @@ class InterleavedGraph:
             key = ready.popleft()
             node = by_id[key]
             dependencies = [copies[parent] for parent in parents[key]] or frontier
-            if self.preserve_internal_pdl and parents[key]:
-                # Add typed internal dependencies after all nodes exist.
-                dependencies = []
             args = (self.graph, dependencies, len(dependencies))
             (kind,) = self.check(driver.cuGraphNodeGetType(node))
             if int(kind) == 0:
@@ -263,24 +253,6 @@ class InterleavedGraph:
                 degrees[child] -= 1
                 if degrees[child] == 0:
                     ready.append(child)
-        if self.preserve_internal_pdl:
-            if count:
-                self.check(
-                    driver.cuGraphAddDependencies(
-                        self.graph,
-                        [copies[int(node)] for node in sources],
-                        [copies[int(node)] for node in destinations],
-                        edge_data,
-                        count,
-                    )
-                )
-                self.preserved_programmatic_edges += sum(
-                    int(edge.type) == 1 for edge in edge_data
-                )
-            # A programmatic dependency can release a successor before its
-            # predecessor finishes. Waiting only for leaves would therefore
-            # allow unfinished kernels to cross the phase boundary.
-            return list(copies.values())
         return [copies[key] for key in copies if not children[key]]
 
     def _instantiate(self):
