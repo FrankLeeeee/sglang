@@ -142,6 +142,25 @@ def summarize_cycles(trace_path, cycles, attribution):
         row["compute_compute_ms"] = intersection(dc, tc) / 1000
         row["draft_compute_coverage"] = intersection(dc, tm) / duration(dc) if dc else 0
         row["draft_comm_coverage"] = intersection(dm, tc) / duration(dm) if dm else 0
+        row["draft_compute_spread_fraction"] = (
+            max(b for a, b in dc) - min(a for a, b in dc)
+        ) / (end - start)
+        deciles = [
+            intersection(
+                dc,
+                [
+                    (
+                        start + index * (end - start) / 10,
+                        start + (index + 1) * (end - start) / 10,
+                    )
+                ],
+            )
+            for index in range(10)
+        ]
+        row["draft_compute_occupied_deciles"] = sum(value > 0 for value in deciles)
+        row["draft_compute_decile_cv"] = statistics.pstdev(deciles) / statistics.mean(
+            deciles
+        )
         draft_intervals = dc + dm
         row["draft_spread_fraction"] = (
             max(b for a, b in draft_intervals) - min(a for a, b in draft_intervals)

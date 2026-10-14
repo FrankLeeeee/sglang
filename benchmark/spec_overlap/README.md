@@ -5,6 +5,44 @@ in [REVISION_REPORT.md](REVISION_REPORT.md). Its selected experimental schedule
 uses one target graph launch, release index zero and a 50% request split;
 the compatibility defaults below remain eight chunks and release index one.
 
+The EP=2 follow-up adds `--speculative-microbatch-schedule phase` to compose
+verification A and draft B into one CUDA graph. It partitions at communication
+boundaries and spreads draft node groups across opposite-phase target windows.
+`--speculative-microbatch-compute-chunks` controls the number of subdivisions per
+draft compute region (default 4). Fork/join dependencies exclude communication
+collisions and draft compute concurrent with target compute. `phase_serial`
+serializes the same segments as a control. These experimental modes require
+`fine_overlap` and full decode graphs; they are separate from native SGLang TBO.
+They preserve the extension-A / verification-B fence. Better paired-region
+overlap does not by itself imply better end-to-end throughput.
+
+The reproducible EP=2 matrix is:
+
+```bash
+python benchmark/spec_overlap/run_context_matrix.py \
+  --mode no_spec --results benchmark/spec_overlap/results/context-v2/no-spec
+python benchmark/spec_overlap/run_context_matrix.py \
+  --mode spec --allow-draft-context-extension \
+  --results benchmark/spec_overlap/results/context-v2/spec
+python benchmark/spec_overlap/run_context_matrix.py \
+  --mode phase --allow-draft-context-extension --compute-chunks 4 \
+  --results benchmark/spec_overlap/results/context-v2/phase
+```
+
+The default grid is batches 1/4/8/16/32/64/128/256 and total prompt-plus-output
+budgets 4k/16k/32k/64k/128k. Two prompt positions are reserved at the server context
+boundary. The draft extension is an explicit experimental opt-in: this checkpoint
+declares only 4096 positions. Capacity-limited batches are recorded instead of
+silently queuing smaller batches. `--mode launch` reproduces the previous selected
+whole-graph release schedule; `--mode phase_serial` supplies the composition
+control. `--tbo` tests native TBO startup, which this GPT-OSS checkout rejects with
+the NCCL backend. Its DeepEP forward branch is also unimplemented.
+
+`summarize_context_matrix.py` checks both rank traces and exports the grid;
+`analyze_context_phases.py` measures actual paired-region kernel intersections.
+Phase traces use benchmark-only CUPTI clone identities to retain model attribution
+inside the composed graph. Raw evidence and commands are stored alongside results.
+
 This experiment targets throughput with multiple independent requests. Both
 models use the same TP=2 GPU allocation. It does not put the draft on a dedicated
 GPU. `--speculative-microbatch-mode off` preserves the existing path; `serial`
@@ -144,16 +182,16 @@ Report `T_serial / T_overlap` to isolate scheduling benefit **and**
 
 ## Supported experiment
 
-CUDA EAGLE3, greedy decoding, topk>=1, fixed budget, PP=DP=CP=EP=1, no LoRA,
+CUDA EAGLE3, greedy decoding, topk>=1, fixed budget, PP=DP=CP=1, no LoRA,
 no grammar, no logprobs/hidden-state returns, and no hybrid state tracking.
 The current implementation supports Llama and GPT-OSS with FA3 attention.
 Disable custom all-reduce, FlashInfer all-reduce fusion, and CPU overlap
 scheduling. Eager execution supports all modes. Full decode CUDA graphs support
 `off`, `fine_serial`, and `fine_overlap`, with prefill graphs disabled. Graph cuts
 require `cuda.bindings`, CUDA graph APIs, and PyTorch's `keep_graph=True` support.
-MoE EP/all-to-all integration
-is not implemented by this TP experiment. GPT-OSS being MoE does not by itself
-mean its trace contains all-to-all.
+EP is supported with `moe-a2a-backend=none` (NCCL AllReduce/AllGather); the follow-up
+tests EP=TP=2. All-to-all integration is not implemented by this experiment.
+GPT-OSS being MoE does not by itself mean its trace contains all-to-all.
 
 ```bash
 python benchmark/spec_overlap/run_matrix.py --models gpt-oss \

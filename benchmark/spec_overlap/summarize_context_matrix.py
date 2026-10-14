@@ -117,7 +117,8 @@ def plot(rows, output):
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    fig, axes = plt.subplots(1, 5, figsize=(18, 3.8), sharey=True)
+    fig, grid = plt.subplots(2, 3, figsize=(12, 7), sharey=True)
+    axes = grid.ravel()
     for ax, context in zip(axes, (4096, 16384, 32768, 65536, 131072)):
         for mode in MODES:
             data = sorted(
@@ -146,7 +147,18 @@ def plot(rows, output):
         )
         ax.grid(alpha=0.2)
     axes[0].set_ylabel("Generated tokens/s (cached prefix)")
-    axes[-1].legend(fontsize=8)
+    axes[3].set_ylabel("Generated tokens/s (cached prefix)")
+    axes[-1].set_axis_off()
+    handles, labels = axes[0].get_legend_handles_labels()
+    if handles:
+        axes[-1].legend(handles, labels, loc="center", fontsize=11)
+    axes[-1].text(
+        0.5,
+        0.1,
+        "EP=TP=2; two H200 GPUs\n128 output tokens; median of 3 runs",
+        ha="center",
+        transform=axes[-1].transAxes,
+    )
     fig.tight_layout()
     fig.savefig(output, dpi=180)
     plt.close(fig)
