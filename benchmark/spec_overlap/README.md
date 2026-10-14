@@ -16,6 +16,11 @@ serializes the same segments as a control. These experimental modes require
 They preserve the extension-A / verification-B fence. Better paired-region
 overlap does not by itself imply better end-to-end throughput.
 
+The EP=2 data, plots, and XML report sections are in
+[reports/ep2-20261015](reports/ep2-20261015). The
+[experiment document](https://my.feishu.cn/docx/VJeHdhDUboeaBSxC9MSc1ui7noe)
+also retains the downloadable raw traces and evidence archives.
+
 An internal-PDL preservation experiment at commit `46f0b5d29b` failed
 token repeatability on the GPT-OSS workload. Its apparent speedup is rejected;
 the final schedule uses full completion dependencies. The failed experiment

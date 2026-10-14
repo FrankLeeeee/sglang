@@ -1,0 +1,4 @@
+<h2>Cold latency and draft acceptance</h2>
+<p>For standard EAGLE3 at B16, generated tokens per verification step are 4k: 1.390, 16k: 1.352, 32k: 1.208, 64k: 1.218, 128k: 1.187. This low acceptance helps explain why speculation does not win here. The draft extension changes its position-cache limit, not its trained context range or RoPE scaling.</p>
+<img path="@./benchmark/spec_overlap/reports/ep2-20261015/figures/cold-latency-b16.png" width="1000"/>
+<p>The cold-latency plot contains one observation per mode/context at B16, including prefill and all 128 output tokens per request. It is separate from the repeated cached-prefix throughput measurements and is not a TTFT distribution.</p>

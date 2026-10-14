@@ -377,13 +377,14 @@ def plot_phase_ratio(rows, output):
     fig, ax = plt.subplots(figsize=(10, 4))
     palette = plt.get_cmap("RdYlGn").copy()
     palette.set_bad("#eeeeee")
+    extent = max(0.05, float(np.nanmax(np.abs(values - 1))))
     image = ax.imshow(
         np.ma.masked_invalid(values),
         cmap=palette,
         norm=TwoSlopeNorm(
-            vmin=min(0.8, float(np.nanmin(values)) - 0.02),
+            vmin=1 - extent,
             vcenter=1,
-            vmax=max(1.05, float(np.nanmax(values)) + 0.02),
+            vmax=1 + extent,
         ),
         aspect="auto",
     )

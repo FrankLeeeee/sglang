@@ -1,0 +1,2 @@
+<h2>Completed throughput grid</h2>
+<p>Values are generated output tokens/s: median of three unprofiled cached-prefix HTTP requests, 128 output tokens per request. Native TBO is off in every measured column. “Capacity” means the requested whole batch exceeds this experiment’s resident-KV allowance; no queued smaller-batch substitute is used.</p>

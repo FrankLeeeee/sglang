@@ -1,0 +1,36 @@
+{
+  "launch": {
+    "rank_cases": 58,
+    "paired_cycles": 406,
+    "max_forbidden_ms": {
+      "comm_comm_ms": 0.323264892578125,
+      "draft_comm_draft_compute_ms": 0.008768310546875,
+      "compute_compute_ms": 2.8247734375
+    },
+    "compute_coverage_range": [
+      0.02216399998054384,
+      0.418005474293383
+    ],
+    "comm_coverage_range": [
+      0.4607177528720069,
+      0.9580770221802318
+    ]
+  },
+  "phase": {
+    "rank_cases": 58,
+    "paired_cycles": 406,
+    "max_forbidden_ms": {
+      "comm_comm_ms": 0.0,
+      "draft_comm_draft_compute_ms": 0.0,
+      "compute_compute_ms": 0.0
+    },
+    "compute_coverage_range": [
+      0.13186515468496907,
+      0.8019766112007032
+    ],
+    "comm_coverage_range": [
+      0.7610684666635605,
+      0.8613650626228223
+    ]
+  }
+}

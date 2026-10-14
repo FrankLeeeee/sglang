@@ -1,0 +1,6052 @@
+[
+  {
+    "mode": "no-spec",
+    "batch": 1,
+    "context": 4096,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b1-c4096.json",
+    "tokens_per_second": 223.43245539272968,
+    "cold_seconds": 0.613642391981557,
+    "cold_output_tokens_per_second": 208.5905434053634,
+    "warm_seconds": 0.5728800669312477,
+    "throughput_min": 222.09574217208944,
+    "throughput_max": 223.491883496243,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 3967,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 4.0601640625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 4.028383056640625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 4,
+    "context": 4096,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b4-c4096.json",
+    "tokens_per_second": 687.1179717272521,
+    "cold_seconds": 0.9990405939752236,
+    "cold_output_tokens_per_second": 512.4916876127435,
+    "warm_seconds": 0.745141330990009,
+    "throughput_min": 683.8453114030904,
+    "throughput_max": 688.8885185083835,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 3967,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 4.825284912109375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 4.825791015625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 8,
+    "context": 4096,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b8-c4096.json",
+    "tokens_per_second": 1173.5813978051692,
+    "cold_seconds": 1.3162205410189927,
+    "cold_output_tokens_per_second": 777.985123380037,
+    "warm_seconds": 0.8725428009638563,
+    "throughput_min": 1173.0227786531027,
+    "throughput_max": 1174.1311856998873,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 3967,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 5.129222900390625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 5.12172900390625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 16,
+    "context": 4096,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b16-c4096.json",
+    "tokens_per_second": 2086.7050078828875,
+    "cold_seconds": 1.904279301990755,
+    "cold_output_tokens_per_second": 1075.4724886517424,
+    "warm_seconds": 0.9814516149926931,
+    "throughput_min": 2084.8458669006795,
+    "throughput_max": 2087.6692246579546,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 3967,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 5.921386962890625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 5.888386962890625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 32,
+    "context": 4096,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b32-c4096.json",
+    "tokens_per_second": 3111.0202821346693,
+    "cold_seconds": 3.239197220071219,
+    "cold_output_tokens_per_second": 1264.5108407168684,
+    "warm_seconds": 1.3166098670335487,
+    "throughput_min": 3110.0340100050594,
+    "throughput_max": 3118.6357484594623,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 3967,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 7.168013916015625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 7.09485205078125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 64,
+    "context": 4096,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b64-c4096.json",
+    "tokens_per_second": 5333.72998753363,
+    "cold_seconds": 5.372825446072966,
+    "cold_output_tokens_per_second": 1524.7098723424167,
+    "warm_seconds": 1.5358857720857486,
+    "throughput_min": 5326.338339082083,
+    "throughput_max": 5342.774792148831,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 3967,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      64
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 7.98593896484375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      64
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 7.967176025390625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 128,
+    "context": 4096,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b128-c4096.json",
+    "tokens_per_second": 8660.947194044986,
+    "cold_seconds": 9.610953704104759,
+    "cold_output_tokens_per_second": 1704.721560879284,
+    "warm_seconds": 1.8917099519167095,
+    "throughput_min": 8646.92337176041,
+    "throughput_max": 8676.30210842806,
+    "completed_requests": 128,
+    "retractions": 0,
+    "cached_tokens_min": 3967,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      128
+    ],
+    "rank0_iteration_request_batches": [
+      128
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 10.032926025390625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      128
+    ],
+    "rank1_iteration_request_batches": [
+      128
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 10.047888916015625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 256,
+    "context": 4096,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b256-c4096.json",
+    "tokens_per_second": 12759.73510566039,
+    "cold_seconds": 18.10256393707823,
+    "cold_output_tokens_per_second": 1810.1303281621656,
+    "warm_seconds": 2.5680783910211176,
+    "throughput_min": 12749.641565507156,
+    "throughput_max": 12779.265342605557,
+    "completed_requests": 256,
+    "retractions": 0,
+    "cached_tokens_min": 3967,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      256
+    ],
+    "rank0_iteration_request_batches": [
+      256
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 13.456623046875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      256
+    ],
+    "rank1_iteration_request_batches": [
+      256
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 13.4497880859375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 1,
+    "context": 16384,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b1-c16384.json",
+    "tokens_per_second": 214.34724904788771,
+    "cold_seconds": 0.813885256065987,
+    "cold_output_tokens_per_second": 157.27032655524872,
+    "warm_seconds": 0.5971618510084227,
+    "throughput_min": 209.25896060150745,
+    "throughput_max": 215.21262087728448,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 16255,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 3.99777392578125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 3.932905029296875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 4,
+    "context": 16384,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b4-c16384.json",
+    "tokens_per_second": 695.7252165396407,
+    "cold_seconds": 1.7730399019783363,
+    "cold_output_tokens_per_second": 288.76958687095345,
+    "warm_seconds": 0.735922729014419,
+    "throughput_min": 695.0561849179554,
+    "throughput_max": 697.6838406253055,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 16255,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 4.301806884765625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 4.28026611328125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 8,
+    "context": 16384,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b8-c16384.json",
+    "tokens_per_second": 1146.3577394159638,
+    "cold_seconds": 3.0107230090070516,
+    "cold_output_tokens_per_second": 340.1176384996371,
+    "warm_seconds": 0.8932639129925519,
+    "throughput_min": 1144.3354991728659,
+    "throughput_max": 1149.6332313424004,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 16255,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 4.62401611328125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 4.62743310546875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 16,
+    "context": 16384,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b16-c16384.json",
+    "tokens_per_second": 1942.7455138607615,
+    "cold_seconds": 5.345663396059535,
+    "cold_output_tokens_per_second": 383.11428316074824,
+    "warm_seconds": 1.0541782160289586,
+    "throughput_min": 1942.1193325059082,
+    "throughput_max": 1944.6699580537834,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 16255,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 5.088818115234375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 5.09364111328125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 32,
+    "context": 16384,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b32-c16384.json",
+    "tokens_per_second": 2771.1839007587414,
+    "cold_seconds": 10.08233476895839,
+    "cold_output_tokens_per_second": 406.2551079548373,
+    "warm_seconds": 1.478068633005023,
+    "throughput_min": 2771.11166400869,
+    "throughput_max": 2772.3624172559153,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 16255,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.94114306640625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.952751953125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 64,
+    "context": 16384,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b64-c16384.json",
+    "tokens_per_second": 4346.15269951858,
+    "cold_seconds": 19.19172588305082,
+    "cold_output_tokens_per_second": 426.85061520364707,
+    "warm_seconds": 1.8848854530369863,
+    "throughput_min": 4340.021217044722,
+    "throughput_max": 4354.976647001508,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 16255,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      64
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 8.82985791015625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      64
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 8.798549072265626,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 128,
+    "context": 16384,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b128-c16384.json",
+    "tokens_per_second": 6067.158086878519,
+    "cold_seconds": 37.231361116981134,
+    "cold_output_tokens_per_second": 440.0591197437393,
+    "warm_seconds": 2.7004405959742144,
+    "throughput_min": 6042.330875185189,
+    "throughput_max": 6075.251313984256,
+    "completed_requests": 128,
+    "retractions": 0,
+    "cached_tokens_min": 16255,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      128
+    ],
+    "rank0_iteration_request_batches": [
+      128
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 13.62773291015625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      128
+    ],
+    "rank1_iteration_request_batches": [
+      128
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 13.642781982421875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 256,
+    "context": 16384,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b256-c16384.json",
+    "tokens_per_second": 7581.418725718606,
+    "cold_seconds": 73.4113862599479,
+    "cold_output_tokens_per_second": 446.3612754017384,
+    "warm_seconds": 4.322146182064898,
+    "throughput_min": 7576.285025058609,
+    "throughput_max": 7619.428682619396,
+    "completed_requests": 256,
+    "retractions": 0,
+    "cached_tokens_min": 16255,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      256
+    ],
+    "rank0_iteration_request_batches": [
+      256
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 22.580052001953124,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      256
+    ],
+    "rank1_iteration_request_batches": [
+      256
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 22.51573095703125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 1,
+    "context": 32768,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b1-c32768.json",
+    "tokens_per_second": 218.03633864852594,
+    "cold_seconds": 1.1797087190207094,
+    "cold_output_tokens_per_second": 108.50135964601021,
+    "warm_seconds": 0.5870581059716642,
+    "throughput_min": 217.81300332869523,
+    "throughput_max": 218.33613951070677,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 32639,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 4.004196044921875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 3.99868896484375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 4,
+    "context": 32768,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b4-c32768.json",
+    "tokens_per_second": 634.6624963056987,
+    "cold_seconds": 3.1587614739546552,
+    "cold_output_tokens_per_second": 162.08884533436913,
+    "warm_seconds": 0.8067279900424182,
+    "throughput_min": 633.9965221688511,
+    "throughput_max": 640.20115601417,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 32639,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 4.756360107421875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 4.73843408203125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 8,
+    "context": 32768,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b8-c32768.json",
+    "tokens_per_second": 1102.9093845674524,
+    "cold_seconds": 5.6602774650091305,
+    "cold_output_tokens_per_second": 180.90985933643594,
+    "warm_seconds": 0.9284534290200099,
+    "throughput_min": 1102.4586245328155,
+    "throughput_max": 1102.9395057175786,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 32639,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 5.267178955078125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 5.236006103515625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 16,
+    "context": 32768,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b16-c32768.json",
+    "tokens_per_second": 1696.8634088636352,
+    "cold_seconds": 10.72052623401396,
+    "cold_output_tokens_per_second": 191.03539838390859,
+    "warm_seconds": 1.2069327379576862,
+    "throughput_min": 1694.394675749669,
+    "throughput_max": 1703.0140194734097,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 32639,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.136722900390625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.090154052734375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 32,
+    "context": 32768,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b32-c32768.json",
+    "tokens_per_second": 2338.152118514404,
+    "cold_seconds": 20.832086671027355,
+    "cold_output_tokens_per_second": 196.61976568562355,
+    "warm_seconds": 1.751810743007809,
+    "throughput_min": 2337.8582839106202,
+    "throughput_max": 2338.952179991345,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 32639,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 8.777694091796874,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 8.7402099609375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 64,
+    "context": 32768,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b64-c32768.json",
+    "tokens_per_second": 3349.5249254773667,
+    "cold_seconds": 40.7449048490962,
+    "cold_output_tokens_per_second": 201.05581373524092,
+    "warm_seconds": 2.4457199699245393,
+    "throughput_min": 3341.8694954903735,
+    "throughput_max": 3369.5489647777126,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 32639,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      64
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 12.09335791015625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      64
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 12.090876953125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 128,
+    "context": 32768,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b128-c32768.json",
+    "tokens_per_second": 4173.233088953394,
+    "cold_seconds": 80.43650709395297,
+    "cold_output_tokens_per_second": 203.68860598164525,
+    "warm_seconds": 3.9259728969773278,
+    "throughput_min": 4164.098398239099,
+    "throughput_max": 4174.03350414905,
+    "completed_requests": 128,
+    "retractions": 0,
+    "cached_tokens_min": 32639,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      128
+    ],
+    "rank0_iteration_request_batches": [
+      128
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 19.503114990234376,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      128
+    ],
+    "rank1_iteration_request_batches": [
+      128
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 19.441285888671874,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 256,
+    "context": 32768,
+    "capacity": 7226538,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 8404992
+  },
+  {
+    "mode": "no-spec",
+    "batch": 1,
+    "context": 65536,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b1-c65536.json",
+    "tokens_per_second": 206.3019225560875,
+    "cold_seconds": 2.003323554992676,
+    "cold_output_tokens_per_second": 63.89382268330987,
+    "warm_seconds": 0.6204498650040478,
+    "throughput_min": 205.68421173411008,
+    "throughput_max": 206.41864915591248,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 65407,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 4.14039990234375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 4.126635986328125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 4,
+    "context": 65536,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b4-c65536.json",
+    "tokens_per_second": 599.9814151383966,
+    "cold_seconds": 6.498284525936469,
+    "cold_output_tokens_per_second": 78.79002496065922,
+    "warm_seconds": 0.853359765955247,
+    "throughput_min": 596.4357116404116,
+    "throughput_max": 603.1877829030418,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 65407,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 5.143028076171875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 5.114572998046875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 8,
+    "context": 65536,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b8-c65536.json",
+    "tokens_per_second": 940.4858954331679,
+    "cold_seconds": 12.497177810990252,
+    "cold_output_tokens_per_second": 81.93849967466056,
+    "warm_seconds": 1.0887988910544664,
+    "throughput_min": 939.2917135015857,
+    "throughput_max": 944.1094211264414,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 65407,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.529049072265625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.500528076171875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 16,
+    "context": 65536,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b16-c65536.json",
+    "tokens_per_second": 1402.250425223979,
+    "cold_seconds": 24.998261432978325,
+    "cold_output_tokens_per_second": 81.92569733262441,
+    "warm_seconds": 1.460509451921098,
+    "throughput_min": 1395.9396879142976,
+    "throughput_max": 1402.703599688947,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 65407,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 8.084319091796875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 8.052819091796875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 32,
+    "context": 65536,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b32-c65536.json",
+    "tokens_per_second": 1750.7699296614237,
+    "cold_seconds": 48.232514388044365,
+    "cold_output_tokens_per_second": 84.92196709975576,
+    "warm_seconds": 2.3395421240711585,
+    "throughput_min": 1747.660544667134,
+    "throughput_max": 1757.8335169730424,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 65407,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 12.25943994140625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 12.239580078125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 64,
+    "context": 65536,
+    "capacity": 7226538,
+    "status": "existing",
+    "output": "b64-c65536.json",
+    "tokens_per_second": 2216.228238094553,
+    "cold_seconds": 95.13497412693687,
+    "cold_output_tokens_per_second": 86.10923664171668,
+    "warm_seconds": 3.696370192919858,
+    "throughput_min": 2201.1662305827417,
+    "throughput_max": 2227.3716221904656,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 65407,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      64
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 18.768904052734374,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      64
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 18.76768701171875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 128,
+    "context": 65536,
+    "capacity": 7226538,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 8396800
+  },
+  {
+    "mode": "no-spec",
+    "batch": 256,
+    "context": 65536,
+    "capacity": 7226538,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 16793600
+  },
+  {
+    "mode": "no-spec",
+    "batch": 1,
+    "context": 131072,
+    "capacity": 7226538,
+    "status": "ok",
+    "output": "b1-c131072.json",
+    "elapsed": 13.78127817204222,
+    "tokens_per_second": 197.31762962282443,
+    "cold_seconds": 4.397266353014857,
+    "cold_output_tokens_per_second": 29.108994025854393,
+    "warm_seconds": 0.6487002719659358,
+    "throughput_min": 196.79131726185193,
+    "throughput_max": 197.53598978489697,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 130937,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 4.471944091796875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 4.444449951171875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 4,
+    "context": 131072,
+    "capacity": 7226538,
+    "status": "ok",
+    "output": "b4-c131072.json",
+    "elapsed": 27.2985527649289,
+    "tokens_per_second": 526.5394892075111,
+    "cold_seconds": 16.136256853002124,
+    "cold_output_tokens_per_second": 31.729787438574593,
+    "warm_seconds": 0.9723867069697008,
+    "throughput_min": 525.6402941189137,
+    "throughput_max": 528.0521190564829,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 130937,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 5.695472900390625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 5.670472900390625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 8,
+    "context": 131072,
+    "capacity": 7226538,
+    "status": "ok",
+    "output": "b8-c131072.json",
+    "elapsed": 45.3724574749358,
+    "tokens_per_second": 766.4461607136018,
+    "cold_seconds": 31.819920112960972,
+    "cold_output_tokens_per_second": 32.181099021141215,
+    "warm_seconds": 1.3360364399850368,
+    "throughput_min": 766.4385739741236,
+    "throughput_max": 766.6928448166972,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 130937,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 7.369820068359375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 7.383055908203125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 16,
+    "context": 131072,
+    "capacity": 7226538,
+    "status": "ok",
+    "output": "b16-c131072.json",
+    "elapsed": 79.41649874602444,
+    "tokens_per_second": 1032.304196635233,
+    "cold_seconds": 62.5461959510576,
+    "cold_output_tokens_per_second": 32.74379790583204,
+    "warm_seconds": 1.9839113380294293,
+    "throughput_min": 1031.9607521835635,
+    "throughput_max": 1032.7234990733255,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 130937,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 10.499656005859375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 10.500153076171875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 32,
+    "context": 131072,
+    "capacity": 7226538,
+    "status": "ok",
+    "output": "b32-c131072.json",
+    "elapsed": 149.95599194907118,
+    "tokens_per_second": 1173.127637451492,
+    "cold_seconds": 124.71113852097187,
+    "cold_output_tokens_per_second": 32.843898697237876,
+    "warm_seconds": 3.4915211859624833,
+    "throughput_min": 1170.165699441849,
+    "throughput_max": 1174.7797075032931,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 130937,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 17.857698974609374,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 7,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 17.8559130859375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 7,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "no-spec",
+    "batch": 64,
+    "context": 131072,
+    "capacity": 7226538,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 8392704
+  },
+  {
+    "mode": "no-spec",
+    "batch": 128,
+    "context": 131072,
+    "capacity": 7226538,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 16785408
+  },
+  {
+    "mode": "no-spec",
+    "batch": 256,
+    "context": 131072,
+    "capacity": 7226538,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 33570816
+  },
+  {
+    "mode": "spec",
+    "batch": 1,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b1-c4096.json",
+    "tokens_per_second": 202.54560742243874,
+    "cold_seconds": 0.657977744936943,
+    "cold_output_tokens_per_second": 194.53545501340142,
+    "warm_seconds": 0.6319564350415021,
+    "throughput_min": 202.34392610637704,
+    "throughput_max": 202.6067350791192,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3763440860215055,
+    "spec_accept_rate": 0.12186379928315412,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.93514697265625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.8689609375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 4,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b4-c4096.json",
+    "tokens_per_second": 617.770232430746,
+    "cold_seconds": 1.0723179680062458,
+    "cold_output_tokens_per_second": 477.47031689859534,
+    "warm_seconds": 0.8287871009670198,
+    "throughput_min": 615.0714870042901,
+    "throughput_max": 617.8916886704649,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3989071038251366,
+    "spec_accept_rate": 0.1302367941712204,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 7.61652392578125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 7.605281982421875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 8,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b8-c4096.json",
+    "tokens_per_second": 897.834453122206,
+    "cold_seconds": 1.5790116270072758,
+    "cold_output_tokens_per_second": 648.5069409785173,
+    "warm_seconds": 1.1405220599845052,
+    "throughput_min": 897.7722690992224,
+    "throughput_max": 898.7035751981787,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3969986357435198,
+    "spec_accept_rate": 0.13142337426102774,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 9.75297705078125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 9.735363037109375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 16,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b16-c4096.json",
+    "tokens_per_second": 1664.2375977360164,
+    "cold_seconds": 2.2643216099822894,
+    "cold_output_tokens_per_second": 904.4651567919359,
+    "warm_seconds": 1.2305935178883374,
+    "throughput_min": 1664.0449468452173,
+    "throughput_max": 1665.409277128756,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3903598099117447,
+    "spec_accept_rate": 0.1305725277212039,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 10.27147607421875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 10.277349853515625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 32,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b32-c4096.json",
+    "tokens_per_second": 2895.211798435895,
+    "cold_seconds": 3.4358870040159672,
+    "cold_output_tokens_per_second": 1192.1230224429596,
+    "warm_seconds": 1.4147496919613332,
+    "throughput_min": 2880.7325259482914,
+    "throughput_max": 2899.0279712050437,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.4301675977653632,
+    "spec_accept_rate": 0.1411778398510242,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 11.717369873046875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 11.698378173828125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 64,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b64-c4096.json",
+    "tokens_per_second": 4558.5256264816335,
+    "cold_seconds": 5.797243996988982,
+    "cold_output_tokens_per_second": 1413.085252967587,
+    "warm_seconds": 1.7970722710015252,
+    "throughput_min": 4556.022059873238,
+    "throughput_max": 4565.366651019881,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.371964495059454,
+    "spec_accept_rate": 0.12236922905152682,
+    "rank0_profile_batches": [
+      64
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 13.611973876953124,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      64
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 13.60443408203125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 128,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b128-c4096.json",
+    "tokens_per_second": 6589.60646383402,
+    "cold_seconds": 10.683747887960635,
+    "cold_output_tokens_per_second": 1533.5442367058192,
+    "warm_seconds": 2.4863396759610623,
+    "throughput_min": 6569.239535638737,
+    "throughput_max": 6608.41164923296,
+    "completed_requests": 128,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3783124421637083,
+    "spec_accept_rate": 0.12414121869829786,
+    "rank0_profile_batches": [
+      128
+    ],
+    "rank0_iteration_request_batches": [
+      128
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 19.31167822265625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      128
+    ],
+    "rank1_iteration_request_batches": [
+      128
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 19.274529052734376,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 256,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b256-c4096.json",
+    "tokens_per_second": 8672.81804215084,
+    "cold_seconds": 20.00583114393521,
+    "cold_output_tokens_per_second": 1637.9224519214067,
+    "warm_seconds": 3.7782413790700957,
+    "throughput_min": 8649.288990203195,
+    "throughput_max": 8697.366623480377,
+    "completed_requests": 256,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3978925813745147,
+    "spec_accept_rate": 0.13066848683929866,
+    "rank0_profile_batches": [
+      256
+    ],
+    "rank0_iteration_request_batches": [
+      256
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 29.57578515625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      256
+    ],
+    "rank1_iteration_request_batches": [
+      256
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 29.5965419921875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 1,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b1-c16384.json",
+    "tokens_per_second": 191.9594606465837,
+    "cold_seconds": 0.9215880050323904,
+    "cold_output_tokens_per_second": 138.89069660308922,
+    "warm_seconds": 0.6668074580375105,
+    "throughput_min": 191.6615722402062,
+    "throughput_max": 192.43988198363553,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.292929292929293,
+    "spec_accept_rate": 0.09427609427609428,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.866777099609375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.7520791015625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 4,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b4-c16384.json",
+    "tokens_per_second": 567.041566996316,
+    "cold_seconds": 1.9738077190704644,
+    "cold_output_tokens_per_second": 259.3971008691357,
+    "warm_seconds": 0.902932042023167,
+    "throughput_min": 566.4930142778121,
+    "throughput_max": 567.2780341668016,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2896725440806045,
+    "spec_accept_rate": 0.09319899244332494,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.831095947265625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.860206787109375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 8,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b8-c16384.json",
+    "tokens_per_second": 864.8318800181797,
+    "cold_seconds": 3.3469808030640706,
+    "cold_output_tokens_per_second": 305.94737772698176,
+    "warm_seconds": 1.1840451579773799,
+    "throughput_min": 864.0980551724998,
+    "throughput_max": 866.2590985995427,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3671562082777036,
+    "spec_accept_rate": 0.12283044058744993,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 8.343260009765626,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 8.311695068359375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 16,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b16-c16384.json",
+    "tokens_per_second": 1509.9487314051325,
+    "cold_seconds": 5.74610351305455,
+    "cold_output_tokens_per_second": 356.415437930618,
+    "warm_seconds": 1.3563374420627952,
+    "throughput_min": 1509.3127066617192,
+    "throughput_max": 1510.5616117837794,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3518151815181518,
+    "spec_accept_rate": 0.11551155115511551,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 9.33548779296875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 9.3097470703125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 32,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b32-c16384.json",
+    "tokens_per_second": 2528.254392425827,
+    "cold_seconds": 10.52163188601844,
+    "cold_output_tokens_per_second": 389.29322412837183,
+    "warm_seconds": 1.6200901350239292,
+    "throughput_min": 2521.5191034014297,
+    "throughput_max": 2531.0315748538537,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3442730554643911,
+    "spec_accept_rate": 0.11333552127775955,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 11.182470947265625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 11.125303955078126,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 64,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b64-c16384.json",
+    "tokens_per_second": 3743.1111635572347,
+    "cold_seconds": 20.069793968927115,
+    "cold_output_tokens_per_second": 408.17559027677083,
+    "warm_seconds": 2.188553757034242,
+    "throughput_min": 3731.877859681376,
+    "throughput_max": 3743.402342968918,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3547213494294692,
+    "spec_accept_rate": 0.11625599470811973,
+    "rank0_profile_batches": [
+      64
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 15.0387099609375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      64
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 15.024739013671875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 128,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b128-c16384.json",
+    "tokens_per_second": 4813.598024684545,
+    "cold_seconds": 39.19373562303372,
+    "cold_output_tokens_per_second": 418.0259865398313,
+    "warm_seconds": 3.403690943028778,
+    "throughput_min": 4812.286570267177,
+    "throughput_max": 4820.46790309301,
+    "completed_requests": 128,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3748426617437275,
+    "spec_accept_rate": 0.12318536544432324,
+    "rank0_profile_batches": [
+      128
+    ],
+    "rank0_iteration_request_batches": [
+      128
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 24.999487060546876,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      128
+    ],
+    "rank1_iteration_request_batches": [
+      128
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 24.99323291015625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 256,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b256-c16384.json",
+    "tokens_per_second": 5668.1207115498655,
+    "cold_seconds": 77.60016074299347,
+    "cold_output_tokens_per_second": 422.26716654009806,
+    "warm_seconds": 5.7811048260191455,
+    "throughput_min": 5603.65566826962,
+    "throughput_max": 5696.720627753422,
+    "completed_requests": 256,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3738051316451452,
+    "spec_accept_rate": 0.12285482698865224,
+    "rank0_profile_batches": [
+      256
+    ],
+    "rank0_iteration_request_batches": [
+      256
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 42.96765307617188,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      256
+    ],
+    "rank1_iteration_request_batches": [
+      256
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 42.9563720703125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 1,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b1-c32768.json",
+    "tokens_per_second": 170.99104420355238,
+    "cold_seconds": 1.3154596289386973,
+    "cold_output_tokens_per_second": 97.30439246035199,
+    "warm_seconds": 0.7485772169893607,
+    "throughput_min": 169.26920853561458,
+    "throughput_max": 171.79213719153302,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2190476190476192,
+    "spec_accept_rate": 0.06984126984126984,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.950169921875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.828497802734375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 4,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b4-c32768.json",
+    "tokens_per_second": 496.3337603891834,
+    "cold_seconds": 3.4462596870725974,
+    "cold_output_tokens_per_second": 148.5668656719584,
+    "warm_seconds": 1.031563921016641,
+    "throughput_min": 495.46103260973564,
+    "throughput_max": 497.6632538183128,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1851851851851851,
+    "spec_accept_rate": 0.06018518518518518,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 7.242489990234375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 7.210258056640625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 8,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b8-c32768.json",
+    "tokens_per_second": 777.5433843882784,
+    "cold_seconds": 6.2641449549701065,
+    "cold_output_tokens_per_second": 163.47003579275994,
+    "warm_seconds": 1.3169683140004054,
+    "throughput_min": 776.6530284509594,
+    "throughput_max": 777.8249732451245,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2018779342723005,
+    "spec_accept_rate": 0.0649452269170579,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 8.91427294921875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 8.910388916015625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 16,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b16-c32768.json",
+    "tokens_per_second": 1307.3203346224634,
+    "cold_seconds": 11.440427421941422,
+    "cold_output_tokens_per_second": 179.0142906787007,
+    "warm_seconds": 1.5665632559685037,
+    "throughput_min": 1304.641071426033,
+    "throughput_max": 1308.9320783251678,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2075471698113207,
+    "spec_accept_rate": 0.06721698113207547,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 10.266981201171875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 10.21125390625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 32,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b32-c32768.json",
+    "tokens_per_second": 1975.0612040237177,
+    "cold_seconds": 22.09698216605466,
+    "cold_output_tokens_per_second": 185.36467872487435,
+    "warm_seconds": 2.0738597830059007,
+    "throughput_min": 1965.7416307421176,
+    "throughput_max": 1985.93423191428,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2215926036385327,
+    "spec_accept_rate": 0.07137886469828014,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 13.06868896484375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 13.0404140625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 64,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b64-c32768.json",
+    "tokens_per_second": 2722.9850840543577,
+    "cold_seconds": 42.70983821398113,
+    "cold_output_tokens_per_second": 191.80592440919938,
+    "warm_seconds": 3.008463045931421,
+    "throughput_min": 2717.972208873183,
+    "throughput_max": 2726.2783590064205,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2165132165132164,
+    "spec_accept_rate": 0.06974556974556975,
+    "rank0_profile_batches": [
+      64
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 19.556266845703124,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      64
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 19.54314111328125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 128,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b128-c32768.json",
+    "tokens_per_second": 3176.650243928113,
+    "cold_seconds": 84.95717861608136,
+    "cold_output_tokens_per_second": 192.85009538792178,
+    "warm_seconds": 5.1576342190383,
+    "throughput_min": 3170.2336723673398,
+    "throughput_max": 3242.232300278332,
+    "completed_requests": 128,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2186849152038084,
+    "spec_accept_rate": 0.0703411683030844,
+    "rank0_profile_batches": [
+      128
+    ],
+    "rank0_iteration_request_batches": [
+      128
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 33.51443188476563,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      128
+    ],
+    "rank1_iteration_request_batches": [
+      128
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 33.42659301757813,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 256,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 8404992
+  },
+  {
+    "mode": "spec",
+    "batch": 1,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b1-c65536.json",
+    "tokens_per_second": 169.40678837287402,
+    "cold_seconds": 2.179838740034029,
+    "cold_output_tokens_per_second": 58.719939988772666,
+    "warm_seconds": 0.7555777500383556,
+    "throughput_min": 167.86291747251764,
+    "throughput_max": 169.4758082962504,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2307692307692308,
+    "spec_accept_rate": 0.07371794871794872,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.870713134765625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.88043212890625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 4,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b4-c65536.json",
+    "tokens_per_second": 492.74581011428404,
+    "cold_seconds": 7.082174414070323,
+    "cold_output_tokens_per_second": 72.29418114623067,
+    "warm_seconds": 1.0390752990497276,
+    "throughput_min": 492.4689294637724,
+    "throughput_max": 497.44194509530087,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1906976744186046,
+    "spec_accept_rate": 0.06124031007751938,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 7.7532451171875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 7.610578125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 8,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b8-c65536.json",
+    "tokens_per_second": 715.1863057241382,
+    "cold_seconds": 13.302204729057848,
+    "cold_output_tokens_per_second": 76.97972034388667,
+    "warm_seconds": 1.4317947530653328,
+    "throughput_min": 714.4714090417682,
+    "throughput_max": 716.8444986655419,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1756601607347876,
+    "spec_accept_rate": 0.05549177190968236,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 10.259430908203125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 10.2220087890625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 16,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b16-c65536.json",
+    "tokens_per_second": 1081.9697527305436,
+    "cold_seconds": 25.80725893098861,
+    "cold_output_tokens_per_second": 79.35751741308802,
+    "warm_seconds": 1.892844041925855,
+    "throughput_min": 1077.5362342750193,
+    "throughput_max": 1082.9312523532792,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2183224271267104,
+    "spec_accept_rate": 0.07019631171921475,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 13.161137939453125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 13.14127978515625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 32,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b32-c65536.json",
+    "tokens_per_second": 1502.3927617969805,
+    "cold_seconds": 50.43244483694434,
+    "cold_output_tokens_per_second": 81.2175577298103,
+    "warm_seconds": 2.726317714084871,
+    "throughput_min": 1497.9692346383752,
+    "throughput_max": 1504.0111286645795,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2194105388508485,
+    "spec_accept_rate": 0.07085442095861863,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 18.638181884765626,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 18.613029052734376,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 64,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "existing",
+    "output": "b64-c65536.json",
+    "tokens_per_second": 1802.666251050878,
+    "cold_seconds": 100.06166063994169,
+    "cold_output_tokens_per_second": 81.86951873083339,
+    "warm_seconds": 4.544379745959304,
+    "throughput_min": 1767.8039819574205,
+    "throughput_max": 1816.143241744552,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2029368575624082,
+    "spec_accept_rate": 0.06524718551150269,
+    "rank0_profile_batches": [
+      64
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 29.731823974609377,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      64
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 29.738201904296876,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 128,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 8396800
+  },
+  {
+    "mode": "spec",
+    "batch": 256,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 16793600
+  },
+  {
+    "mode": "spec",
+    "batch": 1,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b1-c131072.json",
+    "elapsed": 15.533493350958452,
+    "tokens_per_second": 160.49457746595837,
+    "cold_seconds": 4.814584078034386,
+    "cold_output_tokens_per_second": 26.58588944037251,
+    "warm_seconds": 0.7975347330793738,
+    "throughput_min": 160.128630327553,
+    "throughput_max": 160.60080962354488,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 130936,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1851851851851851,
+    "spec_accept_rate": 0.05864197530864197,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.798826904296875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.7775390625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 4,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b4-c131072.json",
+    "elapsed": 33.206240340019576,
+    "tokens_per_second": 444.82408019379614,
+    "cold_seconds": 17.42752800893504,
+    "cold_output_tokens_per_second": 29.37880804079036,
+    "warm_seconds": 1.1510168239474297,
+    "throughput_min": 444.1886138095264,
+    "throughput_max": 445.57671560177573,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 130936,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2018779342723005,
+    "spec_accept_rate": 0.0649452269170579,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 8.253622802734375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 8.2152451171875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 8,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b8-c131072.json",
+    "elapsed": 49.22631898103282,
+    "tokens_per_second": 590.015149347269,
+    "cold_seconds": 33.51090423704591,
+    "cold_output_tokens_per_second": 30.55721781652135,
+    "warm_seconds": 1.735548656899482,
+    "throughput_min": 589.9587150893746,
+    "throughput_max": 590.4411283049105,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 130936,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1797235023041475,
+    "spec_accept_rate": 0.057219662058371736,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 11.7691298828125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 11.772155029296876,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 16,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b16-c131072.json",
+    "elapsed": 86.12224621407222,
+    "tokens_per_second": 808.9177947759594,
+    "cold_seconds": 66.21727425896097,
+    "cold_output_tokens_per_second": 30.928485397794077,
+    "warm_seconds": 2.531777658034116,
+    "throughput_min": 808.8149863933363,
+    "throughput_max": 809.235606200984,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 130936,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.186558516801854,
+    "spec_accept_rate": 0.0600617999227501,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 16.722655029296874,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 16.698948974609376,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 32,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b32-c131072.json",
+    "elapsed": 160.9141885660356,
+    "tokens_per_second": 965.6891733247547,
+    "cold_seconds": 131.68635713600088,
+    "cold_output_tokens_per_second": 31.10420919131205,
+    "warm_seconds": 4.241530414903536,
+    "throughput_min": 956.0147321874065,
+    "throughput_max": 968.5179570530474,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 130936,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1766733697213445,
+    "spec_accept_rate": 0.05640141721727473,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 27.245604248046874,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 27.231996826171876,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "spec",
+    "batch": 64,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 8392704
+  },
+  {
+    "mode": "spec",
+    "batch": 128,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 16785408
+  },
+  {
+    "mode": "spec",
+    "batch": 256,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 33570816
+  },
+  {
+    "mode": "launch",
+    "batch": 1,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b1-c4096.json",
+    "elapsed": 10.529984485008754,
+    "tokens_per_second": 201.67383421454505,
+    "cold_seconds": 0.6824549549492076,
+    "cold_output_tokens_per_second": 187.55816639872813,
+    "warm_seconds": 0.634688185993582,
+    "throughput_min": 201.2990652620131,
+    "throughput_max": 202.20492525952827,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3763440860215055,
+    "spec_accept_rate": 0.12186379928315412,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.899109130859375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.759548095703125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 4,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b4-c4096.json",
+    "elapsed": 15.387589661055245,
+    "tokens_per_second": 380.48200104089466,
+    "cold_seconds": 1.4951476829592139,
+    "cold_output_tokens_per_second": 342.44108848608425,
+    "warm_seconds": 1.3456615519244224,
+    "throughput_min": 380.3876403202137,
+    "throughput_max": 380.7696305355003,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3580901856763925,
+    "spec_accept_rate": 0.1184792219274978,
+    "rank0_profile_batches": [
+      2
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 14.886927001953126,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      2
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 14.6051748046875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 8,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b8-c4096.json",
+    "elapsed": 16.43780015897937,
+    "tokens_per_second": 716.1952619271119,
+    "cold_seconds": 2.0512798390118405,
+    "cold_output_tokens_per_second": 499.20053837865913,
+    "warm_seconds": 1.4297776799649,
+    "throughput_min": 715.4544586995333,
+    "throughput_max": 716.4294500170598,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.4607703281027105,
+    "spec_accept_rate": 0.15121255349500715,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 15.170740966796876,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 15.168926025390626,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 16,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b16-c4096.json",
+    "elapsed": 20.493546304060146,
+    "tokens_per_second": 1018.5316431471821,
+    "cold_seconds": 3.072036175057292,
+    "cold_output_tokens_per_second": 666.6588162692472,
+    "warm_seconds": 2.0107377259992063,
+    "throughput_min": 1015.2150070064007,
+    "throughput_max": 1018.7298608031082,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.4008207934336525,
+    "spec_accept_rate": 0.1324669402644779,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 17.406718994140626,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 17.385989013671875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 32,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b32-c4096.json",
+    "elapsed": 23.693168687052093,
+    "tokens_per_second": 1720.598949247163,
+    "cold_seconds": 4.547199840075336,
+    "cold_output_tokens_per_second": 900.7741344247011,
+    "warm_seconds": 2.380566373001784,
+    "throughput_min": 1719.11542181359,
+    "throughput_max": 1721.5001650992156,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.4027397260273973,
+    "spec_accept_rate": 0.13310502283105022,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 19.0149541015625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 18.999533203125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 64,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b64-c4096.json",
+    "elapsed": 27.597989732050337,
+    "tokens_per_second": 3030.144536621805,
+    "cold_seconds": 6.6602905539330095,
+    "cold_output_tokens_per_second": 1229.9763701994189,
+    "warm_seconds": 2.70350140100345,
+    "throughput_min": 3024.951819854718,
+    "throughput_max": 3035.3093259117204,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.4119269217511203,
+    "spec_accept_rate": 0.13547052740434332,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 21.85068701171875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 21.818010009765626,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 128,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b128-c4096.json",
+    "elapsed": 37.26026652799919,
+    "tokens_per_second": 4791.438269831518,
+    "cold_seconds": 12.272048715036362,
+    "cold_output_tokens_per_second": 1335.066408262009,
+    "warm_seconds": 3.4194325539283454,
+    "throughput_min": 4791.408954554523,
+    "throughput_max": 4801.216693884775,
+    "completed_requests": 128,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3786603837091889,
+    "spec_accept_rate": 0.12400426343543139,
+    "rank0_profile_batches": [
+      64
+    ],
+    "rank0_iteration_request_batches": [
+      128
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 26.511893798828126,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      64
+    ],
+    "rank1_iteration_request_batches": [
+      128
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 26.490321044921874,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 256,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b256-c4096.json",
+    "elapsed": 53.282560714986175,
+    "tokens_per_second": 6851.850814261763,
+    "cold_seconds": 20.93897957901936,
+    "cold_output_tokens_per_second": 1564.9282180318469,
+    "warm_seconds": 4.7823574809590355,
+    "throughput_min": 6847.503222384038,
+    "throughput_max": 6867.279677124277,
+    "completed_requests": 256,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3977733225269804,
+    "spec_accept_rate": 0.13058624465014432,
+    "rank0_profile_batches": [
+      128
+    ],
+    "rank0_iteration_request_batches": [
+      256
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 38.159625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      128
+    ],
+    "rank1_iteration_request_batches": [
+      256
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 38.121968017578126,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 1,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b1-c16384.json",
+    "elapsed": 10.829266232904047,
+    "tokens_per_second": 188.55755119973333,
+    "cold_seconds": 0.9278354280395433,
+    "cold_output_tokens_per_second": 137.95549957653134,
+    "warm_seconds": 0.6788378359051421,
+    "throughput_min": 187.6880743540435,
+    "throughput_max": 190.18762492233705,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.292929292929293,
+    "spec_accept_rate": 0.09427609427609428,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.703511962890625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.657680908203125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 4,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b4-c16384.json",
+    "elapsed": 16.585371281020343,
+    "tokens_per_second": 369.40862661544435,
+    "cold_seconds": 2.625616276054643,
+    "cold_output_tokens_per_second": 195.00183810916644,
+    "warm_seconds": 1.3859990349737927,
+    "throughput_min": 367.99588306424386,
+    "throughput_max": 369.7457584217293,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3195876288659794,
+    "spec_accept_rate": 0.10395189003436427,
+    "rank0_profile_batches": [
+      2
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 14.5909921875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      2
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 14.41718310546875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 8,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b8-c16384.json",
+    "elapsed": 19.240180172026157,
+    "tokens_per_second": 641.0785393243626,
+    "cold_seconds": 3.869434628984891,
+    "cold_output_tokens_per_second": 264.6381443763108,
+    "warm_seconds": 1.5973081879783422,
+    "throughput_min": 639.947025970083,
+    "throughput_max": 642.1915347919404,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3094629156010231,
+    "spec_accept_rate": 0.1010230179028133,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 14.987697021484376,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 14.6224287109375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 16,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b16-c16384.json",
+    "elapsed": 24.746293297037482,
+    "tokens_per_second": 953.4503903925887,
+    "cold_seconds": 6.568283308995888,
+    "cold_output_tokens_per_second": 311.80141045302804,
+    "warm_seconds": 2.147988002980128,
+    "throughput_min": 952.4924432194972,
+    "throughput_max": 954.9568721694585,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3385620915032679,
+    "spec_accept_rate": 0.11089324618736383,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 16.073204833984374,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 16.1020458984375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 32,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b32-c16384.json",
+    "elapsed": 31.60387065098621,
+    "tokens_per_second": 1612.7115562136119,
+    "cold_seconds": 11.381349753006361,
+    "cold_output_tokens_per_second": 359.88701594185255,
+    "warm_seconds": 2.5398218201007694,
+    "throughput_min": 1612.1880561029361,
+    "throughput_max": 1614.093678343672,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3447143795141168,
+    "spec_accept_rate": 0.11315386298971329,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 17.295002197265624,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 17.255554931640624,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 64,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b64-c16384.json",
+    "elapsed": 44.22017896606121,
+    "tokens_per_second": 2631.0489790537345,
+    "cold_seconds": 21.025664253043942,
+    "cold_output_tokens_per_second": 389.61908177593114,
+    "warm_seconds": 3.11358703894075,
+    "throughput_min": 2626.659079110815,
+    "throughput_max": 2632.7651099733075,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3471468508469002,
+    "spec_accept_rate": 0.11374225730417147,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 21.84401416015625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 21.8290400390625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 128,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b128-c16384.json",
+    "elapsed": 70.00204089505132,
+    "tokens_per_second": 3870.7298586268766,
+    "cold_seconds": 40.11662681400776,
+    "cold_output_tokens_per_second": 408.4092133658432,
+    "warm_seconds": 4.232793451985344,
+    "throughput_min": 3850.517474243556,
+    "throughput_max": 3872.927626689993,
+    "completed_requests": 128,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3742660627411507,
+    "spec_accept_rate": 0.12291002628194375,
+    "rank0_profile_batches": [
+      64
+    ],
+    "rank0_iteration_request_batches": [
+      128
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 30.526258056640625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      64
+    ],
+    "rank1_iteration_request_batches": [
+      128
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 30.495739990234377,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 256,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b256-c16384.json",
+    "elapsed": 121.56533887097612,
+    "tokens_per_second": 4937.160327880438,
+    "cold_seconds": 78.51131342398003,
+    "cold_output_tokens_per_second": 417.36660069670336,
+    "warm_seconds": 6.637013551080599,
+    "throughput_min": 4910.360600019789,
+    "throughput_max": 4956.554413514245,
+    "completed_requests": 256,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3738051316451452,
+    "spec_accept_rate": 0.12285482698865224,
+    "rank0_profile_batches": [
+      128
+    ],
+    "rank0_iteration_request_batches": [
+      256
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 49.70760815429688,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      128
+    ],
+    "rank1_iteration_request_batches": [
+      256
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 49.674906982421874,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 1,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b1-c32768.json",
+    "elapsed": 11.87890295300167,
+    "tokens_per_second": 168.27330909084154,
+    "cold_seconds": 1.3561939179198816,
+    "cold_output_tokens_per_second": 94.3817829505719,
+    "warm_seconds": 0.76066727808211,
+    "throughput_min": 167.82123347302752,
+    "throughput_max": 169.36370651142468,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2190476190476192,
+    "spec_accept_rate": 0.06984126984126984,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.722296875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.6467041015625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 4,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b4-c32768.json",
+    "elapsed": 19.03726893698331,
+    "tokens_per_second": 321.16726676423065,
+    "cold_seconds": 4.001799500081688,
+    "cold_output_tokens_per_second": 127.94244189134129,
+    "warm_seconds": 1.5941848780494183,
+    "throughput_min": 319.9681737544944,
+    "throughput_max": 321.54387423537236,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1662870159453302,
+    "spec_accept_rate": 0.05315110098709187,
+    "rank0_profile_batches": [
+      2
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 14.7578759765625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      2
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 14.501151123046874,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 8,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b8-c32768.json",
+    "elapsed": 23.14534464699682,
+    "tokens_per_second": 556.5451548425814,
+    "cold_seconds": 6.7682300000451505,
+    "cold_output_tokens_per_second": 151.2950948760856,
+    "warm_seconds": 1.8399225850589573,
+    "throughput_min": 555.5970031833485,
+    "throughput_max": 556.8459254577317,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2089728453364816,
+    "spec_accept_rate": 0.06808343171979536,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 14.978162109375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 14.991262939453126,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 16,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b16-c32768.json",
+    "elapsed": 31.85295748000499,
+    "tokens_per_second": 828.0124517106599,
+    "cold_seconds": 12.308635954977944,
+    "cold_output_tokens_per_second": 166.3872428668047,
+    "warm_seconds": 2.4733927560737357,
+    "throughput_min": 827.7143880252596,
+    "throughput_max": 829.5491263647222,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.199063231850117,
+    "spec_accept_rate": 0.06381733021077284,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 16.853625732421875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 16.842916015625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 32,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b32-c32768.json",
+    "elapsed": 45.02149214595556,
+    "tokens_per_second": 1380.626140649186,
+    "cold_seconds": 22.818623112980276,
+    "cold_output_tokens_per_second": 179.50250458670348,
+    "warm_seconds": 2.9667698440607637,
+    "throughput_min": 1380.4834289279318,
+    "throughput_max": 1385.1823260935548,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2150697122515575,
+    "spec_accept_rate": 0.06951448630475625,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 19.907113037109376,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 19.881837158203126,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 64,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b64-c32768.json",
+    "elapsed": 71.65621476992965,
+    "tokens_per_second": 2077.086472667972,
+    "cold_seconds": 43.692572267958894,
+    "cold_output_tokens_per_second": 187.49182240312834,
+    "warm_seconds": 3.9439860149286687,
+    "throughput_min": 2076.5920129616047,
+    "throughput_max": 2079.3839227007084,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2188662401428358,
+    "spec_accept_rate": 0.07062441104994296,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 26.137506103515626,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 26.115572021484375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 128,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b128-c32768.json",
+    "elapsed": 124.56746236607432,
+    "tokens_per_second": 2777.494148207943,
+    "cold_seconds": 85.82980056398083,
+    "cold_output_tokens_per_second": 190.88941011562457,
+    "warm_seconds": 5.898842310998589,
+    "throughput_min": 2752.4206285879213,
+    "throughput_max": 2778.85044292768,
+    "completed_requests": 128,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2184130289283854,
+    "spec_accept_rate": 0.07027589796980739,
+    "rank0_profile_batches": [
+      64
+    ],
+    "rank0_iteration_request_batches": [
+      128
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 39.10744287109375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      64
+    ],
+    "rank1_iteration_request_batches": [
+      128
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 39.070378173828125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 256,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 8404992
+  },
+  {
+    "mode": "launch",
+    "batch": 1,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b1-c65536.json",
+    "elapsed": 12.68196740897838,
+    "tokens_per_second": 166.76561381578077,
+    "cold_seconds": 2.1975204769987613,
+    "cold_output_tokens_per_second": 58.24746633297113,
+    "warm_seconds": 0.7675443220650777,
+    "throughput_min": 165.29709501037826,
+    "throughput_max": 166.93933074061414,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2307692307692308,
+    "spec_accept_rate": 0.07371794871794872,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.66223193359375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.65550390625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 4,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b4-c65536.json",
+    "elapsed": 22.99260964000132,
+    "tokens_per_second": 307.41830266999415,
+    "cold_seconds": 7.500088430941105,
+    "cold_output_tokens_per_second": 68.26586175807992,
+    "warm_seconds": 1.6654831399209797,
+    "throughput_min": 300.54387293517084,
+    "throughput_max": 308.8958891529697,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1743119266055047,
+    "spec_accept_rate": 0.05504587155963303,
+    "rank0_profile_batches": [
+      2
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 14.7550908203125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      2
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 14.7259208984375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 8,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b8-c65536.json",
+    "elapsed": 30.60434083500877,
+    "tokens_per_second": 530.6237866991341,
+    "cold_seconds": 13.831776792998426,
+    "cold_output_tokens_per_second": 74.03242658733068,
+    "warm_seconds": 1.9298041770234704,
+    "throughput_min": 530.5204778420052,
+    "throughput_max": 531.4117515115214,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2004689331770222,
+    "spec_accept_rate": 0.06369675654552559,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 15.983126953125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 15.9657958984375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 16,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b16-c65536.json",
+    "elapsed": 47.82580191397574,
+    "tokens_per_second": 745.7947145961032,
+    "cold_seconds": 26.543773039011285,
+    "cold_output_tokens_per_second": 77.1555723065467,
+    "warm_seconds": 2.7460639770142734,
+    "throughput_min": 744.699075710359,
+    "throughput_max": 747.0007033616638,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2147093712930013,
+    "spec_accept_rate": 0.0693950177935943,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 21.06852490234375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 21.042576904296876,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 32,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b32-c65536.json",
+    "elapsed": 77.46892996097449,
+    "tokens_per_second": 1119.8812871635191,
+    "cold_seconds": 51.37150213099085,
+    "cold_output_tokens_per_second": 79.732922536618,
+    "warm_seconds": 3.6575305319856852,
+    "throughput_min": 1115.3237847397982,
+    "throughput_max": 1120.2351468125607,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2190476190476192,
+    "spec_accept_rate": 0.06994047619047619,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 26.5986279296875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 26.60652294921875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 64,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b64-c65536.json",
+    "elapsed": 136.18351560796145,
+    "tokens_per_second": 1533.1529408408255,
+    "cold_seconds": 100.80335667089093,
+    "cold_output_tokens_per_second": 81.26713504933919,
+    "warm_seconds": 5.343237312976271,
+    "throughput_min": 1531.8654199575749,
+    "throughput_max": 1537.21722132782,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.208616110947182,
+    "spec_accept_rate": 0.06698141044555916,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 37.41101806640625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 37.40231005859375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 128,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 8396800
+  },
+  {
+    "mode": "launch",
+    "batch": 256,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 16793600
+  },
+  {
+    "mode": "launch",
+    "batch": 1,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b1-c131072.json",
+    "elapsed": 15.482804305036552,
+    "tokens_per_second": 152.7981504615831,
+    "cold_seconds": 4.782260615960695,
+    "cold_output_tokens_per_second": 26.765584370873196,
+    "warm_seconds": 0.8377064749365672,
+    "throughput_min": 152.74385213378994,
+    "throughput_max": 153.87916240044407,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 130936,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1851851851851851,
+    "spec_accept_rate": 0.05864197530864197,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.71272998046875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.77960205078125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 4,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b4-c131072.json",
+    "elapsed": 33.404655811027624,
+    "tokens_per_second": 299.06256078158293,
+    "cold_seconds": 17.77130268001929,
+    "cold_output_tokens_per_second": 28.81049348034875,
+    "warm_seconds": 1.712016370962374,
+    "throughput_min": 298.2221545709157,
+    "throughput_max": 299.5664449099855,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 130936,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2075471698113207,
+    "spec_accept_rate": 0.0660377358490566,
+    "rank0_profile_batches": [
+      2
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 14.8665517578125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      2
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 14.8131220703125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 8,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b8-c131072.json",
+    "elapsed": 52.42803911701776,
+    "tokens_per_second": 461.4215826179806,
+    "cold_seconds": 34.041002160985954,
+    "cold_output_tokens_per_second": 30.08137055299729,
+    "warm_seconds": 2.2192286589415744,
+    "throughput_min": 459.10425214726143,
+    "throughput_max": 462.23826137899215,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 130936,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1783659378596087,
+    "spec_accept_rate": 0.05753739930955121,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 16.6053740234375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 16.80755908203125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 16,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b16-c131072.json",
+    "elapsed": 91.12521184899379,
+    "tokens_per_second": 625.001660166764,
+    "cold_seconds": 67.11330008995719,
+    "cold_output_tokens_per_second": 30.51556095818423,
+    "warm_seconds": 3.276791295967996,
+    "throughput_min": 624.1617675864229,
+    "throughput_max": 625.416897573921,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 130936,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1962616822429906,
+    "spec_accept_rate": 0.0630841121495327,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 23.565845947265625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 23.522451904296876,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 32,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b32-c131072.json",
+    "elapsed": 166.516575274989,
+    "tokens_per_second": 813.1110701158289,
+    "cold_seconds": 132.74377044395078,
+    "cold_output_tokens_per_second": 30.856438583153544,
+    "warm_seconds": 5.037442177999765,
+    "throughput_min": 808.6022215555711,
+    "throughput_max": 815.6741057745785,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 130936,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1773498131647024,
+    "spec_accept_rate": 0.05662546708824375,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 33.83516479492187,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 28,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 33.81485791015625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 28,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "launch",
+    "batch": 64,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 8392704
+  },
+  {
+    "mode": "launch",
+    "batch": 128,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 16785408
+  },
+  {
+    "mode": "launch",
+    "batch": 256,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 33570816
+  },
+  {
+    "mode": "phase",
+    "batch": 1,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b1-c4096.json",
+    "elapsed": 10.477052929927595,
+    "tokens_per_second": 199.57089139590227,
+    "cold_seconds": 0.6664738609688357,
+    "cold_output_tokens_per_second": 192.05554410480516,
+    "warm_seconds": 0.6413761000148952,
+    "throughput_min": 199.1744003137206,
+    "throughput_max": 201.06943268802655,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3763440860215055,
+    "spec_accept_rate": 0.12186379928315412,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.64490087890625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.73391796875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 4,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b4-c4096.json",
+    "elapsed": 15.933908368111588,
+    "tokens_per_second": 366.83822931493876,
+    "cold_seconds": 1.5598456000443548,
+    "cold_output_tokens_per_second": 328.2376153033615,
+    "warm_seconds": 1.3957105859881267,
+    "throughput_min": 366.7012923774613,
+    "throughput_max": 366.8647412969438,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3580901856763925,
+    "spec_accept_rate": 0.1184792219274978,
+    "rank0_profile_batches": [
+      2
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 14.534061279296875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      2
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 14.76530908203125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 8,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b8-c4096.json",
+    "elapsed": 16.73598061397206,
+    "tokens_per_second": 683.2606388100079,
+    "cold_seconds": 2.131469261017628,
+    "cold_output_tokens_per_second": 480.41978307072156,
+    "warm_seconds": 1.4986960199894384,
+    "throughput_min": 682.4928175519619,
+    "throughput_max": 685.328039417519,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.4607703281027105,
+    "spec_accept_rate": 0.15121255349500715,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 15.22210107421875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 15.22409912109375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 16,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b16-c4096.json",
+    "elapsed": 20.890475846012123,
+    "tokens_per_second": 982.3981441529311,
+    "cold_seconds": 3.2088081560796127,
+    "cold_output_tokens_per_second": 638.2432044495176,
+    "warm_seconds": 2.0846944919321686,
+    "throughput_min": 982.0063203596159,
+    "throughput_max": 985.3788745993251,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.4008207934336525,
+    "spec_accept_rate": 0.1324669402644779,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 18.3519990234375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 18.34301708984375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 32,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b32-c4096.json",
+    "elapsed": 23.99421152600553,
+    "tokens_per_second": 1670.5703319597567,
+    "cold_seconds": 4.534678680007346,
+    "cold_output_tokens_per_second": 903.2613530168283,
+    "warm_seconds": 2.4518572619417682,
+    "throughput_min": 1670.1018111356098,
+    "throughput_max": 1673.736071925506,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.4027397260273973,
+    "spec_accept_rate": 0.13310502283105022,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 19.996809814453126,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 19.990002197265625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 64,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b64-c4096.json",
+    "elapsed": 27.9492040729383,
+    "tokens_per_second": 2970.9970190297686,
+    "cold_seconds": 6.720736018032767,
+    "cold_output_tokens_per_second": 1218.9141156592977,
+    "warm_seconds": 2.757323533995077,
+    "throughput_min": 2970.9845491685555,
+    "throughput_max": 2971.7713855359793,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.4119269217511203,
+    "spec_accept_rate": 0.13547052740434332,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 22.62197998046875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 22.605824951171876,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 128,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b128-c4096.json",
+    "elapsed": 36.60971907898784,
+    "tokens_per_second": 4707.172302815656,
+    "cold_seconds": 11.50544215401169,
+    "cold_output_tokens_per_second": 1424.0217612399422,
+    "warm_seconds": 3.48064590501599,
+    "throughput_min": 4706.806780405288,
+    "throughput_max": 4715.2232296409575,
+    "completed_requests": 128,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3786603837091889,
+    "spec_accept_rate": 0.12400426343543139,
+    "rank0_profile_batches": [
+      64
+    ],
+    "rank0_iteration_request_batches": [
+      128
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 27.280212890625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      64
+    ],
+    "rank1_iteration_request_batches": [
+      128
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 27.2821650390625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 256,
+    "context": 4096,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b256-c4096.json",
+    "elapsed": 53.93141363398172,
+    "tokens_per_second": 6767.793079133514,
+    "cold_seconds": 21.259626390994526,
+    "cold_output_tokens_per_second": 1541.3252988246475,
+    "warm_seconds": 4.841755594010465,
+    "throughput_min": 6732.028682586693,
+    "throughput_max": 6772.318419137053,
+    "completed_requests": 256,
+    "retractions": 0,
+    "cached_tokens_min": 3966,
+    "prompt_tokens_min": 3968,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3977733225269804,
+    "spec_accept_rate": 0.13058624465014432,
+    "rank0_profile_batches": [
+      128
+    ],
+    "rank0_iteration_request_batches": [
+      256
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 38.9167451171875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      128
+    ],
+    "rank1_iteration_request_batches": [
+      256
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 38.907830078125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 1,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b1-c16384.json",
+    "elapsed": 10.877865121001378,
+    "tokens_per_second": 190.47102679230727,
+    "cold_seconds": 0.9260806749807671,
+    "cold_output_tokens_per_second": 138.21689995059913,
+    "warm_seconds": 0.6720182179706171,
+    "throughput_min": 190.29953275638024,
+    "throughput_max": 190.72604726804832,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.292929292929293,
+    "spec_accept_rate": 0.09427609427609428,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.576216796875,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.69403173828125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 4,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b4-c16384.json",
+    "elapsed": 17.085730677936226,
+    "tokens_per_second": 354.492141889752,
+    "cold_seconds": 2.5941195290070027,
+    "cold_output_tokens_per_second": 197.36947132732445,
+    "warm_seconds": 1.4443197450600564,
+    "throughput_min": 354.40805171592086,
+    "throughput_max": 354.538038269304,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3195876288659794,
+    "spec_accept_rate": 0.10395189003436427,
+    "rank0_profile_batches": [
+      2
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 14.48910400390625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      2
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 14.647806884765625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 8,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b8-c16384.json",
+    "elapsed": 19.13820275303442,
+    "tokens_per_second": 617.7559469654001,
+    "cold_seconds": 3.8810447989962995,
+    "cold_output_tokens_per_second": 263.8464776971456,
+    "warm_seconds": 1.6576125329593197,
+    "throughput_min": 616.5662813406859,
+    "throughput_max": 618.60687463729,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3094629156010231,
+    "spec_accept_rate": 0.1010230179028133,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 14.485453125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 14.424763916015625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 16,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b16-c16384.json",
+    "elapsed": 24.795125402044505,
+    "tokens_per_second": 923.1095220469275,
+    "cold_seconds": 6.656058916007169,
+    "cold_output_tokens_per_second": 307.68958415839154,
+    "warm_seconds": 2.218588315998204,
+    "throughput_min": 922.4767714535338,
+    "throughput_max": 923.4176690297427,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3385620915032679,
+    "spec_accept_rate": 0.11089324618736383,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 16.572181884765627,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 16.5845458984375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 32,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b32-c16384.json",
+    "elapsed": 32.0044673869852,
+    "tokens_per_second": 1574.5152655617655,
+    "cold_seconds": 11.451300722081214,
+    "cold_output_tokens_per_second": 357.6886241492026,
+    "warm_seconds": 2.60143555898685,
+    "throughput_min": 1567.2586241463564,
+    "throughput_max": 1576.1613634285582,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3447143795141168,
+    "spec_accept_rate": 0.11315386298971329,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 18.158589111328126,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 18.1302138671875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 64,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b64-c16384.json",
+    "elapsed": 44.82094520004466,
+    "tokens_per_second": 2570.6843530046326,
+    "cold_seconds": 21.023227464058436,
+    "cold_output_tokens_per_second": 389.66424227703106,
+    "warm_seconds": 3.1867000670172274,
+    "throughput_min": 2562.2218089882035,
+    "throughput_max": 2571.728137131357,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3471468508469002,
+    "spec_accept_rate": 0.11374225730417147,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 22.73502392578125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 22.701875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 128,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b128-c16384.json",
+    "elapsed": 69.75182031898294,
+    "tokens_per_second": 3843.2165881598153,
+    "cold_seconds": 40.090039848932065,
+    "cold_output_tokens_per_second": 408.6800627222735,
+    "warm_seconds": 4.26309567107819,
+    "throughput_min": 3812.1605786939067,
+    "throughput_max": 3851.675354255434,
+    "completed_requests": 128,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3742660627411507,
+    "spec_accept_rate": 0.12291002628194375,
+    "rank0_profile_batches": [
+      64
+    ],
+    "rank0_iteration_request_batches": [
+      128
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 31.423988037109375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      64
+    ],
+    "rank1_iteration_request_batches": [
+      128
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 31.399326171875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 256,
+    "context": 16384,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b256-c16384.json",
+    "elapsed": 121.81769073696341,
+    "tokens_per_second": 4852.075361289247,
+    "cold_seconds": 78.46681153494865,
+    "cold_output_tokens_per_second": 417.6033071689848,
+    "warm_seconds": 6.753398815984838,
+    "throughput_min": 4834.637575573605,
+    "throughput_max": 4906.091137793265,
+    "completed_requests": 256,
+    "retractions": 0,
+    "cached_tokens_min": 16254,
+    "prompt_tokens_min": 16256,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.3738051316451452,
+    "spec_accept_rate": 0.12285482698865224,
+    "rank0_profile_batches": [
+      128
+    ],
+    "rank0_iteration_request_batches": [
+      256
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 50.21398095703125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      128
+    ],
+    "rank1_iteration_request_batches": [
+      256
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 50.178846923828125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 1,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b1-c32768.json",
+    "elapsed": 11.929604643024504,
+    "tokens_per_second": 171.94240178299825,
+    "cold_seconds": 1.3837927399436012,
+    "cold_output_tokens_per_second": 92.49940132307448,
+    "warm_seconds": 0.7444353380706161,
+    "throughput_min": 171.93159031178521,
+    "throughput_max": 173.5143292206595,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2190476190476192,
+    "spec_accept_rate": 0.06984126984126984,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.608570068359375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.747281005859375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 4,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b4-c32768.json",
+    "elapsed": 22.54246533603873,
+    "tokens_per_second": 306.0217416156152,
+    "cold_seconds": 4.586920144036412,
+    "cold_output_tokens_per_second": 111.6217383173034,
+    "warm_seconds": 1.6730837400536984,
+    "throughput_min": 305.74140560390435,
+    "throughput_max": 306.7368134935205,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1662870159453302,
+    "spec_accept_rate": 0.05315110098709187,
+    "rank0_profile_batches": [
+      2
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 14.582161865234376,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      2
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 14.82489794921875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 8,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b8-c32768.json",
+    "elapsed": 23.4937936560018,
+    "tokens_per_second": 535.6420003020302,
+    "cold_seconds": 6.818144685938023,
+    "cold_output_tokens_per_second": 150.18748459708297,
+    "warm_seconds": 1.9117246209643781,
+    "throughput_min": 535.1629042489105,
+    "throughput_max": 535.6985011067069,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2089728453364816,
+    "spec_accept_rate": 0.06808343171979536,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 15.07809814453125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 15.067391845703124,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 16,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b16-c32768.json",
+    "elapsed": 32.60502867400646,
+    "tokens_per_second": 803.2924343297116,
+    "cold_seconds": 12.394955739961006,
+    "cold_output_tokens_per_second": 165.22850447922963,
+    "warm_seconds": 2.5495073929196224,
+    "throughput_min": 802.1544596762079,
+    "throughput_max": 804.9822549691198,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.199063231850117,
+    "spec_accept_rate": 0.06381733021077284,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 17.8252119140625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 17.7707578125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 32,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b32-c32768.json",
+    "elapsed": 45.92227903008461,
+    "tokens_per_second": 1343.4111613135594,
+    "cold_seconds": 22.87635497096926,
+    "cold_output_tokens_per_second": 179.04950352440062,
+    "warm_seconds": 3.0489548679906875,
+    "throughput_min": 1339.1058529151903,
+    "throughput_max": 1344.1517575784594,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2150697122515575,
+    "spec_accept_rate": 0.06951448630475625,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 20.783755126953125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 20.75860693359375,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 64,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b64-c32768.json",
+    "elapsed": 71.7543560450431,
+    "tokens_per_second": 2046.1073210717557,
+    "cold_seconds": 43.65404101193417,
+    "cold_output_tokens_per_second": 187.6573121320078,
+    "warm_seconds": 4.003700057975948,
+    "throughput_min": 2041.6239308580564,
+    "throughput_max": 2053.4976531683424,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2188662401428358,
+    "spec_accept_rate": 0.07062441104994296,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 27.179141845703125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 27.18380029296875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 128,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b128-c32768.json",
+    "elapsed": 124.27156845596619,
+    "tokens_per_second": 2787.021658581242,
+    "cold_seconds": 85.59487382601947,
+    "cold_output_tokens_per_second": 191.41333198647146,
+    "warm_seconds": 5.878676955937408,
+    "throughput_min": 2784.0300214797744,
+    "throughput_max": 2794.7078230674424,
+    "completed_requests": 128,
+    "retractions": 0,
+    "cached_tokens_min": 32638,
+    "prompt_tokens_min": 32640,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2184130289283854,
+    "spec_accept_rate": 0.07027589796980739,
+    "rank0_profile_batches": [
+      64
+    ],
+    "rank0_iteration_request_batches": [
+      128
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 39.387093017578124,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      64
+    ],
+    "rank1_iteration_request_batches": [
+      128
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 39.381260009765626,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 256,
+    "context": 32768,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 8404992
+  },
+  {
+    "mode": "phase",
+    "batch": 1,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b1-c65536.json",
+    "elapsed": 13.130691751022823,
+    "tokens_per_second": 167.92522554960397,
+    "cold_seconds": 2.196640050970018,
+    "cold_output_tokens_per_second": 58.270812254140715,
+    "warm_seconds": 0.7622440260602161,
+    "throughput_min": 167.10814986611243,
+    "throughput_max": 168.00590672877783,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2307692307692308,
+    "spec_accept_rate": 0.07371794871794872,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.592537109375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.56664111328125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 4,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b4-c65536.json",
+    "elapsed": 23.443741041002795,
+    "tokens_per_second": 295.03492144781876,
+    "cold_seconds": 7.558902799966745,
+    "cold_output_tokens_per_second": 67.73469821602316,
+    "warm_seconds": 1.735387788969092,
+    "throughput_min": 294.7516129427005,
+    "throughput_max": 295.3687415175333,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1743119266055047,
+    "spec_accept_rate": 0.05504587155963303,
+    "rank0_profile_batches": [
+      2
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 14.795411865234374,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      2
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 14.77811376953125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 8,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b8-c65536.json",
+    "elapsed": 31.30359794793185,
+    "tokens_per_second": 505.87755917895964,
+    "cold_seconds": 13.931787136010826,
+    "cold_output_tokens_per_second": 73.500979451026,
+    "warm_seconds": 2.0242052279645577,
+    "throughput_min": 504.1686520141528,
+    "throughput_max": 506.42069658995916,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2004689331770222,
+    "spec_accept_rate": 0.06369675654552559,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 16.80553173828125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 16.80973291015625,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 16,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b16-c65536.json",
+    "elapsed": 49.17576883500442,
+    "tokens_per_second": 724.8613919327926,
+    "cold_seconds": 26.771704930928536,
+    "cold_output_tokens_per_second": 76.49867669182353,
+    "warm_seconds": 2.8253677500179037,
+    "throughput_min": 721.673774057638,
+    "throughput_max": 725.3243427630434,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2147093712930013,
+    "spec_accept_rate": 0.0693950177935943,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 22.025139892578125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 22.013780029296875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 32,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b32-c65536.json",
+    "elapsed": 77.96277353202458,
+    "tokens_per_second": 1097.0772724135525,
+    "cold_seconds": 51.49013975600246,
+    "cold_output_tokens_per_second": 79.54921115789958,
+    "warm_seconds": 3.733556516934186,
+    "throughput_min": 1097.0595516436033,
+    "throughput_max": 1104.4544969776177,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2190476190476192,
+    "spec_accept_rate": 0.06994047619047619,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 27.463464111328125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 27.425023193359376,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 64,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b64-c65536.json",
+    "elapsed": 136.98598303308245,
+    "tokens_per_second": 1516.2945729962678,
+    "cold_seconds": 100.9128779360326,
+    "cold_output_tokens_per_second": 81.17893540993653,
+    "warm_seconds": 5.402644147048704,
+    "throughput_min": 1514.6577198496423,
+    "throughput_max": 1521.2064707113996,
+    "completed_requests": 64,
+    "retractions": 0,
+    "cached_tokens_min": 65406,
+    "prompt_tokens_min": 65408,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.208616110947182,
+    "spec_accept_rate": 0.06698141044555916,
+    "rank0_profile_batches": [
+      32
+    ],
+    "rank0_iteration_request_batches": [
+      64
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 37.74702099609375,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      32
+    ],
+    "rank1_iteration_request_batches": [
+      64
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 37.669996826171875,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 128,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 8396800
+  },
+  {
+    "mode": "phase",
+    "batch": 256,
+    "context": 65536,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 16793600
+  },
+  {
+    "mode": "phase",
+    "batch": 1,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b1-c131072.json",
+    "elapsed": 15.533555435016751,
+    "tokens_per_second": 157.40903625252582,
+    "cold_seconds": 4.772396059939638,
+    "cold_output_tokens_per_second": 26.820908908725183,
+    "warm_seconds": 0.8131680559599772,
+    "throughput_min": 157.25409368201755,
+    "throughput_max": 157.63487800333692,
+    "completed_requests": 1,
+    "retractions": 0,
+    "cached_tokens_min": 130936,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1851851851851851,
+    "spec_accept_rate": 0.05864197530864197,
+    "rank0_profile_batches": [
+      1
+    ],
+    "rank0_iteration_request_batches": [
+      1
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 6.68722509765625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 0,
+    "rank1_profile_batches": [
+      1
+    ],
+    "rank1_iteration_request_batches": [
+      1
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 6.6035048828125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 0,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 4,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b4-c131072.json",
+    "elapsed": 33.90663746499922,
+    "tokens_per_second": 284.4880295788766,
+    "cold_seconds": 17.669278429006226,
+    "cold_output_tokens_per_second": 28.976848265602683,
+    "warm_seconds": 1.7997242300771177,
+    "throughput_min": 284.29072718585286,
+    "throughput_max": 285.64653392076747,
+    "completed_requests": 4,
+    "retractions": 0,
+    "cached_tokens_min": 130936,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.2075471698113207,
+    "spec_accept_rate": 0.0660377358490566,
+    "rank0_profile_batches": [
+      2
+    ],
+    "rank0_iteration_request_batches": [
+      4
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 15.06520703125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      2
+    ],
+    "rank1_iteration_request_batches": [
+      4
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 15.05344189453125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 8,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b8-c131072.json",
+    "elapsed": 53.080979602993466,
+    "tokens_per_second": 443.3161561444738,
+    "cold_seconds": 34.12014898203779,
+    "cold_output_tokens_per_second": 30.011592286395775,
+    "warm_seconds": 2.309863933012821,
+    "throughput_min": 443.1859686614261,
+    "throughput_max": 443.50716346893904,
+    "completed_requests": 8,
+    "retractions": 0,
+    "cached_tokens_min": 130936,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1783659378596087,
+    "spec_accept_rate": 0.05753739930955121,
+    "rank0_profile_batches": [
+      4
+    ],
+    "rank0_iteration_request_batches": [
+      8
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 17.571617919921874,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      4
+    ],
+    "rank1_iteration_request_batches": [
+      8
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 17.604841064453126,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 16,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b16-c131072.json",
+    "elapsed": 91.88205089594703,
+    "tokens_per_second": 612.4769007935953,
+    "cold_seconds": 67.25763004599139,
+    "cold_output_tokens_per_second": 30.45007679574137,
+    "warm_seconds": 3.343799574067816,
+    "throughput_min": 609.9670420718986,
+    "throughput_max": 613.9803178843754,
+    "completed_requests": 16,
+    "retractions": 0,
+    "cached_tokens_min": 130936,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1962616822429906,
+    "spec_accept_rate": 0.0630841121495327,
+    "rank0_profile_batches": [
+      8
+    ],
+    "rank0_iteration_request_batches": [
+      16
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 24.487578125,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      8
+    ],
+    "rank1_iteration_request_batches": [
+      16
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 24.514903076171876,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 32,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "ok",
+    "output": "b32-c131072.json",
+    "elapsed": 166.8766209720634,
+    "tokens_per_second": 798.2612538390421,
+    "cold_seconds": 132.67806741292588,
+    "cold_output_tokens_per_second": 30.871718889696126,
+    "warm_seconds": 5.131152214016765,
+    "throughput_min": 797.4262094200753,
+    "throughput_max": 802.4657620895684,
+    "completed_requests": 32,
+    "retractions": 0,
+    "cached_tokens_min": 130936,
+    "prompt_tokens_min": 130938,
+    "completion_tokens_min": 128,
+    "repeated_outputs_stable": true,
+    "spec_accept_length": 1.1773498131647024,
+    "spec_accept_rate": 0.05662546708824375,
+    "rank0_profile_batches": [
+      16
+    ],
+    "rank0_iteration_request_batches": [
+      32
+    ],
+    "rank0_profiled_gpu_iteration_median_ms": 34.0271650390625,
+    "rank0_profiled_gpu_iterations": 7,
+    "rank0_graph_launches": 14,
+    "rank0_phase_pairs": 7,
+    "rank1_profile_batches": [
+      16
+    ],
+    "rank1_iteration_request_batches": [
+      32
+    ],
+    "rank1_profiled_gpu_iteration_median_ms": 34.0067939453125,
+    "rank1_profiled_gpu_iterations": 7,
+    "rank1_graph_launches": 14,
+    "rank1_phase_pairs": 7,
+    "validation": "passed"
+  },
+  {
+    "mode": "phase",
+    "batch": 64,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 8392704
+  },
+  {
+    "mode": "phase",
+    "batch": 128,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 16785408
+  },
+  {
+    "mode": "phase",
+    "batch": 256,
+    "context": 131072,
+    "capacity": 6649985,
+    "status": "exceeds_fixed_batch_capacity",
+    "required_tokens": 33570816
+  }
+]
