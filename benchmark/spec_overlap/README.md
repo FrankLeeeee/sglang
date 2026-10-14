@@ -16,6 +16,12 @@ serializes the same segments as a control. These experimental modes require
 They preserve the extension-A / verification-B fence. Better paired-region
 overlap does not by itself imply better end-to-end throughput.
 
+`--speculative-microbatch-preserve-internal-pdl` optionally preserves captured
+programmatic dependencies inside each phase segment. Phase boundaries still wait
+for every node in the segment, since a programmatic successor can finish before
+its predecessor. The context runner exposes this as `--preserve-internal-pdl`;
+compare it with the default full-dependency reconstruction before using it.
+
 The reproducible EP=2 matrix is:
 
 ```bash

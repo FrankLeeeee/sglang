@@ -42,10 +42,13 @@ def main():
     parser.add_argument("--port", type=int, default=31080)
     parser.add_argument("--tbo", action="store_true")
     parser.add_argument("--compute-chunks", type=int, default=4)
+    parser.add_argument("--preserve-internal-pdl", action="store_true")
     parser.add_argument("--sanity-eval", action="store_true")
     parser.add_argument("--allow-draft-context-extension", action="store_true")
     parser.add_argument("--extra-server-args", nargs=argparse.REMAINDER, default=[])
     args = parser.parse_args()
+    if args.preserve_internal_pdl and args.mode not in {"phase", "phase_serial"}:
+        parser.error("--preserve-internal-pdl requires a phase schedule")
     args.results.mkdir(parents=True, exist_ok=True)
     command = [sys.executable]
     if args.mode in {"phase", "phase_serial"}:
@@ -122,11 +125,16 @@ def main():
         ]
     if args.tbo:
         command.append("--enable-two-batch-overlap")
+    if args.preserve_internal_pdl:
+        command.append("--speculative-microbatch-preserve-internal-pdl")
     command += args.extra_server_args
     (args.results / "command.json").write_text(json.dumps(command, indent=2))
     (args.results / "experiment-options.json").write_text(
         json.dumps(
-            {"allow_draft_context_extension": args.allow_draft_context_extension},
+            {
+                "allow_draft_context_extension": args.allow_draft_context_extension,
+                "preserve_internal_pdl": args.preserve_internal_pdl,
+            },
             indent=2,
         )
     )

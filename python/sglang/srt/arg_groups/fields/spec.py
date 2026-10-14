@@ -76,6 +76,10 @@ class Spec(msgspec.Struct):
         int,
         "Number of pieces per draft compute phase for phase scheduling.",
     ] = 4
+    speculative_microbatch_preserve_internal_pdl: A[
+        bool,
+        "Preserve captured dependencies inside phase segments; keep full completion fences between phases.",
+    ] = False
     speculative_microbatch_graph_chunks: A[
         int,
         "Number of ordered target graph partitions in experimental fine modes.",

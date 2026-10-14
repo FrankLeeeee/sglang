@@ -99,8 +99,8 @@ def summarize(root):
                     continue
                 with gzip.open(traces[0], "rt") as stream:
                     events = json.load(stream)["traceEvents"]
-                batches = [
-                    int(match[1])
+                steps = [
+                    (event, int(match[1]))
                     for event in events
                     if event.get("cat") == "user_annotation"
                     and (
@@ -109,7 +109,59 @@ def summarize(root):
                         )
                     )
                 ]
+                batches = [size for event, size in steps]
                 row[f"rank{rank}_profile_batches"] = sorted(set(batches))
+                grouped_batches = []
+                iteration_ids = []
+                for parent in events:
+                    if (
+                        parent.get("cat") != "user_annotation"
+                        or parent.get("name") != "scheduler.run_batch"
+                    ):
+                        continue
+                    sizes = [
+                        size
+                        for event, size in steps
+                        if event["pid"] == parent["pid"]
+                        and event["tid"] == parent["tid"]
+                        and parent["ts"] <= event["ts"]
+                        and event["ts"] + event["dur"]
+                        <= parent["ts"] + parent["dur"] + 0.01
+                    ]
+                    if sizes:
+                        grouped_batches.append(sorted(sizes))
+                        iteration_ids.append(parent["args"]["External id"])
+                expected_sizes = [batch]
+                if mode in {"launch", "phase", "phase-serial"} and batch > 1:
+                    percent = result["server_info"][
+                        "speculative_microbatch_split_percent"
+                    ]
+                    cut = max(1, min(batch - 1, batch * percent // 100))
+                    expected_sizes = sorted([cut, batch - cut])
+                row[f"rank{rank}_iteration_request_batches"] = sorted(
+                    {sum(sizes) for sizes in grouped_batches}
+                )
+                gpu_iterations = []
+                for external_id in iteration_ids:
+                    ranges = [
+                        (event["ts"], event["ts"] + event["dur"])
+                        for event in events
+                        if event.get("cat") == "gpu_user_annotation"
+                        and event.get("name") == "scheduler.run_batch"
+                        and event.get("args", {}).get("External id") == external_id
+                    ]
+                    if ranges:
+                        gpu_iterations.append(
+                            (
+                                max(end for start, end in ranges)
+                                - min(start for start, end in ranges)
+                            )
+                            / 1000
+                        )
+                if gpu_iterations:
+                    row[f"rank{rank}_profiled_gpu_iteration_median_ms"] = (
+                        statistics.median(gpu_iterations)
+                    )
                 gpu_steps = [
                     e["dur"] / 1000
                     for e in events
@@ -117,8 +169,8 @@ def summarize(root):
                     and re.match(r"step\[(?:DECODE|VERIFY) bs=", e.get("name", ""))
                 ]
                 if gpu_steps:
-                    row[f"rank{rank}_profiled_gpu_step_median_ms"] = statistics.median(
-                        gpu_steps
+                    row[f"rank{rank}_profiled_gpu_model_call_median_ms"] = (
+                        statistics.median(gpu_steps)
                     )
                 row[f"rank{rank}_graph_launches"] = sum(
                     "cudaGraphLaunch" in e.get("name", "") for e in events
@@ -128,7 +180,11 @@ def summarize(root):
                     and e.get("cat") == "user_annotation"
                     for e in events
                 )
-                if not batches or any(size != batch for size in batches):
+                if (
+                    not grouped_batches
+                    or any(sizes != expected_sizes for sizes in grouped_batches)
+                    or sum(map(len, grouped_batches)) != len(steps)
+                ):
                     errors.append(f"rank{rank}_nonfixed_batch")
                 if not row[f"rank{rank}_graph_launches"]:
                     errors.append(f"rank{rank}_no_graph")

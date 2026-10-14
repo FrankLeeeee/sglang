@@ -115,6 +115,7 @@ def launch_cycles(events):
 
 def summarize_cycles(trace_path, cycles, attribution):
     rows = []
+    uncovered = defaultdict(lambda: {"calls": 0, "duration_us": 0.0, "outside_us": 0.0})
     for correlation, kernels in cycles.items():
         lanes = defaultdict(list)
         for event in kernels:
@@ -146,7 +147,11 @@ def summarize_cycles(trace_path, cycles, attribution):
         row["comm_comm_ms"] = intersection(dm, tm) / 1000
         row["draft_comm_draft_compute_ms"] = intersection(dm, dc) / 1000
         row["compute_compute_ms"] = intersection(dc, tc) / 1000
+        row["target_compute_comm_ms"] = intersection(tc, tm) / 1000
         row["draft_compute_coverage"] = intersection(dc, tm) / duration(dc) if dc else 0
+        row["draft_compute_any_target_coverage"] = (
+            intersection(dc, tc + tm) / duration(dc) if dc else 0
+        )
         row["draft_comm_coverage"] = intersection(dm, tc) / duration(dm) if dm else 0
         row["draft_compute_spread_fraction"] = (
             max(b for a, b in dc) - min(a for a, b in dc)
@@ -175,6 +180,14 @@ def summarize_cycles(trace_path, cycles, attribution):
             (e for e in kernels if e["phase_metadata"]["role"] == "draft"),
             key=lambda e: e["ts"],
         )
+        for event in draft_kernels:
+            if event["phase_metadata"]["phase"] == "compute":
+                entry = uncovered[event["name"]]
+                entry["calls"] += 1
+                entry["duration_us"] += event["dur"]
+                entry["outside_us"] += event["dur"] - intersection(
+                    [(event["ts"], event["ts"] + event["dur"])], tm
+                )
         comm_starts = []
         previous_phase = None
         for event in draft_kernels:
@@ -202,6 +215,21 @@ def summarize_cycles(trace_path, cycles, attribution):
         "trace": str(trace_path),
         "attribution": attribution,
         "kernel_scope": "Model kernels; CUDA memcpy32_post graph-copy helpers excluded in both schedules",
+        "top_uncovered_draft_compute": sorted(
+            [
+                {
+                    "kernel": name,
+                    "calls": values["calls"],
+                    "mean_outside_target_comm_us_per_pair": values["outside_us"]
+                    / len(rows),
+                    "target_comm_coverage": 1
+                    - values["outside_us"] / values["duration_us"],
+                }
+                for name, values in uncovered.items()
+            ],
+            key=lambda item: item["mean_outside_target_comm_us_per_pair"],
+            reverse=True,
+        )[:12],
         "cycles": rows,
         "median": medians,
         "maximum_forbidden_ms": {

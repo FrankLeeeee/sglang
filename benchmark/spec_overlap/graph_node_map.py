@@ -100,13 +100,16 @@ def install():
     original_pair = GraphPhases.pair
     prepared = set()
 
-    def prepared_pair(self, draft, serial=False):
-        if serial not in prepared:
+    def prepared_pair(self, draft, serial=False, preserve_internal_pdl=False):
+        key = (serial, preserve_internal_pdl)
+        if key not in prepared:
             for target_phases in captured["target"]:
                 for draft_phases in captured["draft"]:
-                    original_pair(target_phases, draft_phases, serial)
-            prepared.add(serial)
-        return original_pair(self, draft, serial)
+                    original_pair(
+                        target_phases, draft_phases, serial, preserve_internal_pdl
+                    )
+            prepared.add(key)
+        return original_pair(self, draft, serial, preserve_internal_pdl)
 
     GraphPhases.pair = prepared_pair
 
@@ -167,6 +170,7 @@ def install():
                     "positions": self.positions,
                     "target_kinds": self.target.kinds,
                     "draft_kinds": self.draft.kinds,
+                    "preserved_programmatic_edges": self.preserved_programmatic_edges,
                     "nodes": nodes,
                 }
             ),
