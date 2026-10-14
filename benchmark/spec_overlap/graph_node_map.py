@@ -8,6 +8,7 @@ no kernel-name heuristic or undocumented graph-ID bit layout is used.
 import ctypes
 import json
 import os
+from collections import Counter
 
 
 class ResourceData(ctypes.Structure):
@@ -48,7 +49,26 @@ def install():
                 if self._cuda_graph_runner.model_runner.is_draft_worker
                 else "target"
             )
-            captured[role].append(self._speculative_phases[shape_key])
+            phases = self._speculative_phases[shape_key]
+            captured[role].append(phases)
+            driver = phases.driver
+            raw = driver.CUgraph(phases.original.raw_cuda_graph())
+            _, _, _, count = phases.check(driver.cuGraphGetEdges(raw, 0))
+            _, _, edge_data, _ = phases.check(driver.cuGraphGetEdges(raw, count))
+            print(
+                "PHASE_GRAPH_EDGES "
+                + json.dumps(
+                    {
+                        "pid": os.getpid(),
+                        "role": role,
+                        "shape": str(shape_key),
+                        "edge_types": dict(
+                            Counter(int(edge.type) for edge in edge_data)
+                        ),
+                    }
+                ),
+                flush=True,
+            )
         return result
 
     FullCudaGraphBackend.capture_one = tracked_capture

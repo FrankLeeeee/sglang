@@ -12,6 +12,12 @@ from analyze_results import duration, intersection
 from sglang.srt.speculative.graph_interleave import is_communication_kernel
 
 
+def is_model_kernel(event):
+    # CUDA emits these copy helpers for graph memory nodes without a source
+    # kernel-node identity. Exclude them consistently from both schedules.
+    return event.get("cat") == "kernel" and event.get("name") != "memcpy32_post"
+
+
 def analyze(trace_path, server_log, mode="phase"):
     with gzip.open(trace_path, "rt") as stream:
         trace = json.load(stream)
@@ -38,7 +44,7 @@ def analyze(trace_path, server_log, mode="phase"):
         raise ValueError(f"No CUPTI graph-node map for {trace_path}")
     cycles = defaultdict(list)
     for event in events:
-        if event.get("cat") != "kernel":
+        if not is_model_kernel(event):
             continue
         args = event.get("args", {})
         metadata = mapping.get(str(args.get("graph node id")))
@@ -60,7 +66,7 @@ def launch_cycles(events):
     ]
     kernels = defaultdict(list)
     for event in events:
-        if event.get("cat") == "kernel":
+        if is_model_kernel(event):
             kernels[event["args"]["correlation"]].append(event)
 
     def inside(inner, outer):
@@ -195,6 +201,7 @@ def summarize_cycles(trace_path, cycles, attribution):
     return {
         "trace": str(trace_path),
         "attribution": attribution,
+        "kernel_scope": "Model kernels; CUDA memcpy32_post graph-copy helpers excluded in both schedules",
         "cycles": rows,
         "median": medians,
         "maximum_forbidden_ms": {

@@ -9,6 +9,13 @@ import statistics
 from pathlib import Path
 
 MODES = ("no-spec", "spec", "launch", "phase", "phase-serial")
+LABELS = {
+    "no-spec": "Target only",
+    "spec": "Standard EAGLE3",
+    "launch": "Previous overlap",
+    "phase": "Phase-fenced overlap",
+    "phase-serial": "Phase serial control",
+}
 
 
 def summarize(root):
@@ -137,14 +144,17 @@ def plot(rows, output):
                     [r["tokens_per_second"] for r in data],
                     marker="o",
                     markersize=3,
-                    label=mode,
+                    label=LABELS[mode],
                 )
         ax.set(
             title=f"{context // 1024}k total context",
             xlabel="Batch size",
             xscale="log",
             yscale="log",
+            xlim=(1, 256),
         )
+        batches = (1, 4, 8, 16, 32, 64, 128, 256)
+        ax.set_xticks(batches, [str(batch) for batch in batches], fontsize=8)
         ax.grid(alpha=0.2)
     axes[0].set_ylabel("Generated tokens/s (cached prefix)")
     axes[3].set_ylabel("Generated tokens/s (cached prefix)")
@@ -155,7 +165,7 @@ def plot(rows, output):
     axes[-1].text(
         0.5,
         0.1,
-        "EP=TP=2; two H200 GPUs\n128 output tokens; median of 3 runs",
+        "EP=TP=2; two H200 GPUs\n128 output tokens; median of 3 runs\nNative TBO disabled",
         ha="center",
         transform=axes[-1].transAxes,
     )
