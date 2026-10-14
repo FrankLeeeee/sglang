@@ -16,6 +16,7 @@ LABELS = {
     "phase": "Phase-fenced overlap",
     "phase-serial": "Phase serial control",
 }
+COLORS = dict(zip(MODES, ("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd")))
 
 
 def summarize(root):
@@ -220,6 +221,7 @@ def plot(rows, output):
                     marker="o",
                     markersize=3,
                     label=LABELS[mode],
+                    color=COLORS[mode],
                 )
         ax.set(
             title=f"{context // 1024}k total context",
@@ -264,6 +266,7 @@ def main():
         writer.writerows(rows)
     plot(rows, args.output / "throughput.png")
     plot_cold(rows, args.output / "cold-latency-b16.png")
+    plot_phase_ratio(rows, args.output / "phase-vs-previous.png")
     print(
         json.dumps(
             {
@@ -309,6 +312,7 @@ def plot_cold(rows, output):
                 [row["cold_seconds"] for row in data],
                 marker="o",
                 label=LABELS[mode],
+                color=COLORS[mode],
             )
     ax.set(
         xscale="log",
@@ -320,6 +324,72 @@ def plot_cold(rows, output):
     ax.set_xticks([4, 16, 32, 64, 128], ["4", "16", "32", "64", "128"])
     ax.grid(alpha=0.2)
     ax.legend()
+    fig.tight_layout()
+    fig.savefig(output, dpi=180)
+    plt.close(fig)
+
+
+def plot_phase_ratio(rows, output):
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from matplotlib.colors import TwoSlopeNorm
+    from matplotlib.ticker import FuncFormatter
+
+    contexts = (4096, 16384, 32768, 65536, 131072)
+    batches = (1, 4, 8, 16, 32, 64, 128, 256)
+    lookup = {(row["mode"], row["context"], row["batch"]): row for row in rows}
+    values = np.full((len(contexts), len(batches)), np.nan)
+    labels = {}
+    for i, context in enumerate(contexts):
+        for j, batch in enumerate(batches):
+            old = lookup.get(("launch", context, batch), {})
+            new = lookup.get(("phase", context, batch), {})
+            if batch == 1:
+                labels[i, j] = "fallback"
+            elif old.get("validation") == new.get("validation") == "passed":
+                values[i, j] = new["tokens_per_second"] / old["tokens_per_second"]
+                labels[i, j] = f"{100 * (values[i, j] - 1):+.1f}%"
+            else:
+                labels[i, j] = (
+                    "capacity"
+                    if "exceeds_fixed_batch_capacity"
+                    in {old.get("status"), new.get("status")}
+                    else "pending"
+                )
+    if np.isnan(values).all():
+        return
+    fig, ax = plt.subplots(figsize=(10, 4))
+    palette = plt.get_cmap("RdYlGn").copy()
+    palette.set_bad("#eeeeee")
+    image = ax.imshow(
+        np.ma.masked_invalid(values),
+        cmap=palette,
+        norm=TwoSlopeNorm(
+            vmin=min(0.8, float(np.nanmin(values)) - 0.02),
+            vcenter=1,
+            vmax=max(1.05, float(np.nanmax(values)) + 0.02),
+        ),
+        aspect="auto",
+    )
+    for (i, j), label in labels.items():
+        ax.text(j, i, label, ha="center", va="center", fontsize=9)
+    ax.set(
+        xticks=range(len(batches)),
+        xticklabels=batches,
+        yticks=range(len(contexts)),
+        yticklabels=[f"{context // 1024}k" for context in contexts],
+        xlabel="Batch size",
+        ylabel="Total context budget",
+        title="Phase schedule: throughput change versus previous overlap",
+    )
+    fig.colorbar(
+        image,
+        ax=ax,
+        format=FuncFormatter(lambda value, _: f"{100 * (value - 1):+.0f}%"),
+    )
     fig.tight_layout()
     fig.savefig(output, dpi=180)
     plt.close(fig)
