@@ -109,3 +109,17 @@ Why MineDraft loses here: it splits the batch into two cohorts, so each round ru
 | 128 | 10017 | 16208 | 9575 | 7708 | 0.48x | 0.80x |
 
 A longer draft moves MineDraft closer to the serial path (0.80x at C = 128, from 0.73x with (3, 1, 4)) but not past it, and it stays at about half of two replicas.
+
+## 10. Standalone draft 2026-11-12 00:40 (branch `feature/minedraft`, 243aef80d7)
+
+`StandaloneWorkerV2` now builds its draft on the draft GPU through the same path (`_build_draft_worker(worker_cls=StandaloneDraftWorker)`), and `StandaloneDraftWorker.alloc_memory_pool` gets the mirrored `req_to_token` and the slot-allocator proxy. Llama-3.1-8B-Instruct target, Llama-3.2-1B-Instruct draft, (3, 1, 4), CUDA graphs on (draft decode + prefill graphs on cuda:1 for the cross-GPU configs), overlap scheduler ON, 3C requests, tok/s (`data/insglang2/sa_overlap_*.json`, script `sa.sh`):
+
+| C | colocated 1 GPU | 2 colocated replicas | cross-GPU serial SD | cross-GPU MineDraft | MineDraft / replicas | MineDraft / serial |
+|---|---|---|---|---|---|---|
+| 32 | 5561 | 6518 | 5429 | 3234 | 0.50x | 0.60x |
+| 64 | 8066 | 11123 | 7190 | 4609 | 0.41x | 0.64x |
+| 128 | 12523 | 16133 | 12097 | 7153 | 0.44x | 0.59x |
+
+Correctness: under `--enable-deterministic-inference` (C = 16, 32 requests) cross-GPU MineDraft with the standalone draft equals AR on 32/32.
+
+A 1B standalone draft costs more than the EAGLE-3 head, but on an 8B target its draft time is still well below the verify, so MineDraft stays at 0.59-0.64x of the cross-GPU serial path and 0.41-0.50x of two replicas, the same picture as EAGLE-3.

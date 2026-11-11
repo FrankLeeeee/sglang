@@ -1,0 +1,19 @@
+up sac
+coloc {"conc": 16, "num_requests": 48, "wall_s": 2.9458918129093945, "out_tokens": 9601, "tok_s": 3259.1149335243067, "accept_len": 2.999375195251484, "mean_latency_s": 0.821055914653698}
+coloc {"conc": 32, "num_requests": 96, "wall_s": 3.3938177041709423, "out_tokens": 18874, "tok_s": 5561.288685837247, "accept_len": 3.193570219966159, "mean_latency_s": 0.9426590063764403}
+coloc {"conc": 64, "num_requests": 192, "wall_s": 4.66471179202199, "out_tokens": 37627, "tok_s": 8066.307561456012, "accept_len": 3.1798360517197666, "mean_latency_s": 1.338265436810616}
+coloc {"conc": 128, "num_requests": 384, "wall_s": 5.994506652932614, "out_tokens": 75071, "tok_s": 12523.299138099046, "accept_len": 3.1863752122241085, "mean_latency_s": 1.7467129121808587}
+up sas
+disagg_serial {"conc": 32, "num_requests": 96, "wall_s": 3.5225083990953863, "out_tokens": 19124, "tok_s": 5429.085706342454, "accept_len": 3.1762165753197142, "mean_latency_s": 0.9603303535550367}
+disagg_serial {"conc": 64, "num_requests": 192, "wall_s": 5.258498452603817, "out_tokens": 37808, "tok_s": 7189.885162232738, "accept_len": 3.18222371854221, "mean_latency_s": 1.4966424588128575}
+disagg_serial {"conc": 128, "num_requests": 384, "wall_s": 6.200002042111009, "out_tokens": 75004, "tok_s": 12097.415370279821, "accept_len": 3.1923387954884017, "mean_latency_s": 1.7827092927266979}
+up sam
+minedraft {"conc": 32, "num_requests": 96, "wall_s": 5.859029363840818, "out_tokens": 18946, "tok_s": 3233.6414145533777, "accept_len": 3.1895622895622897, "mean_latency_s": 1.5750010756552608}
+minedraft {"conc": 64, "num_requests": 192, "wall_s": 8.22516199434176, "out_tokens": 37910, "tok_s": 4609.027764569133, "accept_len": 3.184643817204301, "mean_latency_s": 2.2909427908962243}
+minedraft {"conc": 128, "num_requests": 384, "wall_s": 10.44095928920433, "out_tokens": 74683, "tok_s": 7152.886811580638, "accept_len": 3.1894004099760846, "mean_latency_s": 3.0141094587367356}
+up sadar
+det_ar {"conc": 16, "num_requests": 32, "wall_s": 9.636812886223197, "out_tokens": 6108, "tok_s": 633.8195077681758, "accept_len": 1.0, "mean_latency_s": 3.613570617279038}
+up sadmd
+det_md {"conc": 16, "num_requests": 32, "wall_s": 12.294084544293582, "out_tokens": 6108, "tok_s": 496.8243042411065, "accept_len": 2.8409302325581396, "mean_latency_s": 4.687655689427629}
+standalone md == ar: 32 / 32
+SADONE
