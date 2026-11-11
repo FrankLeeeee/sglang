@@ -2088,7 +2088,8 @@ class Scheduler(
                 # The other cohort's result is processed; draft it on the draft GPU while
                 # the target GPU still verifies the cohort just launched.
                 self._minedraft_after_decode()
-                self._minedraft_predraft(self.running_batch)
+                if os.environ.get("SGLANG_MINEDRAFT_PREDRAFT") == "1":
+                    self._minedraft_predraft(self.running_batch)
 
             # Run sample of the current batch
             # It depends on the result of the last batch (e.g., grammar), so we run it after the last batch is processed.

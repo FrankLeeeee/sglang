@@ -1423,6 +1423,8 @@ class EAGLEWorkerV2(BaseSpecWorker):
         entry = pending.pop(rids, None)
         if entry is not None and entry[0] == rids and not isinstance(entry[1], tuple):
             self.minedraft_hits = self.__dict__.get("minedraft_hits", 0) + 1
+            if isinstance(entry[2], torch.cuda.Event):
+                torch.cuda.current_stream().wait_event(entry[2])
             return entry[1]
         self.minedraft_misses = self.__dict__.get("minedraft_misses", 0) + 1
         return self._call_draft("draft", batch)
@@ -1436,11 +1438,20 @@ class EAGLEWorkerV2(BaseSpecWorker):
         if other.spec_info.is_verify_input():
             return
         rids = tuple(r.rid for r in other.reqs)
-        self.__dict__.setdefault("_minedraft_pending", {})[id(other)] = (
+        self.__dict__.setdefault("_minedraft_pending", {})[rids] = (
             rids,
             self._minedraft_start_async(other),
             other,
         )
+
+    def minedraft_predraft(self, batch, view):
+        """Overlap mode: draft `view` (the cohort with FutureMap-resolved inputs) now."""
+        rids = tuple(r.rid for r in batch.reqs)
+        verify_input = self._call_draft("draft", view)
+        batch.out_cache_loc = view.out_cache_loc
+        ev = torch.cuda.Event()
+        ev.record(torch.cuda.current_stream())
+        self.__dict__.setdefault("_minedraft_pending", {})[rids] = (rids, verify_input, ev)
 
     def _minedraft_start_async(self, other):
         """Launch draft(other) on the draft GPU behind a stream dependency, without host syncs."""
@@ -1469,7 +1480,7 @@ class EAGLEWorkerV2(BaseSpecWorker):
     def _minedraft_finish_pending(self):
         pending = self.__dict__.get("_minedraft_pending", {})
         for key, (rids, record, other) in list(pending.items()):
-            if isinstance(record, tuple):
+            if isinstance(record, tuple) and not isinstance(other, torch.cuda.Event):
                 pending[key] = (rids, self._minedraft_finish_async(other, record), other)
 
     def _minedraft_finish_async(self, batch, record):
