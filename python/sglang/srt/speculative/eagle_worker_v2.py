@@ -1326,7 +1326,7 @@ class EAGLEWorkerV2(BaseSpecWorker):
         pending = self.__dict__.setdefault("_minedraft_pending", {})
         entry = pending.pop(id(batch), None)
         rids = tuple(r.rid for r in batch.reqs)
-        if entry is not None and entry[0] == rids:
+        if entry is not None and entry[0] == rids and not isinstance(entry[1], tuple):
             self.minedraft_hits = self.__dict__.get("minedraft_hits", 0) + 1
             return entry[1]
         self.minedraft_misses = self.__dict__.get("minedraft_misses", 0) + 1
@@ -1343,8 +1343,53 @@ class EAGLEWorkerV2(BaseSpecWorker):
         rids = tuple(r.rid for r in other.reqs)
         self.__dict__.setdefault("_minedraft_pending", {})[id(other)] = (
             rids,
-            self._call_draft("draft", other),
+            self._minedraft_start_async(other),
+            other,
         )
+
+    def _minedraft_start_async(self, other):
+        """Launch draft(other) on the draft GPU behind a stream dependency, without host syncs."""
+        from sglang.srt.speculative import minedraft_device as md
+
+        draft_dev = torch.device(f"cuda:{self._draft_gpu_id}")
+        target_dev = torch.device(f"cuda:{self.gpu_id}")
+        mirror = self.draft_worker.req_to_token_pool
+        ready = torch.cuda.Event()
+        ready.record(torch.cuda.current_stream(target_dev))
+        with torch.cuda.device(draft_dev):
+            torch.cuda.current_stream(draft_dev).wait_event(ready)
+            rows_d = other.req_pool_indices.to(draft_dev)
+            mirror.req_to_token[rows_d] = mirror.target_pool.req_to_token[other.req_pool_indices].to(draft_dev)
+            guard = md.snapshot(other)
+            proxy = md.to_device(other, draft_dev)
+            before = md.snapshot(proxy)
+            out = self.draft_worker.draft(proxy)
+            # The draft returns views of buffers that the next draft call reuses; keep copies.
+            out = md.to_device(out, draft_dev, clone=True)
+            proxy = md.to_device(proxy, draft_dev, clone=True)
+            done = torch.cuda.Event()
+            done.record(torch.cuda.current_stream(draft_dev))
+        return (proxy, before, out, done, guard)
+
+    def _minedraft_finish_pending(self):
+        pending = self.__dict__.get("_minedraft_pending", {})
+        for key, (rids, record, other) in list(pending.items()):
+            if isinstance(record, tuple):
+                pending[key] = (rids, self._minedraft_finish_async(other, record), other)
+
+    def _minedraft_finish_async(self, batch, record):
+        """Bring a pending draft onto the target GPU: rows of req_to_token, batch fields, verify input."""
+        from sglang.srt.speculative import minedraft_device as md
+
+        proxy, before, out, done, guard = record
+        target_dev = torch.device(f"cuda:{self.gpu_id}")
+        stream = torch.cuda.current_stream(target_dev)
+        stream.wait_event(done)
+        mirror = self.draft_worker.req_to_token_pool
+        rows = batch.req_pool_indices
+        mirror.target_pool.req_to_token[rows] = mirror.req_to_token[rows.to(mirror.req_to_token.device)].to(target_dev)
+        md.write_back(batch, proxy, before, target_dev, guard=guard)
+        return md.to_device(out, target_dev)
 
     def _call_draft(self, name: str, *args):
         """Run a draft entry point, on the draft GPU when it differs from the target GPU."""
@@ -1356,14 +1401,16 @@ class EAGLEWorkerV2(BaseSpecWorker):
         draft_dev = torch.device(f"cuda:{self._draft_gpu_id}")
         target_dev = torch.device(f"cuda:{self.gpu_id}")
         mirror = self.draft_worker.req_to_token_pool
-        mirror.req_to_token.copy_(mirror.target_pool.req_to_token, non_blocking=True)
+        rows_t = args[0].req_pool_indices
+        rows_d = rows_t.to(draft_dev)
         torch.cuda.synchronize(target_dev)
+        mirror.req_to_token[rows_d] = mirror.target_pool.req_to_token[rows_t].to(draft_dev)
         proxies = [md.to_device(a, draft_dev) for a in args]
         befores = [md.snapshot(p) for p in proxies]
         with torch.cuda.device(draft_dev):
             out = fn(*proxies)
         torch.cuda.synchronize(draft_dev)
-        mirror.target_pool.req_to_token.copy_(mirror.req_to_token, non_blocking=True)
+        mirror.target_pool.req_to_token[rows_t] = mirror.req_to_token[rows_d].to(target_dev)
         for orig, proxy, before in zip(args, proxies, befores):
             md.write_back(orig, proxy, before, target_dev)
         raw = out
@@ -1533,6 +1580,7 @@ class EAGLEWorkerV2(BaseSpecWorker):
                     spec_stage_span("draft_extend"),
                 ):
                     self._call_draft("_draft_extend_for_decode", batch, batch_output)
+                    self._minedraft_finish_pending()
 
             if (
                 get_parallel().pp_size > 1

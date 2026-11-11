@@ -41,20 +41,25 @@ def _fields(obj: Any):
     return []
 
 
-def to_device(value: Any, device: torch.device, depth: int = 0) -> Any:
-    """Copy of value with every CUDA tensor on device; plain objects are shallow-copied."""
+def to_device(value: Any, device: torch.device, depth: int = 0, clone: bool = False) -> Any:
+    """Copy of value with every CUDA tensor on device; plain objects are shallow-copied.
+
+    clone=True also copies tensors already on device, detaching them from reused buffers.
+    """
     if isinstance(value, torch.Tensor):
         if value.is_cuda and value.device != device:
             return value.to(device, non_blocking=True)
+        if clone and value.is_cuda:
+            return value.clone()
         return value
     if depth >= _MAX_DEPTH or value is None or isinstance(value, (int, float, str, bool, bytes)):
         return value
     if isinstance(value, list):
-        return [to_device(v, device, depth + 1) for v in value]
+        return [to_device(v, device, depth + 1, clone) for v in value]
     if isinstance(value, tuple) and not hasattr(value, "_fields"):
-        return tuple(to_device(v, device, depth + 1) for v in value)
+        return tuple(to_device(v, device, depth + 1, clone) for v in value)
     if isinstance(value, dict):
-        return {k: to_device(v, device, depth + 1) for k, v in value.items()}
+        return {k: to_device(v, device, depth + 1, clone) for k, v in value.items()}
     names = _fields(value)
     if not names or isinstance(value, torch.nn.Module):
         return value
@@ -66,7 +71,7 @@ def to_device(value: Any, device: torch.device, depth: int = 0) -> Any:
             current = getattr(value, name)
         except AttributeError:
             continue
-        moved = to_device(current, device, depth + 1)
+        moved = to_device(current, device, depth + 1, clone)
         if moved is not current:
             try:
                 object.__setattr__(proxy, name, moved)
@@ -95,8 +100,14 @@ def snapshot(proxy: Any, depth: int = 0) -> dict:
     return snap
 
 
-def write_back(original: Any, proxy: Any, before: dict, device: torch.device, depth: int = 0) -> None:
-    """Copy attributes the callee rebound on proxy, or on its nested objects, back onto original."""
+def write_back(
+    original: Any, proxy: Any, before: dict, device: torch.device, depth: int = 0, guard: dict = None
+) -> None:
+    """Copy attributes the callee rebound on proxy, or on its nested objects, back onto original.
+
+    With guard (a snapshot of original taken when the call started), fields that changed on
+    original in the meantime are newer than the callee's view and are left alone.
+    """
     if original is None or proxy is None or original is proxy:
         return
     for name in _fields(proxy):
@@ -104,10 +115,16 @@ def write_back(original: Any, proxy: Any, before: dict, device: torch.device, de
             continue
         new = getattr(proxy, name, None)
         old, nested = before.get(name, (None, None))
+        orig_value = getattr(original, name, None)
+        guard_entry = guard.get(name) if guard is not None else None
+        if guard_entry is not None and orig_value is not guard_entry[0]:
+            continue
         if new is old:
-            orig_value = getattr(original, name, None)
             if nested is not None and orig_value is not new:
-                write_back(orig_value, new, nested, device, depth + 1)
+                write_back(
+                    orig_value, new, nested, device, depth + 1,
+                    guard_entry[1] if guard_entry is not None else None,
+                )
             continue
         try:
             object.__setattr__(original, name, to_device(new, device))
