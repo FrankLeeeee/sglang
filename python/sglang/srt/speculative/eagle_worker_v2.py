@@ -280,6 +280,17 @@ class EagleDraftWorker(EagleDraftWorkerBase):
             self.init_attention_backend()
 
     def init_cuda_graphs(self):
+        if self.gpu_id != self.target_worker.gpu_id:
+            # TODO(FrankLeeeee): capture draft graphs on the draft GPU; draft runs eager for now.
+            logger.info("[minedraft] draft on its own GPU: skipping draft CUDA graphs")
+            with draft_pp_context(), draft_tp_context(self.draft_owns_attention):
+                self.draft_worker.init_cuda_graphs(capture_decode_cuda_graph=False)
+            self.draft_runner.prefill_cuda_graph_runner = None
+            self.cuda_graph_runner = None
+            self.cuda_graph_runner_for_draft_extend = None
+            if (c := self.draft_runner.canary_manager) is not None:
+                c.mark_init_finished()
+            return
         with (
             draft_pp_context(),
             draft_tp_context(self.draft_owns_attention),
