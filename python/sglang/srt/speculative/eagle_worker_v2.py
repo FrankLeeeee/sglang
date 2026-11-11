@@ -1497,20 +1497,23 @@ class EAGLEWorkerV2(BaseSpecWorker):
         target_dev = torch.device(f"cuda:{self.gpu_id}")
         mirror = self.draft_worker.req_to_token_pool
         rows_t = args[0].req_pool_indices
-        rows_d = rows_t.to(draft_dev)
-        torch.cuda.synchronize(target_dev)
-        mirror.req_to_token[rows_d] = mirror.target_pool.req_to_token[rows_t].to(draft_dev)
-        proxies = [md.to_device(a, draft_dev) for a in args]
-        befores = [md.snapshot(p) for p in proxies]
+        ready = torch.cuda.Event()
+        ready.record(torch.cuda.current_stream(target_dev))
         with torch.cuda.device(draft_dev):
+            torch.cuda.current_stream(draft_dev).wait_event(ready)
+            rows_d = rows_t.to(draft_dev)
+            mirror.req_to_token[rows_d] = mirror.target_pool.req_to_token[rows_t].to(draft_dev)
+            proxies = [md.to_device(a, draft_dev) for a in args]
+            befores = [md.snapshot(p) for p in proxies]
             out = fn(*proxies)
-        torch.cuda.synchronize(draft_dev)
+            done = torch.cuda.Event()
+            done.record(torch.cuda.current_stream(draft_dev))
+        torch.cuda.current_stream(target_dev).wait_event(done)
         mirror.target_pool.req_to_token[rows_t] = mirror.req_to_token[rows_d].to(target_dev)
         for orig, proxy, before in zip(args, proxies, befores):
             md.write_back(orig, proxy, before, target_dev)
         raw = out
         out = md.to_device(out, target_dev)
-        torch.cuda.synchronize(draft_dev)
         if name != "draft" and _MD_DEBUG:
             def desc(o):
                 return {k: (type(v).__name__, getattr(v, "device", None)) for k, v in md.snapshot(o).items()} if o is not None else None
