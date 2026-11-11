@@ -155,6 +155,16 @@ def _qsa_index_share_requested(hf_config) -> bool:
     )
 
 
+def _mirror_req_to_token_pool(pool, *, device: str):
+    """Same slot bookkeeping as the target pool, with its own req_to_token table on the draft GPU."""
+    import copy
+
+    mirror = copy.copy(pool)
+    mirror.req_to_token = torch.zeros_like(pool.req_to_token, device=device)
+    mirror.device = device
+    return mirror
+
+
 class EagleDraftWorker(EagleDraftWorkerBase):
     def __init__(
         self,
@@ -221,6 +231,10 @@ class EagleDraftWorker(EagleDraftWorkerBase):
         token_to_kv_pool_allocator=None,
     ):
         """Allocate draft KV cache pools (called by scheduler)."""
+        if req_to_token_pool is not None and self.gpu_id != self.target_worker.gpu_id:
+            req_to_token_pool = _mirror_req_to_token_pool(
+                req_to_token_pool, device=f"cuda:{self.gpu_id}"
+            )
         self.req_to_token_pool = req_to_token_pool
         self.token_to_kv_pool_allocator = token_to_kv_pool_allocator
         self.draft_worker.alloc_memory_pool(
@@ -1205,6 +1219,32 @@ class EagleDraftWorker(EagleDraftWorkerBase):
         )
 
 
+def _minedraft_draft_gpu_id() -> Optional[int]:
+    import os
+
+    value = os.environ.get("SGLANG_MINEDRAFT_DRAFT_GPU")
+    return int(value) if value else None
+
+
+def _guard_methods_on_device(obj, device_id: int) -> None:
+    import functools
+    import inspect
+
+    for name, fn in inspect.getmembers(type(obj), predicate=inspect.isfunction):
+        if name.startswith("__"):
+            continue
+
+        def make(f):
+            @functools.wraps(f)
+            def guarded(*a, **kw):
+                with torch.cuda.device(device_id):
+                    return f(obj, *a, **kw)
+
+            return guarded
+
+        setattr(obj, name, make(fn))
+
+
 class EAGLEWorkerV2(BaseSpecWorker):
     def __init__(
         self,
@@ -1235,12 +1275,11 @@ class EAGLEWorkerV2(BaseSpecWorker):
         # Only the last PP stage runs the draft; other EAGLEWorkerV2 instances
         # return proxies so scheduler dispatch remains rank-uniform.
         self._hosts_draft = get_parallel().pp_group.is_last_rank
+        # MineDraft prototype: build the draft on its own GPU (local research branch, not upstream).
+        self._draft_gpu_id = _minedraft_draft_gpu_id()
         self._draft_worker = (
-            EagleDraftWorker(
-                server_args,
-                gpu_id,
-                nccl_port,
-                target_worker,
+            self._build_draft_worker(
+                server_args=server_args, gpu_id=gpu_id, nccl_port=nccl_port, target_worker=target_worker
             )
             if self._hosts_draft
             else None
@@ -1264,6 +1303,24 @@ class EAGLEWorkerV2(BaseSpecWorker):
         self.extend_lens = torch.empty((), dtype=torch.int64, device=self.device)
 
         self.plan_stream, self.plan_stream_ctx = get_plan_stream(self.device)
+
+    def _build_draft_worker(self, *, server_args, gpu_id, nccl_port, target_worker):
+        if self._draft_gpu_id is None or self._draft_gpu_id == gpu_id:
+            return EagleDraftWorker(server_args, gpu_id, nccl_port, target_worker)
+        from sglang.srt.layers.rotary_embedding import factory as rope_factory
+
+        # get_rope caches modules by config; the draft needs its own cos/sin cache on its GPU.
+        target_ropes = rope_factory._ROPE_DICT
+        rope_factory._ROPE_DICT = {}
+        try:
+            with get_device().override(gpu_id=self._draft_gpu_id), torch.cuda.device(self._draft_gpu_id):
+                worker = EagleDraftWorker(server_args, self._draft_gpu_id, nccl_port, target_worker)
+        finally:
+            rope_factory._ROPE_DICT = target_ropes
+        torch.cuda.set_device(gpu_id)
+        _guard_methods_on_device(worker, self._draft_gpu_id)
+        logger.info(f"[minedraft] draft worker built on cuda:{self._draft_gpu_id}")
+        return worker
 
     @property
     def last_shared_read_runner(self):
