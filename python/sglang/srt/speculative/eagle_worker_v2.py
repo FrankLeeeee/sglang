@@ -1539,9 +1539,12 @@ class EAGLEWorkerV2(BaseSpecWorker):
             logger.info(f"[minedraft] {name}: raw={type(raw).__name__} {desc(raw)} moved={desc(out)} spec_info={desc(getattr(args[0], 'spec_info', None))}")
         return out
 
-    def _build_draft_worker(self, *, server_args, gpu_id, nccl_port, target_worker):
+    def _build_draft_worker(
+        self, *, server_args, gpu_id, nccl_port, target_worker, worker_cls=None
+    ):
+        worker_cls = worker_cls or EagleDraftWorker
         if self._draft_gpu_id is None or self._draft_gpu_id == gpu_id:
-            return EagleDraftWorker(server_args, gpu_id, nccl_port, target_worker)
+            return worker_cls(server_args, gpu_id, nccl_port, target_worker)
         from sglang.srt.layers.rotary_embedding import factory as rope_factory
 
         # get_rope caches modules by config; the draft needs its own cos/sin cache on its GPU.
@@ -1549,7 +1552,7 @@ class EAGLEWorkerV2(BaseSpecWorker):
         rope_factory._ROPE_DICT = {}
         try:
             with get_device().override(gpu_id=self._draft_gpu_id), torch.cuda.device(self._draft_gpu_id):
-                worker = EagleDraftWorker(server_args, self._draft_gpu_id, nccl_port, target_worker)
+                worker = worker_cls(server_args, self._draft_gpu_id, nccl_port, target_worker)
         finally:
             rope_factory._ROPE_DICT = target_ropes
         torch.cuda.set_device(gpu_id)

@@ -19,7 +19,11 @@ from sglang.srt.speculative.base_spec_worker import (
     EagleDraftWorkerBase,
 )
 from sglang.srt.speculative.eagle_utils import default_tree_mask_mode
-from sglang.srt.speculative.eagle_worker_v2 import EagleDraftWorker, EAGLEWorkerV2
+from sglang.srt.speculative.eagle_worker_v2 import (
+    EagleDraftWorker,
+    EAGLEWorkerV2,
+    _minedraft_draft_gpu_id,
+)
 from sglang.srt.speculative.spec_info import SpeculativeAlgorithm
 from sglang.srt.speculative.spec_utils import draft_pp_context, get_plan_stream
 from sglang.srt.utils import get_bool_env_var
@@ -105,6 +109,18 @@ class StandaloneDraftWorker(EagleDraftWorker):
         token_to_kv_pool_allocator=None,
     ):
         """Standalone: allocate pools without sharing embeddings."""
+        if req_to_token_pool is not None and self.gpu_id != self.target_worker.gpu_id:
+            from sglang.srt.speculative.eagle_worker_v2 import _mirror_req_to_token_pool
+            from sglang.srt.speculative.minedraft_device import DraftDeviceAllocator
+
+            req_to_token_pool = _mirror_req_to_token_pool(
+                req_to_token_pool, device=f"cuda:{self.gpu_id}"
+            )
+            token_to_kv_pool_allocator = DraftDeviceAllocator(
+                token_to_kv_pool_allocator,
+                draft_device=torch.device(f"cuda:{self.gpu_id}"),
+                target_device=torch.device(f"cuda:{self.target_worker.gpu_id}"),
+            )
         self.req_to_token_pool = req_to_token_pool
         self.token_to_kv_pool_allocator = token_to_kv_pool_allocator
         self.draft_worker.alloc_memory_pool(
@@ -146,11 +162,14 @@ class StandaloneWorkerV2(EAGLEWorkerV2):
         )
 
         # Create our custom draft worker that doesn't share embeddings/lm_head
-        self._draft_worker = StandaloneDraftWorker(
-            server_args,
-            gpu_id,
-            nccl_port,
-            target_worker,
+        self._hosts_draft = True
+        self._draft_gpu_id = _minedraft_draft_gpu_id()
+        self._draft_worker = self._build_draft_worker(
+            server_args=server_args,
+            gpu_id=gpu_id,
+            nccl_port=nccl_port,
+            target_worker=target_worker,
+            worker_cls=StandaloneDraftWorker,
         )
 
         self._validate_vocab_compatibility(
