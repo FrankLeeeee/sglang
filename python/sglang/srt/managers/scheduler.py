@@ -1900,6 +1900,44 @@ class Scheduler(
             self.schedule_stream.wait_stream(self.forward_stream)
 
     @DynamicGradMode()
+    def _minedraft_before_step(self):
+        """MineDraft: if the running cohort emptied, switch to the parked one."""
+        parked = self.__dict__.get("_minedraft_parked")
+        if parked is None:
+            self._minedraft_parked = None
+            return
+        if (self.running_batch is None or self.running_batch.is_empty()) and not parked.is_empty():
+            self.running_batch, self._minedraft_parked = parked, self.running_batch
+
+    def _minedraft_after_decode(self):
+        """MineDraft: split one running batch into two cohorts once, then alternate them."""
+        running = self.running_batch
+        parked = self._minedraft_parked
+        if running is None or running.is_empty():
+            return
+        running.filter_batch()
+        if running.is_empty():
+            return
+        if parked is None or parked.is_empty():
+            n = len(running.reqs)
+            if n < 2:
+                return
+            half = n // 2
+            running, parked = _split_schedule_batch(
+                running, list(range(half)), list(range(half, n))
+            )
+            self.running_batch = running
+            self._minedraft_parked = parked
+        parked.filter_batch()
+        self.running_batch, self._minedraft_parked = self._minedraft_parked, self.running_batch
+        self._minedraft_steps = self.__dict__.get("_minedraft_steps", 0) + 1
+        if self._minedraft_steps % 100 == 0:
+            logger.info(
+                f"[minedraft] cohorts run={len(self.running_batch.reqs)} parked={len(self._minedraft_parked.reqs)} "
+                f"hits={self.draft_worker.__dict__.get('minedraft_hits', 0)} "
+                f"misses={self.draft_worker.__dict__.get('minedraft_misses', 0)}"
+            )
+
     def event_loop_normal(self):
         """A normal scheduler loop."""
         while True:
@@ -1912,6 +1950,10 @@ class Scheduler(
                 self._record_scheduler_state_for_paused_engine()
                 continue
 
+            minedraft = _minedraft_enabled() and self.draft_worker is not None
+            if minedraft:
+                self._minedraft_before_step()
+
             # Get the next batch to run
             plan = self.get_next_batch_to_run(
                 running_batch=self.running_batch, last_batch=self.last_batch
@@ -1922,8 +1964,15 @@ class Scheduler(
 
             # Launch the current batch
             if batch:
+                is_decode = batch.forward_mode.is_decode()
+                if minedraft:
+                    self.draft_worker.minedraft_other_batch = (
+                        self._minedraft_parked if is_decode else None
+                    )
                 result = self.run_batch(batch)
                 self.process_batch_result(batch, result)
+                if minedraft and is_decode:
+                    self._minedraft_after_decode()
             else:
                 # When the server is idle, do self-check and re-init some states.
                 self._sched_idled = True
@@ -5997,3 +6046,25 @@ def _make_abort_req(
             num_output_tokens=len(req.output_ids),
         ),
     )
+
+
+def _minedraft_enabled() -> bool:
+    import os
+
+    return bool(os.environ.get("SGLANG_MINEDRAFT_DRAFT_GPU")) and os.environ.get(
+        "SGLANG_MINEDRAFT_COHORTS", "1"
+    ) == "1"
+
+
+def _split_schedule_batch(batch, keep_a, keep_b):
+    """Two independent ScheduleBatches from one; shared mutable sub-objects are copied first."""
+    import copy
+
+    other = copy.copy(batch)
+    other.reqs = list(batch.reqs)
+    other.sampling_info = copy.copy(batch.sampling_info)
+    if batch.spec_info is not None:
+        other.spec_info = copy.copy(batch.spec_info)
+    other.filter_batch(keep_indices=keep_b)
+    batch.filter_batch(keep_indices=keep_a)
+    return batch, other

@@ -1321,6 +1321,31 @@ class EAGLEWorkerV2(BaseSpecWorker):
 
         self.plan_stream, self.plan_stream_ctx = get_plan_stream(self.device)
 
+    def _minedraft_take_or_draft(self, batch):
+        """Drafts for this cohort made during the previous step, or a fresh draft."""
+        pending = self.__dict__.setdefault("_minedraft_pending", {})
+        entry = pending.pop(id(batch), None)
+        rids = tuple(r.rid for r in batch.reqs)
+        if entry is not None and entry[0] == rids:
+            self.minedraft_hits = self.__dict__.get("minedraft_hits", 0) + 1
+            return entry[1]
+        self.minedraft_misses = self.__dict__.get("minedraft_misses", 0) + 1
+        return self._call_draft("draft", batch)
+
+    def _minedraft_draft_other(self):
+        """Draft the parked cohort now so its next verify can start without waiting."""
+        other = self.__dict__.get("minedraft_other_batch")
+        self.minedraft_other_batch = None
+        if other is None or other.is_empty() or other.spec_info is None:
+            return
+        if other.spec_info.is_verify_input():
+            return
+        rids = tuple(r.rid for r in other.reqs)
+        self.__dict__.setdefault("_minedraft_pending", {})[id(other)] = (
+            rids,
+            self._call_draft("draft", other),
+        )
+
     def _call_draft(self, name: str, *args):
         """Run a draft entry point, on the draft GPU when it differs from the target GPU."""
         fn = getattr(self.draft_worker, name)
@@ -1483,7 +1508,8 @@ class EAGLEWorkerV2(BaseSpecWorker):
                     speculative_moe_a2a_backend_context(),
                     spec_stage_span("draft"),
                 ):
-                    verify_input: EagleVerifyInput = self._call_draft("draft", batch)
+                    verify_input: EagleVerifyInput = self._minedraft_take_or_draft(batch)
+                    self._minedraft_draft_other()
             assert verify_input.is_verify_input()
             batch.spec_info = verify_input
             batch_output = self.verify(
