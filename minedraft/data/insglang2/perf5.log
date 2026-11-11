@@ -1,0 +1,14 @@
+up m5
+g_nooverlap_minedraft_v2 {"conc": 32, "num_requests": 96, "wall_s": 6.9671861180104315, "out_tokens": 18672, "tok_s": 2679.9915609735463, "accept_len": 2.5836446658364465, "mean_latency_s": 1.8749157463850377}
+g_nooverlap_minedraft_v2 {"conc": 64, "num_requests": 192, "wall_s": 8.599919247906655, "out_tokens": 37523, "tok_s": 4363.18050418132, "accept_len": 2.575360329444063, "mean_latency_s": 2.2815322341266437}
+g_nooverlap_minedraft_v2 {"conc": 128, "num_requests": 384, "wall_s": 11.053489174228162, "out_tokens": 74721, "tok_s": 6759.94691108182, "accept_len": 2.576319691066441, "mean_latency_s": 3.118445710776238}
+[2026-11-11 19:50:39] [minedraft] host time per step: draft_extend=3.61ms, finish_other=0.67ms, launch_other_draft=1.92ms, take_or_draft=0.37ms, verify=0.90ms
+up s5
+g_nooverlap_disagg_serial_v2 {"conc": 32, "num_requests": 96, "wall_s": 4.291846745181829, "out_tokens": 18669, "tok_s": 4349.875731457198, "accept_len": 2.580373185901866, "mean_latency_s": 1.1493608980963472}
+g_nooverlap_disagg_serial_v2 {"conc": 64, "num_requests": 192, "wall_s": 5.164713912643492, "out_tokens": 37395, "tok_s": 7240.478491645988, "accept_len": 2.587173100871731, "mean_latency_s": 1.433752205244673}
+g_nooverlap_disagg_serial_v2 {"conc": 128, "num_requests": 384, "wall_s": 7.622438787017018, "out_tokens": 74879, "tok_s": 9823.496402167018, "accept_len": 2.579899393605292, "mean_latency_s": 2.2205991152489637}
+up o5
+g_overlap_disagg_serial_v2 {"conc": 32, "num_requests": 96, "wall_s": 3.4077440393157303, "out_tokens": 18632, "tok_s": 5467.546794899912, "accept_len": 2.5806094182825485, "mean_latency_s": 0.9094035366433673}
+g_overlap_disagg_serial_v2 {"conc": 64, "num_requests": 192, "wall_s": 4.123742260970175, "out_tokens": 37494, "tok_s": 9092.226823889558, "accept_len": 2.5843672456575684, "mean_latency_s": 1.1393196818996028}
+g_overlap_disagg_serial_v2 {"conc": 128, "num_requests": 384, "wall_s": 5.975601194426417, "out_tokens": 74629, "tok_s": 12488.952587667365, "accept_len": 2.5739463337242188, "mean_latency_s": 1.72107986912791}
+P5DONE

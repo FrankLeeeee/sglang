@@ -1,0 +1,42 @@
+{"mode": "ar", "conc": 1, "num_requests": 16, "wall_s": 17.88632615795359, "out_tokens": 3733, "tok_s": 208.7069176215391, "accept_len": 1.0, "engine_steps": 0}
+[transformers] Ignoring clean_up_tokenization_spaces=True for BPE tokenizer TokenizersBackend. The clean_up_tokenization post-processing step is designed for WordPiece tokenizers and is destructive for BPE (it strips spaces before punctuation). Set clean_up_tokenization_spaces=False to suppress this warning, or set clean_up_tokenization_spaces_for_bpe_even_though_it_will_corrupt_output=True to force cleanup anyway.
+{"mode": "ar", "conc": 4, "num_requests": 16, "wall_s": 5.24100722419098, "out_tokens": 3731, "tok_s": 711.8860631938796, "accept_len": 1.0, "engine_steps": 0}
+{"mode": "ar", "conc": 16, "num_requests": 32, "wall_s": 2.867796537000686, "out_tokens": 6133, "tok_s": 2138.5757046817066, "accept_len": 1.0, "engine_steps": 0}
+{"mode": "ar", "conc": 64, "num_requests": 128, "wall_s": 3.583718713372946, "out_tokens": 25403, "tok_s": 7088.446954613537, "accept_len": 1.0, "engine_steps": 0}
+{"mode": "ar", "conc": 128, "num_requests": 256, "wall_s": 4.329618993215263, "out_tokens": 51346, "tok_s": 11859.242136654944, "accept_len": 1.0, "engine_steps": 0}
+Traceback (most recent call last):
+  File "/data/frankleeeee/home/minedraft_sglang.py", line 199, in <module>
+    asyncio.run(main(ap.parse_args()))
+  File "/data/frankleeeee/home/.local/share/uv/python/cpython-3.11.18-linux-x86_64-gnu/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/data/frankleeeee/home/.local/share/uv/python/cpython-3.11.18-linux-x86_64-gnu/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/frankleeeee/home/.local/share/uv/python/cpython-3.11.18-linux-x86_64-gnu/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/data/frankleeeee/home/minedraft_sglang.py", line 179, in main
+    rec, fin = await run_point(eng, prompts, C, n, mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/frankleeeee/home/minedraft_sglang.py", line 126, in run_point
+    await eng.verify(batch)
+  File "/data/frankleeeee/home/minedraft_sglang.py", line 65, in verify
+    outs = await self._post(self.t, payload)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/frankleeeee/home/minedraft_sglang.py", line 35, in _post
+    async with self.s.post(url + "/generate", json=payload) as r:
+  File "/data/frankleeeee/home/sglang/.venv/lib/python3.11/site-packages/aiohttp/client.py", line 1756, in __aenter__
+    self._resp: _RetType_co = await self._coro
+                              ^^^^^^^^^^^^^^^^
+  File "/data/frankleeeee/home/sglang/.venv/lib/python3.11/site-packages/aiohttp/client.py", line 900, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/data/frankleeeee/home/sglang/.venv/lib/python3.11/site-packages/aiohttp/client.py", line 878, in _connect_and_send_request
+    await resp.start(conn)
+  File "/data/frankleeeee/home/sglang/.venv/lib/python3.11/site-packages/aiohttp/client_reqrep.py", line 745, in start
+    message, payload = await protocol.read()  # type: ignore[union-attr]
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "/data/frankleeeee/home/sglang/.venv/lib/python3.11/site-packages/aiohttp/streams.py", line 716, in read
+    await self._waiter
+aiohttp.client_exceptions.ServerDisconnectedError: Server disconnected

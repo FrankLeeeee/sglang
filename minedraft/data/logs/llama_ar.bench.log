@@ -1,0 +1,4 @@
+{"conc": 1, "num_requests": 16, "wall_s": 18.051919712219387, "out_tokens": 3767, "tok_s": 208.67586716830502, "accept_len": 1.0, "mean_latency_s": 1.1282316223951057}
+{"conc": 4, "num_requests": 16, "wall_s": 5.132674198132008, "out_tokens": 3696, "tok_s": 720.0924620045291, "accept_len": 1.0, "mean_latency_s": 1.2079724936920684}
+{"conc": 16, "num_requests": 32, "wall_s": 2.7170371511019766, "out_tokens": 5936, "tok_s": 2184.732732709406, "accept_len": 1.0, "mean_latency_s": 1.0046133793803165}
+{"conc": 64, "num_requests": 128, "wall_s": 3.491239828057587, "out_tokens": 24970, "tok_s": 7152.186967886563, "accept_len": 1.0, "mean_latency_s": 1.406958650892193}

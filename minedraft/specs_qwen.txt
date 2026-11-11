@@ -1,0 +1,4 @@
+qwen_ar|Qwen/Qwen3-8B|
+qwen_eagle3_314|Qwen/Qwen3-8B|--speculative-algorithm EAGLE3 --speculative-draft-model-path Tengyunw/qwen3_8b_eagle3 --speculative-num-steps 3 --speculative-eagle-topk 1 --speculative-num-draft-tokens 4
+qwen_dspark|Qwen/Qwen3-8B|--speculative-algorithm DSPARK --speculative-draft-model-path deepseek-ai/dspark_qwen3_8b_block7
+qwen_dflash|Qwen/Qwen3-8B|--speculative-algorithm DFLASH --speculative-draft-model-path z-lab/Qwen3-8B-DFlash-b16

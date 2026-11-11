@@ -1,0 +1,4 @@
+llama_ar|meta-llama/Llama-3.1-8B-Instruct|
+# The lmsys head ships torch_dtype float16; ~/md/llama_eagle3_bf16 is the same checkpoint with config dtype bfloat16.
+llama_eagle3_314|meta-llama/Llama-3.1-8B-Instruct|--context-length 2048 --speculative-algorithm EAGLE3 --speculative-draft-model-path /data/frankleeeee/home/md/llama_eagle3_bf16 --speculative-num-steps 3 --speculative-eagle-topk 1 --speculative-num-draft-tokens 4
+llama_dflash|meta-llama/Llama-3.1-8B-Instruct|--context-length 4096 --speculative-algorithm DFLASH --speculative-draft-model-path z-lab/LLaMA3.1-8B-Instruct-DFlash-UltraChat

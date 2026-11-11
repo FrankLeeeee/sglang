@@ -1,0 +1,18 @@
+up perf_coloc
+coloc_eager {"conc": 16, "num_requests": 48, "wall_s": 2.871955170761794, "out_tokens": 10255, "tok_s": 3570.738187142327, "accept_len": 2.4800483675937124, "mean_latency_s": 0.844906542954656}
+coloc_eager {"conc": 32, "num_requests": 96, "wall_s": 3.2789295078255236, "out_tokens": 18693, "tok_s": 5700.945981115822, "accept_len": 2.581906077348066, "mean_latency_s": 0.8962622693701027}
+coloc_eager {"conc": 64, "num_requests": 192, "wall_s": 4.3775665150024, "out_tokens": 37431, "tok_s": 8550.641063184275, "accept_len": 2.58626407793823, "mean_latency_s": 1.2090679926162313}
+coloc_eager {"conc": 128, "num_requests": 384, "wall_s": 6.452377351000905, "out_tokens": 75017, "tok_s": 11626.257411675282, "accept_len": 2.585544909354105, "mean_latency_s": 1.895044018145806}
+up perf_serial
+disagg_serial {"conc": 16, "num_requests": 48, "wall_s": 5.184554393868893, "out_tokens": 10305, "tok_s": 1987.634658088726, "accept_len": 2.4795476419634266, "mean_latency_s": 1.5163576818013098}
+disagg_serial {"conc": 32, "num_requests": 96, "wall_s": 5.643880352843553, "out_tokens": 18717, "tok_s": 3316.335363234592, "accept_len": 2.5952579034941765, "mean_latency_s": 1.4968171029322548}
+disagg_serial {"conc": 64, "num_requests": 192, "wall_s": 6.836074619088322, "out_tokens": 37379, "tok_s": 5467.90403598388, "accept_len": 2.585529501279657, "mean_latency_s": 1.8268761336124346}
+disagg_serial {"conc": 128, "num_requests": 384, "wall_s": 8.920613230671734, "out_tokens": 74779, "tok_s": 8382.71967031229, "accept_len": 2.5873295965677117, "mean_latency_s": 2.515527926904421}
+up perf_md
+minedraft {"conc": 16, "num_requests": 48, "wall_s": 10.146353652700782, "out_tokens": 10266, "tok_s": 1011.7920537164965, "accept_len": 2.4606903163950142, "mean_latency_s": 3.0043858918458377}
+minedraft {"conc": 32, "num_requests": 96, "wall_s": 10.840447764843702, "out_tokens": 18715, "tok_s": 1726.4047026446635, "accept_len": 2.529737766964044, "mean_latency_s": 2.8841651089799902}
+minedraft {"conc": 64, "num_requests": 192, "wall_s": 12.607625554781407, "out_tokens": 37567, "tok_s": 2979.7046110520646, "accept_len": 2.515703475524007, "mean_latency_s": 3.297228568738016}
+minedraft {"conc": 128, "num_requests": 384, "wall_s": 15.22374353883788, "out_tokens": 74531, "tok_s": 4895.707800769311, "accept_len": 2.4585518720105557, "mean_latency_s": 4.222762692901597}
+[2026-11-11 17:42:49] [minedraft] cohorts run=22 parked=28 hits=2026 misses=310
+[2026-11-11 17:42:50] [minedraft] cohorts run=7 parked=4 hits=2126 misses=310
+PERFDONE

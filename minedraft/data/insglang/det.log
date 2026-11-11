@@ -1,0 +1,13 @@
+up det_ar
+{"conc": 16, "num_requests": 32, "wall_s": 24.385591293219477, "out_tokens": 6304, "tok_s": 258.5133132184027, "accept_len": 1.0, "mean_latency_s": 9.50486539407575}
+up det_coloc
+{"conc": 16, "num_requests": 32, "wall_s": 12.714611831121147, "out_tokens": 6304, "tok_s": 495.8075074356499, "accept_len": 2.3566355140186914, "mean_latency_s": 5.14016964379698}
+up det_serial
+{"conc": 16, "num_requests": 32, "wall_s": 12.813055702950805, "out_tokens": 6304, "tok_s": 491.9981732810394, "accept_len": 2.3566355140186914, "mean_latency_s": 5.127870795375202}
+up det_md
+{"conc": 16, "num_requests": 32, "wall_s": 24.581186376977712, "out_tokens": 6304, "tok_s": 256.45629561249376, "accept_len": 2.352238805970149, "mean_latency_s": 9.89840065286262}
+coloc == ar: 32 / 32
+serial == ar: 32 / 32
+md == ar: 32 / 32
+md == serial: 32 / 32
+DETDONE

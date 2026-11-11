@@ -1,0 +1,14 @@
+up k7c
+coloc {"conc": 16, "num_requests": 48, "wall_s": 2.771986815147102, "out_tokens": 10284, "tok_s": 3709.974356228767, "accept_len": 2.8574604056682413, "mean_latency_s": 0.7889837908927196}
+coloc {"conc": 32, "num_requests": 96, "wall_s": 3.124313509091735, "out_tokens": 18649, "tok_s": 5968.991250632023, "accept_len": 3.0592191601049867, "mean_latency_s": 0.858020632682989}
+coloc {"conc": 64, "num_requests": 192, "wall_s": 4.596744668669999, "out_tokens": 37253, "tok_s": 8104.21345651522, "accept_len": 3.0567818166899157, "mean_latency_s": 1.3000690960980137}
+coloc {"conc": 128, "num_requests": 384, "wall_s": 7.493683817796409, "out_tokens": 75066, "tok_s": 10017.236091777608, "accept_len": 3.0584256844850066, "mean_latency_s": 2.2210148687991023}
+up k7s
+disagg_serial {"conc": 32, "num_requests": 96, "wall_s": 3.423232520930469, "out_tokens": 18635, "tok_s": 5443.685138552849, "accept_len": 3.0404633708598467, "mean_latency_s": 0.9217862803974034}
+disagg_serial {"conc": 64, "num_requests": 192, "wall_s": 4.8277921713888645, "out_tokens": 37394, "tok_s": 7745.5695424524565, "accept_len": 3.0553149767137837, "mean_latency_s": 1.3521948923638167}
+disagg_serial {"conc": 128, "num_requests": 384, "wall_s": 7.800122478976846, "out_tokens": 74689, "tok_s": 9575.362464025959, "accept_len": 3.038361402652347, "mean_latency_s": 2.280879483812896}
+up k7m
+minedraft {"conc": 32, "num_requests": 96, "wall_s": 5.369446223136038, "out_tokens": 18705, "tok_s": 3483.599466813414, "accept_len": 3.0439381611065905, "mean_latency_s": 1.398969888362141}
+minedraft {"conc": 64, "num_requests": 192, "wall_s": 6.845160587225109, "out_tokens": 37441, "tok_s": 5469.703672091327, "accept_len": 3.039782414548997, "mean_latency_s": 1.837872233724435}
+minedraft {"conc": 128, "num_requests": 384, "wall_s": 9.728165925946087, "out_tokens": 74980, "tok_s": 7707.516562810684, "accept_len": 3.0518132606129678, "mean_latency_s": 2.7661181214389217}
+P7DONE

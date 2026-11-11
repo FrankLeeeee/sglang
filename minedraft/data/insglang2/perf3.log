@@ -1,0 +1,17 @@
+up c3
+coloc {"conc": 16, "num_requests": 48, "wall_s": 3.4448514273390174, "out_tokens": 10271, "tok_s": 2981.550936707263, "accept_len": 2.4839177750906893, "mean_latency_s": 0.9947877490679579}
+coloc {"conc": 32, "num_requests": 96, "wall_s": 3.354663643054664, "out_tokens": 18784, "tok_s": 5599.369116748709, "accept_len": 2.5966270389825823, "mean_latency_s": 0.9187499360268703}
+coloc {"conc": 64, "num_requests": 192, "wall_s": 4.526523655746132, "out_tokens": 37461, "tok_s": 8275.887380472575, "accept_len": 2.587085635359116, "mean_latency_s": 1.2576383551640902}
+coloc {"conc": 128, "num_requests": 384, "wall_s": 6.5112404390238225, "out_tokens": 74661, "tok_s": 11466.478730002684, "accept_len": 2.585035662350253, "mean_latency_s": 1.9011471941666969}
+up s3
+disagg_serial {"conc": 32, "num_requests": 96, "wall_s": 5.046757519245148, "out_tokens": 18669, "tok_s": 3699.2068528769646, "accept_len": 2.580373185901866, "mean_latency_s": 1.335339994863413}
+disagg_serial {"conc": 64, "num_requests": 192, "wall_s": 5.907503018155694, "out_tokens": 37470, "tok_s": 6342.7813553107635, "accept_len": 2.5850293204553294, "mean_latency_s": 1.5776729840387513}
+disagg_serial {"conc": 128, "num_requests": 384, "wall_s": 7.9948839424178, "out_tokens": 74915, "tok_s": 9370.367417409228, "accept_len": 2.5798064671648473, "mean_latency_s": 2.285069894043166}
+up m3
+minedraft {"conc": 32, "num_requests": 96, "wall_s": 8.726301900111139, "out_tokens": 18672, "tok_s": 2139.738025768074, "accept_len": 2.5836446658364465, "mean_latency_s": 2.336808766471222}
+minedraft {"conc": 64, "num_requests": 192, "wall_s": 10.266340401954949, "out_tokens": 37465, "tok_s": 3649.304283039923, "accept_len": 2.578280916660932, "mean_latency_s": 2.6729935487625576}
+minedraft {"conc": 128, "num_requests": 384, "wall_s": 12.633224629797041, "out_tokens": 74779, "tok_s": 5919.232990096952, "accept_len": 2.5774308068796747, "mean_latency_s": 3.4602537251836716}
+[2026-11-11 19:33:21] Decode batch, #running-req: 1, #token: 0, token usage: 0.00, accept len: 2.23, accept rate: 0.41, cuda graph: True, gen throughput (token/s): 1639.82, #queue-req: 0
+[2026-11-11 19:34:06] Capture draft decode CUDA graph end. elapsed=2.59 s, mem usage=0.10 GB, avail mem=133.26 GB.
+[2026-11-11 19:34:45] [minedraft] cohorts run=1 parked=8 hits=1555 misses=269
+P3DONE

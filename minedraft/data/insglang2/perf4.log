@@ -1,0 +1,11 @@
+up c4
+coloc {"conc": 16, "num_requests": 48, "wall_s": 2.3081051888875663, "out_tokens": 10356, "tok_s": 4486.7972438428005, "accept_len": 2.479291357433565, "mean_latency_s": 0.6805809819488786}
+coloc {"conc": 32, "num_requests": 96, "wall_s": 2.6457199179567397, "out_tokens": 18734, "tok_s": 7080.8704552778445, "accept_len": 2.592223605922236, "mean_latency_s": 0.7136431912561724}
+coloc {"conc": 64, "num_requests": 192, "wall_s": 3.6084467163309455, "out_tokens": 37436, "tok_s": 10374.546984599729, "accept_len": 2.585894867721213, "mean_latency_s": 0.9930656579041776}
+coloc {"conc": 128, "num_requests": 384, "wall_s": 5.198478667996824, "out_tokens": 74499, "tok_s": 14330.923479331572, "accept_len": 2.5813929313929314, "mean_latency_s": 1.5132209495956583}
+up s4
+disagg_serial {"conc": 32, "num_requests": 96, "wall_s": 5.132509329356253, "out_tokens": 18632, "tok_s": 3630.193109134967, "accept_len": 2.5806094182825485, "mean_latency_s": 1.3430911598164432}
+disagg_serial {"conc": 64, "num_requests": 192, "wall_s": 6.125898547936231, "out_tokens": 37397, "tok_s": 6104.737077730216, "accept_len": 2.57519625395951, "mean_latency_s": 1.6400300041229154}
+disagg_serial {"conc": 128, "num_requests": 384, "wall_s": 8.086041768081486, "out_tokens": 74675, "tok_s": 9235.049996250214, "accept_len": 2.5766881750112143, "mean_latency_s": 2.29799348150118}
+0
+P4DONE
