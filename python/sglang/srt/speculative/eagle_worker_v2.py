@@ -1320,6 +1320,43 @@ def _guard_methods_on_device(obj, device_id: int) -> None:
         setattr(obj, name, make(fn))
 
 
+class _MdTimer:
+    """Accumulates host wall time per MineDraft phase; logs every 200 steps."""
+
+    def __init__(self):
+        import time
+
+        self.enabled = os.environ.get("SGLANG_MINEDRAFT_TIMING") == "1"
+        self.clock = time.perf_counter
+        self.acc = {}
+        self.steps = 0
+
+    def span(self, name):
+        timer = self
+
+        class _Span:
+            def __enter__(self):
+                self.t0 = timer.clock()
+
+            def __exit__(self, *exc):
+                if timer.enabled:
+                    timer.acc[name] = timer.acc.get(name, 0.0) + timer.clock() - self.t0
+                return False
+
+        return _Span()
+
+    def step(self):
+        if not self.enabled:
+            return
+        self.steps += 1
+        if self.steps % 200 == 0:
+            parts = ", ".join(f"{k}={1e3 * v / self.steps:.2f}ms" for k, v in sorted(self.acc.items()))
+            logger.info(f"[minedraft] host time per step: {parts}")
+
+
+_MD_TIMER = _MdTimer()
+
+
 class EAGLEWorkerV2(BaseSpecWorker):
     def __init__(
         self,
@@ -1613,15 +1650,18 @@ class EAGLEWorkerV2(BaseSpecWorker):
                     speculative_moe_a2a_backend_context(),
                     spec_stage_span("draft"),
                 ):
-                    verify_input: EagleVerifyInput = self._minedraft_take_or_draft(batch)
-                    self._minedraft_draft_other()
+                    with _MD_TIMER.span("take_or_draft"):
+                        verify_input: EagleVerifyInput = self._minedraft_take_or_draft(batch)
+                    with _MD_TIMER.span("launch_other_draft"):
+                        self._minedraft_draft_other()
             assert verify_input.is_verify_input()
             batch.spec_info = verify_input
-            batch_output = self.verify(
-                batch,
-                pp_proxy_tensors=pp_proxy_tensors,
-                grammar_barrier=grammar_barrier,
-            )
+            with _MD_TIMER.span("verify"):
+                batch_output = self.verify(
+                    batch,
+                    pp_proxy_tensors=pp_proxy_tensors,
+                    grammar_barrier=grammar_barrier,
+                )
             # Publish before draft_extend so the fence is at verify-end.
             if on_publish is not None:
                 on_publish(batch_output.new_seq_lens)
@@ -1637,8 +1677,11 @@ class EAGLEWorkerV2(BaseSpecWorker):
                     speculative_moe_a2a_backend_context(),
                     spec_stage_span("draft_extend"),
                 ):
-                    self._call_draft("_draft_extend_for_decode", batch, batch_output)
-                    self._minedraft_finish_pending()
+                    with _MD_TIMER.span("draft_extend"):
+                        self._call_draft("_draft_extend_for_decode", batch, batch_output)
+                    with _MD_TIMER.span("finish_other"):
+                        self._minedraft_finish_pending()
+                    _MD_TIMER.step()
 
             if (
                 get_parallel().pp_size > 1
