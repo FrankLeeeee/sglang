@@ -162,6 +162,7 @@ def _mirror_req_to_token_pool(pool, *, device: str):
     mirror = copy.copy(pool)
     mirror.req_to_token = torch.zeros_like(pool.req_to_token, device=device)
     mirror.device = device
+    mirror.target_pool = pool
     return mirror
 
 
@@ -232,8 +233,15 @@ class EagleDraftWorker(EagleDraftWorkerBase):
     ):
         """Allocate draft KV cache pools (called by scheduler)."""
         if req_to_token_pool is not None and self.gpu_id != self.target_worker.gpu_id:
+            from sglang.srt.speculative.minedraft_device import DraftDeviceAllocator
+
             req_to_token_pool = _mirror_req_to_token_pool(
                 req_to_token_pool, device=f"cuda:{self.gpu_id}"
+            )
+            token_to_kv_pool_allocator = DraftDeviceAllocator(
+                token_to_kv_pool_allocator,
+                draft_device=torch.device(f"cuda:{self.gpu_id}"),
+                target_device=torch.device(f"cuda:{self.target_worker.gpu_id}"),
             )
         self.req_to_token_pool = req_to_token_pool
         self.token_to_kv_pool_allocator = token_to_kv_pool_allocator
@@ -368,13 +376,19 @@ class EagleDraftWorker(EagleDraftWorkerBase):
 
     def _resolve_shared_embed_and_head(self):
         target_runner = self.target_worker.model_runner
-        return resolve_draft_embed_and_head(
+        embed, head = resolve_draft_embed_and_head(
             target_model=target_runner.model,
             draft_model=self.draft_runner.model,
             model_path=target_runner.model_config.model_path,
             revision=target_runner.model_config.revision,
             load_config=target_runner.load_config,
         )
+        if self.gpu_id != self.target_worker.gpu_id:
+            # A draft on its own GPU keeps a copy of the shared weights instead of aliasing them.
+            draft_device = torch.device(f"cuda:{self.gpu_id}")
+            embed = embed.to(draft_device) if embed is not None else None
+            head = head.to(draft_device) if head is not None else None
+        return embed, head
 
     def init_attention_backend(self):
         # Create multi-step attn backends and cuda graph runners
@@ -1219,6 +1233,9 @@ class EagleDraftWorker(EagleDraftWorkerBase):
         )
 
 
+_MD_DEBUG = False
+
+
 def _minedraft_draft_gpu_id() -> Optional[int]:
     import os
 
@@ -1303,6 +1320,35 @@ class EAGLEWorkerV2(BaseSpecWorker):
         self.extend_lens = torch.empty((), dtype=torch.int64, device=self.device)
 
         self.plan_stream, self.plan_stream_ctx = get_plan_stream(self.device)
+
+    def _call_draft(self, name: str, *args):
+        """Run a draft entry point, on the draft GPU when it differs from the target GPU."""
+        fn = getattr(self.draft_worker, name)
+        if self._draft_gpu_id is None or self._draft_gpu_id == self.gpu_id:
+            return fn(*args)
+        from sglang.srt.speculative import minedraft_device as md
+
+        draft_dev = torch.device(f"cuda:{self._draft_gpu_id}")
+        target_dev = torch.device(f"cuda:{self.gpu_id}")
+        mirror = self.draft_worker.req_to_token_pool
+        mirror.req_to_token.copy_(mirror.target_pool.req_to_token, non_blocking=True)
+        torch.cuda.synchronize(target_dev)
+        proxies = [md.to_device(a, draft_dev) for a in args]
+        befores = [md.snapshot(p) for p in proxies]
+        with torch.cuda.device(draft_dev):
+            out = fn(*proxies)
+        torch.cuda.synchronize(draft_dev)
+        mirror.target_pool.req_to_token.copy_(mirror.req_to_token, non_blocking=True)
+        for orig, proxy, before in zip(args, proxies, befores):
+            md.write_back(orig, proxy, before, target_dev)
+        raw = out
+        out = md.to_device(out, target_dev)
+        torch.cuda.synchronize(draft_dev)
+        if name != "draft" and _MD_DEBUG:
+            def desc(o):
+                return {k: (type(v).__name__, getattr(v, "device", None)) for k, v in md.snapshot(o).items()} if o is not None else None
+            logger.info(f"[minedraft] {name}: raw={type(raw).__name__} {desc(raw)} moved={desc(out)} spec_info={desc(getattr(args[0], 'spec_info', None))}")
+        return out
 
     def _build_draft_worker(self, *, server_args, gpu_id, nccl_port, target_worker):
         if self._draft_gpu_id is None or self._draft_gpu_id == gpu_id:
@@ -1437,7 +1483,7 @@ class EAGLEWorkerV2(BaseSpecWorker):
                     speculative_moe_a2a_backend_context(),
                     spec_stage_span("draft"),
                 ):
-                    verify_input: EagleVerifyInput = self.draft_worker.draft(batch)
+                    verify_input: EagleVerifyInput = self._call_draft("draft", batch)
             assert verify_input.is_verify_input()
             batch.spec_info = verify_input
             batch_output = self.verify(
@@ -1460,7 +1506,7 @@ class EAGLEWorkerV2(BaseSpecWorker):
                     speculative_moe_a2a_backend_context(),
                     spec_stage_span("draft_extend"),
                 ):
-                    self.draft_worker._draft_extend_for_decode(batch, batch_output)
+                    self._call_draft("_draft_extend_for_decode", batch, batch_output)
 
             if (
                 get_parallel().pp_size > 1
@@ -1548,7 +1594,8 @@ class EAGLEWorkerV2(BaseSpecWorker):
             speculative_moe_a2a_backend_context(),
             spec_stage_span("draft_extend"),
         ):
-            batch_output.next_draft_input = self.draft_worker._draft_extend_for_prefill(
+            batch_output.next_draft_input = self._call_draft(
+                "_draft_extend_for_prefill",
                 batch,
                 batch_output.logits_output.hidden_states,
                 batch_output.next_token_ids,
