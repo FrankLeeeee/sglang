@@ -30,12 +30,24 @@ _SKIP_ATTRS = frozenset(
 _MAX_DEPTH = 3
 
 
+_FIELDS_CACHE: dict = {}
+
+
 def _fields(obj: Any):
+    """Field names of a plain object; cached per type except for objects with a free-form __dict__."""
+    tp = type(obj)
+    cached = _FIELDS_CACHE.get(tp)
+    if cached is not None:
+        return cached
     if dataclasses.is_dataclass(obj) and not isinstance(obj, type):
-        return [f.name for f in dataclasses.fields(obj)]
-    struct_fields = getattr(type(obj), "__struct_fields__", None)
+        names = [f.name for f in dataclasses.fields(obj)]
+        _FIELDS_CACHE[tp] = names
+        return names
+    struct_fields = getattr(tp, "__struct_fields__", None)
     if struct_fields is not None:
-        return list(struct_fields)
+        names = list(struct_fields)
+        _FIELDS_CACHE[tp] = names
+        return names
     if hasattr(obj, "__dict__"):
         return list(vars(obj).keys())
     return []

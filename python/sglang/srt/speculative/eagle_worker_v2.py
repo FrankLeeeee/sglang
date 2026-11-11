@@ -289,6 +289,11 @@ class EagleDraftWorker(EagleDraftWorkerBase):
             self.draft_runner.prefill_cuda_graph_runner = None
             self.cuda_graph_runner = None
             self.cuda_graph_runner_for_draft_extend = None
+            if os.environ.get("SGLANG_MINEDRAFT_DRAFT_PREFILL_GRAPHS") == "1" and check_cuda_graph_backend(
+                Phase.PREFILL, Backend.BREAKABLE
+            ):
+                with draft_pp_context(), draft_tp_context(self.draft_owns_attention):
+                    self.draft_runner.init_prefill_cuda_graph(force_for_draft_worker=True)
             if os.environ.get("SGLANG_MINEDRAFT_DRAFT_DECODE_GRAPHS") == "1":
                 # Prefill (breakable) capture on the draft GPU hits lazy JIT loads; decode/extend graphs warm up first.
                 with (
@@ -1514,17 +1519,20 @@ class EAGLEWorkerV2(BaseSpecWorker):
             torch.cuda.current_stream(draft_dev).wait_event(ready)
             rows_d = rows_t.to(draft_dev)
             mirror.req_to_token[rows_d] = mirror.target_pool.req_to_token[rows_t].to(draft_dev)
-            proxies = [md.to_device(a, draft_dev) for a in args]
-            befores = [md.snapshot(p) for p in proxies]
-            out = fn(*proxies)
+            with _MD_TIMER.span(f"boundary_in:{name}"):
+                proxies = [md.to_device(a, draft_dev) for a in args]
+                befores = [md.snapshot(p) for p in proxies]
+            with _MD_TIMER.span(f"fn:{name}"):
+                out = fn(*proxies)
             done = torch.cuda.Event()
             done.record(torch.cuda.current_stream(draft_dev))
         torch.cuda.current_stream(target_dev).wait_event(done)
         mirror.target_pool.req_to_token[rows_t] = mirror.req_to_token[rows_d].to(target_dev)
-        for orig, proxy, before in zip(args, proxies, befores):
-            md.write_back(orig, proxy, before, target_dev)
-        raw = out
-        out = md.to_device(out, target_dev)
+        with _MD_TIMER.span(f"boundary_out:{name}"):
+            for orig, proxy, before in zip(args, proxies, befores):
+                md.write_back(orig, proxy, before, target_dev)
+            raw = out
+            out = md.to_device(out, target_dev)
         if name != "draft" and _MD_DEBUG:
             def desc(o):
                 return {k: (type(v).__name__, getattr(v, "device", None)) for k, v in md.snapshot(o).items()} if o is not None else None
