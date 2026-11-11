@@ -1419,8 +1419,8 @@ class EAGLEWorkerV2(BaseSpecWorker):
     def _minedraft_take_or_draft(self, batch):
         """Drafts for this cohort made during the previous step, or a fresh draft."""
         pending = self.__dict__.setdefault("_minedraft_pending", {})
-        entry = pending.pop(id(batch), None)
         rids = tuple(r.rid for r in batch.reqs)
+        entry = pending.pop(rids, None)
         if entry is not None and entry[0] == rids and not isinstance(entry[1], tuple):
             self.minedraft_hits = self.__dict__.get("minedraft_hits", 0) + 1
             return entry[1]

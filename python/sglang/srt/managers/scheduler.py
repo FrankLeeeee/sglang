@@ -1900,6 +1900,34 @@ class Scheduler(
             self.schedule_stream.wait_stream(self.forward_stream)
 
     @DynamicGradMode()
+    def _minedraft_record_forward_end(self, batch):
+        ev = torch.cuda.Event()
+        ev.record(self.forward_stream)
+        self.__dict__.setdefault("_minedraft_fwd_events", {})[
+            tuple(r.rid for r in batch.reqs)
+        ] = ev
+
+    def _minedraft_predraft(self, batch):
+        """Overlap mode: resolve this cohort's draft inputs from the FutureMap and draft it now."""
+        if batch is None or batch.is_empty() or batch.spec_info is None:
+            return
+        events = self.__dict__.setdefault("_minedraft_fwd_events", {})
+        ev = events.pop(tuple(r.rid for r in batch.reqs), None)
+        if ev is None:
+            return
+        import copy
+
+        side = self.__dict__.get("_minedraft_side_stream")
+        if side is None:
+            side = self._minedraft_side_stream = torch.cuda.Stream()
+        with torch.cuda.stream(side):
+            side.wait_event(ev)
+            view = copy.copy(batch)
+            view.spec_info = copy.copy(batch.spec_info)
+            self.future_map.resolve_seq_lens_cpu(view)
+            resolve_forward_inputs(view, self.future_map)
+            self.draft_worker.minedraft_predraft(batch, view)
+
     def _minedraft_before_step(self):
         """MineDraft: if the running cohort emptied, switch to the parked one."""
         parked = self.__dict__.get("_minedraft_parked")
@@ -1995,6 +2023,7 @@ class Scheduler(
             tmp_batch, tmp_result = self.result_queue.popleft()
             self.process_batch_result(tmp_batch, tmp_result)
 
+        minedraft = _minedraft_enabled() and self.draft_worker is not None
         while True:
             if self.gracefully_exit:
                 break
@@ -2004,6 +2033,9 @@ class Scheduler(
             if self._engine_paused:
                 self._record_scheduler_state_for_paused_engine()
                 continue
+
+            if minedraft:
+                self._minedraft_before_step()
 
             # Get the next batch to run
             plan = self.get_next_batch_to_run(
@@ -2015,6 +2047,9 @@ class Scheduler(
             disable_overlap_for_batch = self.is_disable_overlap_for_batch(
                 batch, last_batch=self.last_batch
             )
+            md_decode = minedraft and batch is not None and batch.forward_mode.is_decode()
+            if minedraft:
+                self.draft_worker.minedraft_other_batch = None
 
             # If we do not need to overlap the current batch with the last batch,
             # we can process the last batch immediately.
@@ -2032,6 +2067,8 @@ class Scheduler(
             # Launch the current batch
             if batch:
                 batch_result = self.run_batch(batch)
+                if md_decode:
+                    self._minedraft_record_forward_end(batch)
                 # Fence result processing behind this forward's shared reads.
                 self._apply_war_barrier()
                 self.result_queue.append((batch.copy(), batch_result))
@@ -2046,6 +2083,12 @@ class Scheduler(
             elif batch is None:
                 # When the server is idle, do self-check and re-init some states
                 self.on_idle()
+
+            if md_decode:
+                # The other cohort's result is processed; draft it on the draft GPU while
+                # the target GPU still verifies the cohort just launched.
+                self._minedraft_after_decode()
+                self._minedraft_predraft(self.running_batch)
 
             # Run sample of the current batch
             # It depends on the result of the last batch (e.g., grammar), so we run it after the last batch is processed.
