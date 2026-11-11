@@ -1,5 +1,6 @@
 import contextlib
 import logging
+import os
 import time
 from typing import List, Optional
 
@@ -280,7 +281,7 @@ class EagleDraftWorker(EagleDraftWorkerBase):
             self.init_attention_backend()
 
     def init_cuda_graphs(self):
-        if self.gpu_id != self.target_worker.gpu_id:
+        if self.gpu_id != self.target_worker.gpu_id and os.environ.get("SGLANG_MINEDRAFT_DRAFT_EAGER", "1") == "1":
             # TODO(FrankLeeeee): capture draft graphs on the draft GPU; draft runs eager for now.
             logger.info("[minedraft] draft on its own GPU: skipping draft CUDA graphs")
             with draft_pp_context(), draft_tp_context(self.draft_owns_attention):
@@ -288,6 +289,15 @@ class EagleDraftWorker(EagleDraftWorkerBase):
             self.draft_runner.prefill_cuda_graph_runner = None
             self.cuda_graph_runner = None
             self.cuda_graph_runner_for_draft_extend = None
+            if os.environ.get("SGLANG_MINEDRAFT_DRAFT_DECODE_GRAPHS") == "1":
+                # Prefill (breakable) capture on the draft GPU hits lazy JIT loads; decode/extend graphs warm up first.
+                with (
+                    draft_pp_context(),
+                    draft_tp_context(self.draft_owns_attention),
+                    speculative_moe_backend_context(),
+                    speculative_moe_a2a_backend_context(),
+                ):
+                    self._capture_cuda_graphs()
             if (c := self.draft_runner.canary_manager) is not None:
                 c.mark_init_finished()
             return
@@ -1254,10 +1264,47 @@ def _minedraft_draft_gpu_id() -> Optional[int]:
     return int(value) if value else None
 
 
+class _DraftDeviceResources:
+    """Swap the process-wide CUDA graph pool and named streams for draft-GPU ones while active."""
+
+    def __init__(self, device_id: int):
+        self.device_id = device_id
+        self.pool = None
+        self.streams = {}
+        self.depth = 0
+        self.saved = None
+
+    def __enter__(self):
+        from sglang.srt.runtime_context import get_resources
+
+        self.depth += 1
+        if self.depth > 1:
+            return self
+        res = get_resources()
+        self.saved = (res.graph_memory_pool, res.streams)
+        if self.pool is None:
+            with torch.cuda.device(self.device_id):
+                self.pool = torch.cuda.graph_pool_handle()
+        res.graph_memory_pool = self.pool
+        res.streams = self.streams
+        return self
+
+    def __exit__(self, *exc):
+        from sglang.srt.runtime_context import get_resources
+
+        self.depth -= 1
+        if self.depth == 0:
+            res = get_resources()
+            res.graph_memory_pool, res.streams = self.saved
+        return False
+
+
 def _guard_methods_on_device(obj, device_id: int) -> None:
     import functools
     import inspect
 
+    resources = _DraftDeviceResources(device_id)
+    obj.minedraft_resources = resources
     for name, fn in inspect.getmembers(type(obj), predicate=inspect.isfunction):
         if name.startswith("__"):
             continue
@@ -1265,7 +1312,7 @@ def _guard_methods_on_device(obj, device_id: int) -> None:
         def make(f):
             @functools.wraps(f)
             def guarded(*a, **kw):
-                with torch.cuda.device(device_id):
+                with torch.cuda.device(device_id), resources:
                     return f(obj, *a, **kw)
 
             return guarded
